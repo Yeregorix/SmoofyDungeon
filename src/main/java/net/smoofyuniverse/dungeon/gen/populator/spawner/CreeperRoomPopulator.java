@@ -44,8 +44,7 @@ public class CreeperRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHER_BRICK, this.cause);
 		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK, this.cause);
 
-		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 3, y + 1, z + 3).get(), EntityTypes.CREEPER);
+		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER, this.cause);
 	}
 
 	@Override

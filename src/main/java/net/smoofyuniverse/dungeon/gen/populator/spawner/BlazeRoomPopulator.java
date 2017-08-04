@@ -94,8 +94,7 @@ public class BlazeRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 2, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
 		c.setBlockType(x + 5, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
 
-		c.setBlockType(x + 3, floorY + 2, z + 3, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 3, floorY + 2, z + 3).get(), EntityTypes.BLAZE);
+		Minecraft.setSpawner(c, x + 3, floorY + 2, z + 3, EntityTypes.BLAZE, this.cause);
 
 		CHEST_GENERATOR.generateBlock(c, x + 3, floorY, z + 3, this.cause, r);
 		CHEST_GENERATOR.generateBlock(c, x + 4, floorY, z + 4, this.cause, r);

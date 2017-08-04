@@ -148,29 +148,14 @@ public class BossRoomHardPopulator extends LayerPopulator {
 
 		CHEST_GENERATOR.generateBlock(c, x + 8, y + 1, z + 8, this.cause, r);
 
-		c.setBlockType(x + 7, y + 2, z + 7, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 7, y + 2, z + 7).get(), EntityTypes.GHAST);
-
-		c.setBlockType(x + 7, y + 2, z + 8, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 7, y + 2, z + 8).get(), EntityTypes.ZOMBIE);
-
-		c.setBlockType(x + 8, y + 2, z + 7, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 8, y + 2, z + 7).get(), EntityTypes.PIG_ZOMBIE);
-
-		c.setBlockType(x + 8, y + 2, z + 8, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 8, y + 2, z + 8).get(), EntityTypes.ZOMBIE);
-
-		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 3, y + 1, z + 3).get(), EntityTypes.ZOMBIE);
-
-		c.setBlockType(x + 3, y + 1, z + 12, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 3, y + 1, z + 12).get(), EntityTypes.SKELETON);
-
-		c.setBlockType(x + 12, y + 1, z + 3, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 12, y + 1, z + 3).get(), EntityTypes.ZOMBIE);
-
-		c.setBlockType(x + 12, y + 1, z + 12, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 12, y + 1, z + 12).get(), EntityTypes.SPIDER);
+		Minecraft.setSpawner(c, x + 7, y + 2, z + 7, EntityTypes.GHAST, this.cause);
+		Minecraft.setSpawner(c, x + 7, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 8, y + 2, z + 7, EntityTypes.PIG_ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 8, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 3, y + 1, z + 12, EntityTypes.SKELETON, this.cause);
+		Minecraft.setSpawner(c, x + 12, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 12, y + 1, z + 12, EntityTypes.SPIDER, this.cause);
 	}
 
 	static {

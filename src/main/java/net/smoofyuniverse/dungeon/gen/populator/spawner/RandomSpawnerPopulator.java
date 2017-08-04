@@ -50,10 +50,8 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 		y += floorOffset + 1;
 		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
-			c.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER, this.cause);
-			Minecraft.setSpawnerType(c.getTileEntity(x, y, z).get(), getRandomEntityType(r));
-		}
+		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
+			Minecraft.setSpawner(c, x, y, z, getRandomEntityType(r), this.cause);
 	}
 
 	public static EntityType getRandomEntityType(Random r) {

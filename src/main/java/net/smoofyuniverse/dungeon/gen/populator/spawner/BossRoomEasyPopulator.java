@@ -42,14 +42,9 @@ public class BossRoomEasyPopulator extends RoomPopulator {
 			for (int dz = 0; dz < 7; dz++)
 				c.setBlockType(x + dx, y, z + dz, BlockTypes.MOSSY_COBBLESTONE, this.cause);
 
-		c.setBlockType(x + 1, y + 1, z + 1, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 1, y + 1, z + 1).get(), EntityTypes.ZOMBIE);
-
-		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 3, y + 1, z + 3).get(), EntityTypes.PIG_ZOMBIE);
-
-		c.setBlockType(x + 5, y + 1, z + 5, BlockTypes.MOB_SPAWNER, this.cause);
-		Minecraft.setSpawnerType(c.getTileEntity(x + 5, y + 1, z + 5).get(), EntityTypes.SPIDER);
+		Minecraft.setSpawner(c, x + 1, y + 1, z + 1, EntityTypes.ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.PIG_ZOMBIE, this.cause);
+		Minecraft.setSpawner(c, x + 5, y + 1, z + 5, EntityTypes.SPIDER, this.cause);
 
 		c.setBlockType(x + 1, y + 1, z + 5, BlockTypes.COAL_ORE, this.cause);
 		c.setBlockType(x + 5, y + 1, z + 1, BlockTypes.COAL_ORE, this.cause);

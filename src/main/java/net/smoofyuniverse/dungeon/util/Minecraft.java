@@ -24,10 +24,18 @@ package net.smoofyuniverse.dungeon.util;
 
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.world.extent.Extent;
 
 public class Minecraft {
+
+	public static void setSpawner(Extent e, int x, int y, int z, EntityType t, Cause cause) {
+		e.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER, cause);
+		Minecraft.setSpawnerType(e.getTileEntity(x, y, z).get(), t);
+	}
 
 	public static void setSpawnerType(TileEntity tile, EntityType t) {
 		((TileEntityMobSpawner) tile).getSpawnerBaseLogic().setEntityId(new ResourceLocation(t.getId()));
