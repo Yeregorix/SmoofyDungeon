@@ -51,25 +51,23 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			Minecraft.setSpawner(c, x, y, z, getRandomEntityType(r), this.cause);
+			Minecraft.setSpawner(c, x, y, z, randomEntityType(r), this.cause);
 	}
 
-	public static EntityType getRandomEntityType(Random r) {
-		int i = r.nextInt(25);
-		if (i < 10)
-			return EntityTypes.ZOMBIE;
-		if (i < 15)
-			return EntityTypes.SKELETON;
-		if (i < 20)
-			return EntityTypes.SPIDER;
-		if (i < 22)
-			return EntityTypes.PIG_ZOMBIE;
-		if (i == 22)
-			return EntityTypes.ENDERMAN;
-		if (i == 23)
-			return EntityTypes.MAGMA_CUBE;
-		if (i == 24)
-			return EntityTypes.SILVERFISH;
-		return EntityTypes.ZOMBIE;
+	public static EntityType randomEntityType(Random r) {
+		float f = r.nextFloat();
+		if (f < 0.4f)
+			return EntityTypes.ZOMBIE;        // p = 0.4
+		if (f < 0.6f)
+			return EntityTypes.SKELETON;    // p = 0.2
+		if (f < 0.8f)
+			return EntityTypes.SPIDER;        // p = 0.2
+		if (f < 0.88f)
+			return EntityTypes.PIG_ZOMBIE;    // p = 0.08
+		if (f < 0.92f)
+			return EntityTypes.ENDERMAN;    // p = 0.04
+		if (f < 0.96f)
+			return EntityTypes.MAGMA_CUBE;    // p = 0.04
+		return EntityTypes.SILVERFISH;        // p = 0.04
 	}
 }
