@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
 import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockTypes;

@@ -28,13 +28,35 @@ import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.property.PropertyHolder;
 import org.spongepowered.api.data.property.block.BlastResistanceProperty;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.world.World;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-public class MathUtil {
+public class ResourceUtil {
+
+	public static void fill(Inventory inv, Random r, ItemStack... stacks) {
+		List<Inventory> slots = asList(inv.slots());
+
+		for (ItemStack stack : stacks) {
+			Inventory slot;
+			do {
+				slot = slots.get(r.nextInt(slots.size()));
+			} while (slot.peek().isPresent());
+			slot.set(stack);
+		}
+	}
+
+	public static <T> List<T> asList(Iterable<T> it) {
+		if (it instanceof List)
+			return (List<T>) it;
+
+		List<T> list = new ArrayList<>();
+		for (T value : it)
+			list.add(value);
+		return list;
+	}
 
 	public static Set<Vector3i> simulateExplosion(World w, Random r, Vector3d pos, float size) {
 		return simulateExplosion(w, r, pos.getX(), pos.getY(), pos.getZ(), size);

@@ -20,9 +20,10 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen;
+package net.smoofyuniverse.dungeon.gen.loot;
 
 import net.smoofyuniverse.dungeon.util.RandomQueue;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.event.cause.Cause;
@@ -50,25 +51,13 @@ public class ChestContentGenerator {
 	}
 
 	public void fill(Inventory inv, Random r) {
-		fill(inv, r, generate(r));
-	}
-
-	public static void fill(Inventory inv, Random r, ItemStack... stacks) {
-		List<Inventory> slots = asList(inv.slots());
-
-		for (ItemStack stack : stacks) {
-			Inventory slot;
-			do {
-				slot = slots.get(r.nextInt(slots.size()));
-			} while (slot.peek().isPresent());
-			slot.set(stack);
-		}
+		ResourceUtil.fill(inv, r, generate(r));
 	}
 
 	public ItemStack[] generate(Random r) {
 		List<ItemStack> items = new ArrayList<>();
 
-		for (ItemEntry e : entries) {
+		for (ItemEntry e : this.entries) {
 			if (r.nextFloat() < e.chance)
 				items.add(e.item);
 		}
@@ -86,16 +75,6 @@ public class ChestContentGenerator {
 		return result;
 	}
 
-	public static <T> List<T> asList(Iterable<T> it) {
-		if (it instanceof List)
-			return (List<T>) it;
-
-		List<T> list = new ArrayList<>();
-		for (T value : it)
-			list.add(value);
-		return list;
-	}
-
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -111,22 +90,16 @@ public class ChestContentGenerator {
 		}
 
 		public Builder add(ItemStack item, float chance) {
-			this.entries.add(new ItemEntry(item, chance));
+			return add(new ItemEntry(item, chance));
+		}
+
+		public Builder add(ItemEntry e) {
+			this.entries.add(e);
 			return this;
 		}
 
 		public ChestContentGenerator build(int... counts) {
 			return new ChestContentGenerator(this.entries, counts);
-		}
-	}
-
-	private static class ItemEntry {
-		public final ItemStack item;
-		public final float chance;
-
-		public ItemEntry(ItemStack item, float chance) {
-			this.item = item;
-			this.chance = chance;
 		}
 	}
 }

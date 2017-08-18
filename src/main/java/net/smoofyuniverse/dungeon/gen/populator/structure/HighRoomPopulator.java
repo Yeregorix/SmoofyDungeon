@@ -20,37 +20,38 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
+import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
-import java.util.Set;
 
-public class ExplosionPopulator extends ChunkPopulator {
+public class HighRoomPopulator extends RoomPopulator {
 
 	@Override
-	public void populateChunk(World w, Extent c, Random r) {
-		Vector3i chunkMin = c.getBlockMin();
-		double x = chunkMin.getX(), z = chunkMin.getZ();
+	public float getRoomChance() {
+		return 0.006f;
+	}
 
-		int count = 0;
-		while (count < 10) {
-			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, x + (r.nextDouble() * 16d), 30d + (r.nextDouble() * 42d), z + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
-			for (Vector3i b : blocks)
-				w.setBlockType(b, BlockTypes.AIR, this.cause);
+	@Override
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+		RoomPopulator.setFlag(c, layer + 1, room, true, this.cause);
 
-			count += blocks.size();
+		y += ceilingOffset + 6;
+
+		for (int dx = 0; dx < 8; dx++) {
+			for (int dz = 0; dz < 8; dz++) {
+				if (c.getBlockType(x + dx, y, z + dz) == BlockTypes.COBBLESTONE)
+					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR, this.cause);
+			}
 		}
 	}
 
 	@Override
-	public float getChunkIterationChance() {
-		return 0.8f;
+	public int getMaximumLayer() {
+		return 5;
 	}
 }

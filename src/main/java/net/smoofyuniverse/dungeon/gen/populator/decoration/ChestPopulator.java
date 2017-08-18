@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
-import net.smoofyuniverse.dungeon.gen.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemTypes;

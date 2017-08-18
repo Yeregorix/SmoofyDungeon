@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator;
 
-import net.smoofyuniverse.dungeon.util.MathUtil;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.World;
@@ -39,13 +39,13 @@ public abstract class LayerPopulator extends ChunkPopulator {
 		for (int l = getMinimumLayer(); l <= getMaximumLayer(); l++) {
 			if (hasFlag(c, l))
 				continue;
-			if (MathUtil.random(getLayerChance(), r)) {
+			if (ResourceUtil.random(getLayerChance(), r)) {
 				int itMax = getLayerIterationMax();
 				int itCount = 0;
 				for (int it = 0; it < getLayerIterations(); it++) {
 					if (itCount >= itMax && itMax >= 0)
 						break;
-					if (MathUtil.random(getLayerIterationChance(), r)) {
+					if (ResourceUtil.random(getLayerIterationChance(), r)) {
 						itCount++;
 						populateLayer(w, c, r, l);
 					}

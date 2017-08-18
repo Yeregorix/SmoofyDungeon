@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
-import net.smoofyuniverse.dungeon.gen.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import net.smoofyuniverse.dungeon.util.Minecraft;

@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator;
 
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
-import net.smoofyuniverse.dungeon.util.MathUtil;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.World;
@@ -50,13 +50,13 @@ public abstract class ChunkPopulator implements Populator {
 	public void populate(World w, Extent c, Random r) {
 		if (hasFlag(c))
 			return;
-		if (MathUtil.random(getChunkChance(), r)) {
+		if (ResourceUtil.random(getChunkChance(), r)) {
 			int itMax = getChunkIterationMax();
 			int itCount = 0;
 			for (int it = 0; it < getChunkIterations(); it++) {
 				if (itCount >= itMax && itMax >= 0)
 					break;
-				if (MathUtil.random(getChunkIterationChance(), r)) {
+				if (ResourceUtil.random(getChunkIterationChance(), r)) {
 					itCount++;
 					populateChunk(w, c, r);
 				}

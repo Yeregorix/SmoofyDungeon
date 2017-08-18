@@ -90,7 +90,8 @@ public class VinePopulator extends RoomPopulator {
 			y += ceilingOffset + 5;
 			z += r.nextInt(6) + 1;
 
-			c.setBlock(x, y, z, VINE_UP, this.cause);
+			if (c.getBlockType(x, y + 1, z) != BlockTypes.AIR)
+				c.setBlock(x, y, z, VINE_UP, this.cause);
 		}
 	}
 }

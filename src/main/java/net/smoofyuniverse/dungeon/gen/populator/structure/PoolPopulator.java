@@ -20,37 +20,48 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
+import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
-import java.util.Set;
 
-public class ExplosionPopulator extends ChunkPopulator {
+public class PoolPopulator extends RoomPopulator {
 
 	@Override
-	public void populateChunk(World w, Extent c, Random r) {
-		Vector3i chunkMin = c.getBlockMin();
-		double x = chunkMin.getX(), z = chunkMin.getZ();
-
-		int count = 0;
-		while (count < 10) {
-			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, x + (r.nextDouble() * 16d), 30d + (r.nextDouble() * 42d), z + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
-			for (Vector3i b : blocks)
-				w.setBlockType(b, BlockTypes.AIR, this.cause);
-
-			count += blocks.size();
-		}
+	public float getRoomChance() {
+		return 0.005f;
 	}
 
 	@Override
-	public float getChunkIterationChance() {
-		return 0.8f;
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+		RoomPopulator.setFlag(c, layer, room, true, this.cause);
+
+		y += floorOffset + 1;
+		boolean water = r.nextBoolean();
+
+		for (int dy = 0; dy < 4; dy++) {
+			for (int i = 0; i < 8; i++) {
+				if (c.getBlockType(x + i, y + dy, z) == BlockTypes.AIR)
+					c.setBlockType(x + i, y + dy, z, BlockTypes.BRICK_BLOCK, this.cause);
+
+				if (c.getBlockType(x + i, y + dy, z + 7) == BlockTypes.AIR)
+					c.setBlockType(x + i, y + dy, z + 7, BlockTypes.BRICK_BLOCK, this.cause);
+
+				if (c.getBlockType(x, y + dy, z + i) == BlockTypes.AIR)
+					c.setBlockType(x, y + dy, z + i, BlockTypes.BRICK_BLOCK, this.cause);
+
+				if (c.getBlockType(x + 7, y + dy, z + i) == BlockTypes.AIR)
+					c.setBlockType(x + 7, y + dy, z + i, BlockTypes.BRICK_BLOCK, this.cause);
+			}
+
+			for (int dx = 1; dx < 7; dx++) {
+				for (int dz = 1; dz < 7; dz++)
+					c.setBlockType(x + dx, y + dy, z + dz, water ? BlockTypes.WATER : BlockTypes.LAVA, this.cause);
+			}
+		}
 	}
 }

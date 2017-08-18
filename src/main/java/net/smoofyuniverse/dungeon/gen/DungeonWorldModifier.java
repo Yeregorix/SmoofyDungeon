@@ -25,7 +25,10 @@ package net.smoofyuniverse.dungeon.gen;
 import net.smoofyuniverse.dungeon.gen.populator.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
+import net.smoofyuniverse.dungeon.gen.populator.structure.HighRoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.structure.OasisPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.structure.PoolPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.structure.RailPopulator;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
@@ -77,6 +80,9 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		// 1- CHUNKS
 		// Structures
 		pops.add(new OasisPopulator());
+		pops.add(new HighRoomPopulator());
+		pops.add(new PoolPopulator());
+		pops.add(new RailPopulator());
 
 		// 2- LAYERS
 		// Spawners

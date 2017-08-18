@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.util.MathUtil;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.event.cause.Cause;
@@ -47,12 +47,12 @@ public abstract class RoomPopulator extends LayerPopulator {
 				room++;
 				if (hasFlag(c, layer, room))
 					continue;
-				if (MathUtil.random(getRoomChance(), r)) {
+				if (ResourceUtil.random(getRoomChance(), r)) {
 					int itCount = 0;
 					for (int it = 0; it < getRoomIterations(); it++) {
 						if (itCount >= itMax && itMax >= 0)
 							break;
-						if (MathUtil.random(itChance, r)) {
+						if (ResourceUtil.random(itChance, r)) {
 							itCount++;
 							populateRoom(w, c, r, layer, room, min.getX() + x, y, min.getZ() + z);
 						}
