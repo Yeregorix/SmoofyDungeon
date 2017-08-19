@@ -22,34 +22,30 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-public class RailPopulator extends RoomPopulator {
+public class RuinsPopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
+	public int getMaximumLayer() {
+		return 3;
 	}
 
 	@Override
 	public float getRoomIterationChance() {
-		return 0.06f;
+		return 0.2f;
 	}
 
 	@Override
 	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.004f;
+		return -0.02f;
 	}
 
 	@Override
@@ -59,7 +55,7 @@ public class RailPopulator extends RoomPopulator {
 
 	@Override
 	public int getRoomIterations() {
-		return 3;
+		return 5;
 	}
 
 	@Override
@@ -68,19 +64,21 @@ public class RailPopulator extends RoomPopulator {
 
 		int ox = r.nextInt(6) + 1;
 		int oz = r.nextInt(6) + 1;
+		int oHeight = r.nextInt(3) + 1;
 		int[] dir1 = DIRECTIONS[r.nextInt(4)], dir2 = DIRECTIONS[r.nextInt(4)];
 
-		List<Entity> entities = new ArrayList<>();
+		BlockType type = r.nextBoolean() ? BlockTypes.COBBLESTONE : BlockTypes.STONEBRICK;
 
 		int dx = ox;
 		int dz = oz;
-		while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
-			if (r.nextFloat() > 0.2f) {
-				c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL, this.cause);
-				if (r.nextFloat() < 0.01f)
-					entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
+		int height = oHeight;
+		while (height > 0 && x >= 0 && dx < 8 && dz >= 0 && dz < 8) {
+			for (int dy = 0; dy < height; dy++) {
+				if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
+					c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
 			}
 
+			height -= r.nextInt(3);
 			dx += dir1[0];
 			dz += dir1[1];
 		}
@@ -88,19 +86,17 @@ public class RailPopulator extends RoomPopulator {
 		if (dir1 != dir2) {
 			dx = ox;
 			dz = oz;
-			while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
-				if (r.nextFloat() > 0.2f) {
-					c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL, this.cause);
-					if (r.nextFloat() < 0.01f)
-						entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
+			height = oHeight;
+			while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
+				for (int dy = 0; dy < height; dy++) {
+					if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
+						c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
 				}
 
+				height -= r.nextInt(3);
 				dx += dir2[0];
 				dz += dir2[1];
 			}
 		}
-
-		if (!entities.isEmpty()) // TODO fix / report issue
-			c.spawnEntities(entities, this.cause);
 	}
 }
