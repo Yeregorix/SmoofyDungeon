@@ -23,29 +23,28 @@
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.SandTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class RuinsPopulator extends RoomPopulator {
+public class SandPopulator extends RoomPopulator {
+	public static final BlockState NORMAL_SAND = BlockTypes.SAND.getDefaultState(), RED_SAND = NORMAL_SAND.with(Keys.SAND_TYPE, SandTypes.RED).get();
+
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 	@Override
-	public int getMaximumLayer() {
-		return 3;
+	public int getMinimumLayer() {
+		return 4;
 	}
 
 	@Override
 	public float getRoomIterationChance() {
-		return 0.2f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.02f;
+		return 0.05f;
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class RuinsPopulator extends RoomPopulator {
 
 	@Override
 	public int getRoomIterations() {
-		return 5;
+		return 2;
 	}
 
 	@Override
@@ -64,10 +63,10 @@ public class RuinsPopulator extends RoomPopulator {
 
 		int ox = r.nextInt(6) + 1;
 		int oz = r.nextInt(6) + 1;
-		int oHeight = r.nextInt(3) + 1;
+		int oHeight = r.nextInt(2) + 1;
 		int[] dir1 = DIRECTIONS[r.nextInt(4)], dir2 = DIRECTIONS[r.nextInt(4)];
 
-		BlockType type = r.nextBoolean() ? BlockTypes.COBBLESTONE : BlockTypes.STONEBRICK;
+		BlockState state = r.nextBoolean() ? NORMAL_SAND : RED_SAND;
 
 		int dx = ox;
 		int dz = oz;
@@ -75,10 +74,11 @@ public class RuinsPopulator extends RoomPopulator {
 		while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 			for (int dy = 0; dy < height; dy++) {
 				if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-					c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
+					c.setBlock(x + dx, y + dy, z + dz, state, this.cause);
 			}
 
-			height -= r.nextInt(3);
+			if (r.nextBoolean())
+				height--;
 			dx += dir1[0];
 			dz += dir1[1];
 		}
@@ -90,10 +90,11 @@ public class RuinsPopulator extends RoomPopulator {
 			while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 				for (int dy = 0; dy < height; dy++) {
 					if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-						c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
+						c.setBlock(x + dx, y + dy, z + dz, state, this.cause);
 				}
 
-				height -= r.nextInt(3);
+				if (r.nextBoolean())
+					height--;
 				dx += dir2[0];
 				dz += dir2[1];
 			}
