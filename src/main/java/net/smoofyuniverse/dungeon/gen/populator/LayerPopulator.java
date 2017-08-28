@@ -35,7 +35,7 @@ public abstract class LayerPopulator extends ChunkPopulator {
 	protected LayerPopulator() {}
 
 	@Override
-	public void populateChunk(World w, Extent c, Random r) {
+	public final void populateChunk(World w, Extent c, Random r) {
 		for (int l = getMinimumLayer(); l <= getMaximumLayer(); l++) {
 			if (hasFlag(c, l))
 				continue;

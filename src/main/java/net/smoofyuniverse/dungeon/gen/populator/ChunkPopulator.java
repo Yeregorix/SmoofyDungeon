@@ -47,7 +47,7 @@ public abstract class ChunkPopulator implements Populator {
 	}
 
 	@Override
-	public void populate(World w, Extent c, Random r) {
+	public final void populate(World w, Extent c, Random r) {
 		if (hasFlag(c))
 			return;
 		if (ResourceUtil.random(getChunkChance(), r)) {

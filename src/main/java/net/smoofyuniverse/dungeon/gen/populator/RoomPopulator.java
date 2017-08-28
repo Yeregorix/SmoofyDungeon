@@ -37,7 +37,7 @@ public abstract class RoomPopulator extends LayerPopulator {
 	protected RoomPopulator() {}
 
 	@Override
-	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
+	public final void populateLayer(World w, Extent c, Random r, int layer, int y) {
 		Vector3i min = c.getBlockMin();
 		float itChance = getRoomIterationChance() + (getRoomIterationChanceAdditionPerLayer() * layer);
 		int itMax = getRoomIterationMax();
