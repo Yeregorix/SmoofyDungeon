@@ -85,11 +85,7 @@ public abstract class RoomPopulator extends LayerPopulator {
 		return 1;
 	}
 
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		populateRoom(w, c, r, layer, room, x, y, z, getFloorOffset(c, x, y, z), getCeilingOffset(c, x, y, z));
-	}
-
-	public abstract void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset);
+	public abstract void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z);
 
 	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
 		BlockType type = chunk.getBlockType(x + 3, y, z + 3);

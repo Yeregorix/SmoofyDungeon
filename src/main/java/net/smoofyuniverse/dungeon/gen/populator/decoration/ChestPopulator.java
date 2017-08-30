@@ -46,9 +46,9 @@ public class ChestPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
-		y += floorOffset + 1;
+		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)

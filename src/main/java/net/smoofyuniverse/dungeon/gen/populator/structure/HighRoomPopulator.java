@@ -37,10 +37,10 @@ public class HighRoomPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		RoomPopulator.setFlag(c, layer + 1, room, true, this.cause);
 
-		y += ceilingOffset + 6;
+		y += getCeilingOffset(c, x, y, z) + 6;
 
 		for (int dx = 0; dx < 8; dx++) {
 			for (int dz = 0; dz < 8; dz++) {

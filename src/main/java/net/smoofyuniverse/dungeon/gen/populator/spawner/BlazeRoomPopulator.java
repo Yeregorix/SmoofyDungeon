@@ -45,9 +45,9 @@ public class BlazeRoomPopulator extends RoomPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR = ChestPopulator.CHEST_GENERATOR;
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		RoomPopulator.setFlag(c, layer, room, true, this.cause);
-		int floorY = y + floorOffset, ceilingY = y + ceilingOffset + 6;
+		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		for (int dx = 0; dx < 8; dx++)
 			for (int dz = 0; dz < 8; dz++) {

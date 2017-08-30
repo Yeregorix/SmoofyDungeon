@@ -34,9 +34,9 @@ import java.util.Random;
 public class CreeperRoomPopulator extends RoomPopulator {
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		RoomPopulator.setFlag(c, layer, room, true, this.cause);
-		y += floorOffset;
+		y += getFloorOffset(c, x, y, z);
 
 		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHER_BRICK, this.cause);
 		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.NETHER_BRICK, this.cause);

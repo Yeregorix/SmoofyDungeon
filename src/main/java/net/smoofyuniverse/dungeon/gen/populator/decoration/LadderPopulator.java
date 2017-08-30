@@ -40,8 +40,8 @@ public class LadderPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
-		y += floorOffset + 1;
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		y += getFloorOffset(c, x, y, z) + 1;
 
 		Direction dir = null;
 		switch (r.nextInt(4)) {

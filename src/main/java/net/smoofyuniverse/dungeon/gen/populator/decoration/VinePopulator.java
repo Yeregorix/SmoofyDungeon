@@ -54,7 +54,7 @@ public class VinePopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		if (r.nextBoolean()) {
 			y += r.nextInt(4) + 2;
 			switch (r.nextInt(4)) {
@@ -87,7 +87,7 @@ public class VinePopulator extends RoomPopulator {
 			}
 		} else {
 			x += r.nextInt(6) + 1;
-			y += ceilingOffset + 5;
+			y += getCeilingOffset(c, x, y, z) + 5;
 			z += r.nextInt(6) + 1;
 
 			if (c.getBlockType(x, y + 1, z) != BlockTypes.AIR)

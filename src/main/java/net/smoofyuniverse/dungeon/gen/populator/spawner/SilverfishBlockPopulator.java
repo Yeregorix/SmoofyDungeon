@@ -64,7 +64,9 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		int floorOffset = getFloorOffset(c, x, y, z);
+
 		x += r.nextInt(8);
 		y += r.nextInt(4 - floorOffset) + 1 + floorOffset;
 		z += r.nextInt(8);

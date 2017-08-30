@@ -57,10 +57,10 @@ public class SlabPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		boolean ceiling = r.nextBoolean();
 		x += r.nextInt(6) + 1;
-		y += ceiling ? ceilingOffset + 5 : floorOffset + 1;
+		y += ceiling ? (getCeilingOffset(c, x, y, z) + 5) : (getFloorOffset(c, x, y, z) + 1);
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + (ceiling ? 1 : -1), z) != BlockTypes.AIR)

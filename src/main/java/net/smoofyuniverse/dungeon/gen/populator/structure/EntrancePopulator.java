@@ -55,7 +55,7 @@ public class EntrancePopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int ground = 100;
 
 		switch (r.nextInt(4)) {
@@ -83,7 +83,7 @@ public class EntrancePopulator extends RoomPopulator {
 				}
 
 				int floor = y - 6;
-				floor += RoomPopulator.getFloorOffset(c, x + 2, floor, z + 2);
+				floor += getFloorOffset(c, x, floor, z);
 
 				if (c.getBlockType(x + 1, floor, z + 1) == BlockTypes.AIR) {
 					c.setBlockType(x + 1, floor, z + 1, BlockTypes.PLANKS, this.cause);

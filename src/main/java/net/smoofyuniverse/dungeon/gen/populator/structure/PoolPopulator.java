@@ -37,10 +37,10 @@ public class PoolPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		RoomPopulator.setFlag(c, layer, room, true, this.cause);
 
-		y += floorOffset + 1;
+		y += getFloorOffset(c, x, y, z) + 1;
 		boolean water = r.nextBoolean();
 
 		for (int dy = 0; dy < 4; dy++) {

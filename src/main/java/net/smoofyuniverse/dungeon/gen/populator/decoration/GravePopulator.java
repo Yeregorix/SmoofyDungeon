@@ -40,9 +40,9 @@ public class GravePopulator extends RoomPopulator {
 	public static final List<Text> LINES = Arrays.asList(Text.EMPTY, Text.of("R.I.P"), Text.EMPTY, Text.EMPTY);
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(4) + 3;
-		y += floorOffset + 1;
+		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
 		c.setBlockType(x, y, z, BlockTypes.DOUBLE_STONE_SLAB, this.cause);

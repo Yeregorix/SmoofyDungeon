@@ -52,9 +52,9 @@ public class SoulSandPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);
-		y += floorOffset;
+		y += getFloorOffset(c, x, y, z);
 		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE)

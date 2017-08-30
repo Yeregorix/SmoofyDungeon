@@ -63,8 +63,8 @@ public class RailPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
-		y += floorOffset + 1;
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		y += getFloorOffset(c, x, y, z) + 1;
 
 		int ox = r.nextInt(6) + 1;
 		int oz = r.nextInt(6) + 1;

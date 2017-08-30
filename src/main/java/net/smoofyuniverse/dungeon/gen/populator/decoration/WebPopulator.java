@@ -47,11 +47,11 @@ public class WebPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		z += r.nextInt(6) + 1;
 
-		int floorY = y + floorOffset, ceilingY = y + ceilingOffset + 6;
+		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		if (r.nextFloat() < 0.4f) {
 			y = ceilingY;

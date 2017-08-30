@@ -34,9 +34,9 @@ import java.util.Random;
 public class BossRoomEasyPopulator extends RoomPopulator {
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		RoomPopulator.setFlag(c, layer, room, true, this.cause);
-		y += floorOffset;
+		y += getFloorOffset(c, x, y, z);
 
 		for (int dx = 0; dx < 7; dx++)
 			for (int dz = 0; dz < 7; dz++)

@@ -37,8 +37,8 @@ public class BrokenWallPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z, int floorOffset, int ceilingOffset) {
-		y += floorOffset + r.nextInt(2) + 1;
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		y += getFloorOffset(c, x, y, z) + r.nextInt(2) + 1;
 
 		if (r.nextBoolean()) {
 			x += r.nextBoolean() ? 0 : 7;
