@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import org.spongepowered.api.block.BlockState;
@@ -44,8 +45,8 @@ public class BlazeRoomPopulator extends RoomPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR = ChestPopulator.CHEST_GENERATOR;
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		RoomPopulator.setFlag(c, layer, room, true, this.cause);
+	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		info.setFlag(layer, room, true);
 		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		for (int dx = 0; dx < 8; dx++)

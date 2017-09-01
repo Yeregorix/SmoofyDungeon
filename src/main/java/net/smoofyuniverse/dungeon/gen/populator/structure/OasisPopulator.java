@@ -24,6 +24,7 @@ package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -39,8 +40,8 @@ public class OasisPopulator extends ChunkPopulator {
 	public static final PopulatorObject[] TREES;
 
 	@Override
-	public void populateChunk(World w, Extent c, Random r) {
-		ChunkPopulator.setFlag(c, true, this.cause);
+	public void populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+		info.setFlag(true);
 
 		Vector3i min = c.getBlockMin();
 		int x = min.getX(), z = min.getZ();

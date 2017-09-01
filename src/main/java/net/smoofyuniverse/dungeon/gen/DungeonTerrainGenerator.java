@@ -58,9 +58,9 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 		// Fill the floor with bedrock and stone
 		for (int x = minX; x <= maxX; x++)
 			for (int z = minZ; z <= maxZ; z++) {
-				volume.setBlockType(x, 1, z, BlockTypes.BEDROCK, this.cause);
-				for (int y = 2; y <= 30; y++)
-					volume.setBlockType(x, y, z, BlockTypes.STONE, this.cause);
+				int bedrockLevel = r.nextInt(5);
+				for (int y = 0; y <= 30; y++)
+					volume.setBlockType(x, y, z, y <= bedrockLevel ? BlockTypes.BEDROCK : BlockTypes.STONE, this.cause);
 			}
 
 		// Iterate over each layer

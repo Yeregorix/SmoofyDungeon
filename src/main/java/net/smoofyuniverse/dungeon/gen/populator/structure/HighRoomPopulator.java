@@ -22,6 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -37,8 +38,8 @@ public class HighRoomPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		RoomPopulator.setFlag(c, layer + 1, room, true, this.cause);
+	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		info.setFlag(layer + 1, room, true);
 
 		y += getCeilingOffset(c, x, y, z) + 6;
 

@@ -22,9 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator;
 
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
-import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
@@ -35,9 +34,9 @@ public abstract class LayerPopulator extends ChunkPopulator {
 	protected LayerPopulator() {}
 
 	@Override
-	public final void populateChunk(World w, Extent c, Random r) {
+	public final void populateChunk(ChunkInfo info, World w, Extent c, Random r) {
 		for (int l = getMinimumLayer(); l <= getMaximumLayer(); l++) {
-			if (hasFlag(c, l))
+			if (info.getFlag(l))
 				continue;
 			if (ResourceUtil.random(getLayerChance(), r)) {
 				int itMax = getLayerIterationMax();
@@ -47,7 +46,7 @@ public abstract class LayerPopulator extends ChunkPopulator {
 						break;
 					if (ResourceUtil.random(getLayerIterationChance(), r)) {
 						itCount++;
-						populateLayer(w, c, r, l);
+						populateLayer(info, w, c, r, l, l * 6 + 30);
 					}
 				}
 			}
@@ -60,10 +59,6 @@ public abstract class LayerPopulator extends ChunkPopulator {
 
 	public int getMaximumLayer() {
 		return 6;
-	}
-
-	public static boolean hasFlag(Extent chunk, int layer) {
-		return chunk.getBlockType(chunk.getBlockMin().add(layer + 1, 0, 0)) == BlockTypes.BARRIER;
 	}
 
 	public float getLayerChance() {
@@ -82,13 +77,9 @@ public abstract class LayerPopulator extends ChunkPopulator {
 		return 1.0f;
 	}
 
-	public void populateLayer(World w, Extent c, Random r, int layer) {
-		populateLayer(w, c, r, layer, (layer * 6) + 30);
+	public void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
+		populateLayer(w, c, r, layer, y);
 	}
 
-	public abstract void populateLayer(World w, Extent c, Random r, int layer, int y);
-
-	public static void setFlag(Extent chunk, int layer, boolean v, Cause c) {
-		chunk.setBlockType(chunk.getBlockMin().add(layer + 1, 0, 0), v ? BlockTypes.BARRIER : BlockTypes.AIR, c);
-	}
+	public void populateLayer(World w, Extent c, Random r, int layer, int y) {}
 }

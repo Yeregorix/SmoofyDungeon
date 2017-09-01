@@ -23,10 +23,10 @@
 package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
@@ -37,7 +37,7 @@ public abstract class RoomPopulator extends LayerPopulator {
 	protected RoomPopulator() {}
 
 	@Override
-	public final void populateLayer(World w, Extent c, Random r, int layer, int y) {
+	public final void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
 		Vector3i min = c.getBlockMin();
 		float itChance = getRoomIterationChance() + (getRoomIterationChanceAdditionPerLayer() * layer);
 		int itMax = getRoomIterationMax();
@@ -45,7 +45,7 @@ public abstract class RoomPopulator extends LayerPopulator {
 		for (int x = 0; x < 16; x += 8)
 			for (int z = 0; z < 16; z += 8) {
 				room++;
-				if (hasFlag(c, layer, room))
+				if (info.getFlag(layer, room))
 					continue;
 				if (ResourceUtil.random(getRoomChance(), r)) {
 					int itCount = 0;
@@ -54,7 +54,7 @@ public abstract class RoomPopulator extends LayerPopulator {
 							break;
 						if (ResourceUtil.random(itChance, r)) {
 							itCount++;
-							populateRoom(w, c, r, layer, room, min.getX() + x, y, min.getZ() + z);
+							populateRoom(info, w, c, r, layer, room, min.getX() + x, y, min.getZ() + z);
 						}
 					}
 				}
@@ -73,10 +73,6 @@ public abstract class RoomPopulator extends LayerPopulator {
 		return -1;
 	}
 
-	public static boolean hasFlag(Extent chunk, int layer, int room) {
-		return chunk.getBlockType(chunk.getBlockMin().add(layer + 1, 0, room + 1)) == BlockTypes.BARRIER;
-	}
-
 	public float getRoomChance() {
 		return 1.0f;
 	}
@@ -85,7 +81,11 @@ public abstract class RoomPopulator extends LayerPopulator {
 		return 1;
 	}
 
-	public abstract void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z);
+	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		populateRoom(w, c, r, layer, room, x, y, z);
+	}
+
+	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {}
 
 	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
 		BlockType type = chunk.getBlockType(x + 3, y, z + 3);
@@ -99,9 +99,5 @@ public abstract class RoomPopulator extends LayerPopulator {
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.NETHERRACK || type == BlockTypes.SOUL_SAND)
 			return 0;
 		return 1;
-	}
-
-	public static void setFlag(Extent chunk, int layer, int room, boolean v, Cause c) {
-		chunk.setBlockType(chunk.getBlockMin().add(layer + 1, 0, room + 1), v ? BlockTypes.BARRIER : BlockTypes.AIR, c);
 	}
 }

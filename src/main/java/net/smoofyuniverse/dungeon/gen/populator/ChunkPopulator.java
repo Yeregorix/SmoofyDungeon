@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator;
 
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -52,7 +53,8 @@ public abstract class ChunkPopulator implements Populator {
 
 	@Override
 	public final void populate(World w, Extent c, Random r) {
-		if (hasFlag(c))
+		ChunkInfo info = FlagManager.of(w).getChunk(c);
+		if (info.getFlag())
 			return;
 		if (ResourceUtil.random(getChunkChance(), r)) {
 			int itMax = getChunkIterationMax();
@@ -62,7 +64,7 @@ public abstract class ChunkPopulator implements Populator {
 					break;
 				if (ResourceUtil.random(getChunkIterationChance(), r)) {
 					itCount++;
-					populateChunk(w, c, r);
+					populateChunk(info, w, c, r);
 				}
 			}
 		}
@@ -84,18 +86,14 @@ public abstract class ChunkPopulator implements Populator {
 		return 1.0f;
 	}
 
-	public abstract void populateChunk(World w, Extent c, Random r);
+	public void populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+		populateChunk(w, c, r);
+	}
+
+	public void populateChunk(World w, Extent c, Random r) {}
 
 	public static void generateSpawner(Extent e, int x, int y, int z, EntityType t, Cause cause) {
 		e.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER, cause);
 		e.getTileEntity(x, y, z).get().offer(Keys.SPAWNER_NEXT_ENTITY_TO_SPAWN, new WeightedSerializableObject<>(EntityArchetype.of(t), 1));
-	}
-
-	public static boolean hasFlag(Extent chunk) {
-		return chunk.getBlockType(chunk.getBlockMin()) == BlockTypes.BARRIER;
-	}
-
-	public static void setFlag(Extent chunk, boolean v, Cause c) {
-		chunk.setBlockType(chunk.getBlockMin(), v ? BlockTypes.BARRIER : BlockTypes.AIR, c);
 	}
 }

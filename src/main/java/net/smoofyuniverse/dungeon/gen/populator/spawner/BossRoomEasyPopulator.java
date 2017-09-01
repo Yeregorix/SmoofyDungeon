@@ -22,6 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
@@ -33,8 +34,8 @@ import java.util.Random;
 public class BossRoomEasyPopulator extends RoomPopulator {
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		RoomPopulator.setFlag(c, layer, room, true, this.cause);
+	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		info.setFlag(layer, room, true);
 		y += getFloorOffset(c, x, y, z);
 
 		for (int dx = 0; dx < 7; dx++)

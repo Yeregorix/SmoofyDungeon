@@ -48,13 +48,13 @@ public class WrappedPopulator implements Populator {
 
 	@Override
 	public void populate(World w, Extent c, Random r) {
-		if (!ChunkPopulator.hasFlag(c))
+		if (!FlagManager.of(w).getChunk(c).getFlag())
 			this.delegate.populate(w, c, r);
 	}
 
 	@Override
 	public void populate(World w, Extent c, Random r, ImmutableBiomeVolume biomes) {
-		if (!ChunkPopulator.hasFlag(c))
+		if (!FlagManager.of(w).getChunk(c).getFlag())
 			this.delegate.populate(w, c, r, biomes);
 	}
 }

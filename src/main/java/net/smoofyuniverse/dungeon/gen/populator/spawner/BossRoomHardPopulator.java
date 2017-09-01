@@ -24,6 +24,7 @@ package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
@@ -48,10 +49,10 @@ public class BossRoomHardPopulator extends LayerPopulator {
 	}
 
 	@Override
-	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
-		LayerPopulator.setFlag(c, layer, true, this.cause);
-		LayerPopulator.setFlag(c, layer + 1, true, this.cause);
-		LayerPopulator.setFlag(c, layer + 2, true, this.cause);
+	public void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
+		info.setFlag(layer, true);
+		info.setFlag(layer + 1, true);
+		info.setFlag(layer + 2, true);
 
 		Vector3i min = c.getBlockMin();
 		int x = min.getX(), z = min.getZ();
