@@ -25,7 +25,11 @@ package net.smoofyuniverse.dungeon.gen.populator;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.EntityArchetype;
+import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.util.weighted.WeightedSerializableObject;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.gen.Populator;
@@ -64,10 +68,6 @@ public abstract class ChunkPopulator implements Populator {
 		}
 	}
 
-	public static boolean hasFlag(Extent chunk) {
-		return chunk.getBlockType(chunk.getBlockMin()) == BlockTypes.BARRIER;
-	}
-
 	public float getChunkChance() {
 		return 1.0f;
 	}
@@ -85,6 +85,15 @@ public abstract class ChunkPopulator implements Populator {
 	}
 
 	public abstract void populateChunk(World w, Extent c, Random r);
+
+	public static void generateSpawner(Extent e, int x, int y, int z, EntityType t, Cause cause) {
+		e.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER, cause);
+		e.getTileEntity(x, y, z).get().offer(Keys.SPAWNER_NEXT_ENTITY_TO_SPAWN, new WeightedSerializableObject<>(EntityArchetype.of(t), 1));
+	}
+
+	public static boolean hasFlag(Extent chunk) {
+		return chunk.getBlockType(chunk.getBlockMin()) == BlockTypes.BARRIER;
+	}
 
 	public static void setFlag(Extent chunk, boolean v, Cause c) {
 		chunk.setBlockType(chunk.getBlockMin(), v ? BlockTypes.BARRIER : BlockTypes.AIR, c);

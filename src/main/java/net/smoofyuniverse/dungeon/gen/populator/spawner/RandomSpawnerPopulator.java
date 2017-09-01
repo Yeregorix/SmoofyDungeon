@@ -23,7 +23,6 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
@@ -51,7 +50,7 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			Minecraft.setSpawner(c, x, y, z, randomEntityType(r), this.cause);
+			generateSpawner(c, x, y, z, randomEntityType(r), this.cause);
 	}
 
 	public static EntityType randomEntityType(Random r) {

@@ -35,11 +35,11 @@ import org.spongepowered.api.world.gen.WorldGenerator;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.storage.WorldProperties;
-import org.spongepowered.common.world.gen.populators.AnimalPopulator;
 
 import java.util.List;
 
 public class DungeonWorldModifier implements WorldGeneratorModifier {
+	private static Class<?> animalPopulatorClass;
 
 	@Override
 	public String getId() {
@@ -72,6 +72,17 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		}
 
 		List<Populator> pops = worldGen.getPopulators();
+
+		Populator animalPop = null;
+		if (animalPopulatorClass != null) {
+			for (Populator pop : pops) {
+				if (animalPopulatorClass.isInstance(pop)) {
+					animalPop = pop;
+					break;
+				}
+			}
+		}
+
 		pops.clear();
 
 		// 1- CHUNKS
@@ -121,6 +132,15 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		// 4- OTHERS
 		pops.add(new ExplosionPopulator());
-		pops.add(new WrappedPopulator(new AnimalPopulator()));
+		if (animalPop != null)
+			pops.add(new WrappedPopulator(animalPop));
+	}
+
+	static {
+		try {
+			animalPopulatorClass = Class.forName("org.spongepowered.common.world.gen.populators.AnimalPopulator");
+		} catch (Exception e) {
+			animalPopulatorClass = null;
+		}
 	}
 }

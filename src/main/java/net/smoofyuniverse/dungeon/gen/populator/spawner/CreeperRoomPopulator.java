@@ -23,7 +23,6 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
@@ -44,7 +43,7 @@ public class CreeperRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHER_BRICK, this.cause);
 		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK, this.cause);
 
-		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER, this.cause);
+		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER, this.cause);
 	}
 
 	@Override

@@ -25,7 +25,6 @@ package net.smoofyuniverse.dungeon.gen.populator.spawner;
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
-import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.item.ItemTypes;
@@ -148,14 +147,14 @@ public class BossRoomHardPopulator extends LayerPopulator {
 
 		CHEST_GENERATOR.generateBlock(c, x + 8, y + 1, z + 8, this.cause, r);
 
-		Minecraft.setSpawner(c, x + 7, y + 2, z + 7, EntityTypes.GHAST, this.cause);
-		Minecraft.setSpawner(c, x + 7, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 8, y + 2, z + 7, EntityTypes.PIG_ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 8, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 3, y + 1, z + 12, EntityTypes.SKELETON, this.cause);
-		Minecraft.setSpawner(c, x + 12, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 12, y + 1, z + 12, EntityTypes.SPIDER, this.cause);
+		generateSpawner(c, x + 7, y + 2, z + 7, EntityTypes.GHAST, this.cause);
+		generateSpawner(c, x + 7, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
+		generateSpawner(c, x + 8, y + 2, z + 7, EntityTypes.PIG_ZOMBIE, this.cause);
+		generateSpawner(c, x + 8, y + 2, z + 8, EntityTypes.ZOMBIE, this.cause);
+		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
+		generateSpawner(c, x + 3, y + 1, z + 12, EntityTypes.SKELETON, this.cause);
+		generateSpawner(c, x + 12, y + 1, z + 3, EntityTypes.ZOMBIE, this.cause);
+		generateSpawner(c, x + 12, y + 1, z + 12, EntityTypes.SPIDER, this.cause);
 	}
 
 	static {

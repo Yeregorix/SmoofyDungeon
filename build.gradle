@@ -20,56 +20,23 @@
  * SOFTWARE.
  */
 
-buildscript {
-    repositories {
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name = 'sponge'
-            url = 'https://repo.spongepowered.org/maven'
-        }
-        maven {
-            url = 'https://plugins.gradle.org/m2/'
-        }
-    }
-
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.4+'
-        classpath 'org.spongepowered:spongegradle:0.5.+'
-    }
-}
-
-
 group = 'net.smoofyuniverse'
 version = '1.0.0'
 description = 'An advanced dungeon generator'
 
 apply plugin: 'java'
-apply plugin: 'org.spongepowered.plugin'
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.spongepowered.gradle'
-apply plugin: 'org.spongepowered.plugin'
-
-defaultTasks 'clean', 'build'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-minecraft {
-    forgeVersion = '2444'
-    mappings = 'snapshot_20170706'
-    useDepAts = true
-    makeObfSourceJar = false
+repositories {
+    mavenCentral()
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
 }
 
-deobfMcMCP { failOnAtError = false }
-deobfMcSRG { failOnAtError = false }
-
 dependencies {
-    compile ('org.spongepowered:spongeforge:1.12.1-2444-7.0.0-BETA-2565:dev') {
-        exclude group: 'org.spongepowered', module: 'testplugins'
-    }
+    compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
 }

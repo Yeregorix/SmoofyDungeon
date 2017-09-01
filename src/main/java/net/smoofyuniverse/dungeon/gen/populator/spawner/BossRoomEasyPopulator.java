@@ -23,7 +23,6 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
@@ -42,9 +41,9 @@ public class BossRoomEasyPopulator extends RoomPopulator {
 			for (int dz = 0; dz < 7; dz++)
 				c.setBlockType(x + dx, y, z + dz, BlockTypes.MOSSY_COBBLESTONE, this.cause);
 
-		Minecraft.setSpawner(c, x + 1, y + 1, z + 1, EntityTypes.ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 3, y + 1, z + 3, EntityTypes.PIG_ZOMBIE, this.cause);
-		Minecraft.setSpawner(c, x + 5, y + 1, z + 5, EntityTypes.SPIDER, this.cause);
+		generateSpawner(c, x + 1, y + 1, z + 1, EntityTypes.ZOMBIE, this.cause);
+		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.PIG_ZOMBIE, this.cause);
+		generateSpawner(c, x + 5, y + 1, z + 5, EntityTypes.SPIDER, this.cause);
 
 		c.setBlockType(x + 1, y + 1, z + 5, BlockTypes.COAL_ORE, this.cause);
 		c.setBlockType(x + 5, y + 1, z + 1, BlockTypes.COAL_ORE, this.cause);

@@ -25,7 +25,6 @@ package net.smoofyuniverse.dungeon.gen.populator.spawner;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
-import net.smoofyuniverse.dungeon.util.Minecraft;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -94,7 +93,7 @@ public class BlazeRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 2, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
 		c.setBlockType(x + 5, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
 
-		Minecraft.setSpawner(c, x + 3, floorY + 2, z + 3, EntityTypes.BLAZE, this.cause);
+		generateSpawner(c, x + 3, floorY + 2, z + 3, EntityTypes.BLAZE, this.cause);
 
 		CHEST_GENERATOR.generateBlock(c, x + 3, floorY, z + 3, this.cause, r);
 		CHEST_GENERATOR.generateBlock(c, x + 4, floorY, z + 4, this.cause, r);
