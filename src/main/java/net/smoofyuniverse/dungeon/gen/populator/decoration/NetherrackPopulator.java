@@ -53,9 +53,9 @@ public class NetherrackPopulator extends RoomPopulator {
 		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE) {
-			c.setBlockType(x, y, z, BlockTypes.NETHERRACK, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.NETHERRACK);
 			if (c.getBlockType(x, y + 1, z) == BlockTypes.AIR && r.nextFloat() < 0.33f)
-				c.setBlockType(x, y + 1, z, BlockTypes.FIRE, this.cause);
+				c.setBlockType(x, y + 1, z, BlockTypes.FIRE);
 		}
 	}
 }

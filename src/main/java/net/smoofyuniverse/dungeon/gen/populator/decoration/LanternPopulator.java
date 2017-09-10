@@ -62,6 +62,6 @@ public class LanternPopulator extends RoomPopulator {
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.STONEBRICK)
-			c.setBlockType(x, y, z, r.nextBoolean() ? BlockTypes.SEA_LANTERN : BlockTypes.REDSTONE_LAMP, this.cause);
+			c.setBlockType(x, y, z, r.nextBoolean() ? BlockTypes.SEA_LANTERN : BlockTypes.REDSTONE_LAMP);
 	}
 }

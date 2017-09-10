@@ -75,7 +75,7 @@ public class RuinsPopulator extends RoomPopulator {
 		while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 			for (int dy = 0; dy < height; dy++) {
 				if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-					c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
+					c.setBlockType(x + dx, y + dy, z + dz, type);
 			}
 
 			height -= r.nextInt(3);
@@ -90,7 +90,7 @@ public class RuinsPopulator extends RoomPopulator {
 			while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 				for (int dy = 0; dy < height; dy++) {
 					if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-						c.setBlockType(x + dx, y + dy, z + dz, type, this.cause);
+						c.setBlockType(x + dx, y + dy, z + dz, type);
 				}
 
 				height -= r.nextInt(3);

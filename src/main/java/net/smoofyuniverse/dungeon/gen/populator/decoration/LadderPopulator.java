@@ -71,7 +71,7 @@ public class LadderPopulator extends RoomPopulator {
 			// We use Keys.DIRECTION instead of EnumTraits.LADDER_FACING since Direction cannot be cast to net.minecraft.util.EnumFacing and so is not recognized by the implementation (issue to report)
 			BlockState state = BlockTypes.LADDER.getDefaultState().with(Keys.DIRECTION, dir).get();
 			for (int i = 0; i < 8; i++)
-				c.setBlock(x, y + i, z, state, this.cause);
+				c.setBlock(x, y + i, z, state);
 		}
 	}
 

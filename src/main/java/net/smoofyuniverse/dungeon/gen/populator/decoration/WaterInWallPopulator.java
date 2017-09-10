@@ -59,7 +59,7 @@ public class WaterInWallPopulator extends RoomPopulator {
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.STONEBRICK) {
 //			LoggerFactory.getLogger("test").info("water: " + x + " " + y + " " + z);
-			c.setBlockType(x, y, z, BlockTypes.WATER, BlockChangeFlag.ALL, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.WATER, BlockChangeFlag.ALL);
 //			Minecraft.immediateBlockUpdate(w, r, x, y, z);
 		}
 	}

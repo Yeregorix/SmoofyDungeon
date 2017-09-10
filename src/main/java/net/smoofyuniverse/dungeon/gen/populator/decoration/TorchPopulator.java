@@ -38,7 +38,7 @@ public class TorchPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			c.setBlockType(x, y, z, BlockTypes.TORCH, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.TORCH);
 	}
 
 	@Override

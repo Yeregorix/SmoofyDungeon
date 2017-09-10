@@ -23,10 +23,8 @@
 package net.smoofyuniverse.dungeon.gen;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.noise.SimplexOctaveGenerator;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.biome.BiomeTypes;
@@ -37,11 +35,6 @@ import org.spongepowered.api.world.gen.GenerationPopulator;
 import java.util.Random;
 
 public class DungeonTerrainGenerator implements GenerationPopulator {
-	protected final Cause cause;
-
-	protected DungeonTerrainGenerator() {
-		this.cause = SmoofyDungeon.get().newCause().named("GenerationPopulator", this).build();
-	}
 
 	@Override
 	public void populate(World w, MutableBlockVolume volume, ImmutableBiomeVolume biomes) {
@@ -60,7 +53,7 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 			for (int z = minZ; z <= maxZ; z++) {
 				int bedrockLevel = r.nextInt(5);
 				for (int y = 0; y <= 30; y++)
-					volume.setBlockType(x, y, z, y <= bedrockLevel ? BlockTypes.BEDROCK : BlockTypes.STONE, this.cause);
+					volume.setBlockType(x, y, z, y <= bedrockLevel ? BlockTypes.BEDROCK : BlockTypes.STONE);
 			}
 
 		// Iterate over each layer
@@ -75,14 +68,14 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 					for (int x2 = x; x2 < x + 8; x2++)
 						for (int z2 = z; z2 < z + 8; z2++) {
 							// Fill the floor
-							volume.setBlockType(minX + x2, floorY, minZ + z2, BlockTypes.COBBLESTONE, this.cause);
+							volume.setBlockType(minX + x2, floorY, minZ + z2, BlockTypes.COBBLESTONE);
 
 							for (int y2 = floorY; y2 < y + 8; y2++) {
 								// Fill the walls
 								if (((x2 == x || x2 == x + 7) && (z2 == z || z2 == z + 7)) || randX == x2 || randZ == z2)
-									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.STONEBRICK, this.cause);
+									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.STONEBRICK);
 								else if (y2 != floorY)
-									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.AIR, this.cause);
+									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.AIR);
 							}
 						}
 				}
@@ -97,22 +90,22 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 			for (int z = minZ; z <= maxZ; z++) {
 				double height = octave.noise(x, z, 0.5, 0.5) * 4 + 9;
 
-				volume.setBlockType(x, 30 + (7 * 6), z, BlockTypes.COBBLESTONE, this.cause);
+				volume.setBlockType(x, 30 + (7 * 6), z, BlockTypes.COBBLESTONE);
 				for (int y = 30 + (7 * 6) + 1; y < 30 + (7 * 6) + 4; y++)
-					volume.setBlockType(x, y, z, BlockTypes.STONE, this.cause);
+					volume.setBlockType(x, y, z, BlockTypes.STONE);
 
 				BiomeType biome = biomes.getBiome(x, 0, z);
 				if (biome == BiomeTypes.DESERT || biome == BiomeTypes.DESERT_HILLS) {
 					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
-						volume.setBlockType(x, y, z, BlockTypes.SAND, this.cause);
+						volume.setBlockType(x, y, z, BlockTypes.SAND);
 				} else if (biome == BiomeTypes.MUSHROOM_ISLAND) {
 					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
-						volume.setBlockType(x, y, z, BlockTypes.DIRT, this.cause);
-					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.MYCELIUM, this.cause);
+						volume.setBlockType(x, y, z, BlockTypes.DIRT);
+					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.MYCELIUM);
 				} else {
 					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
-						volume.setBlockType(x, y, z, BlockTypes.DIRT, this.cause);
-					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.GRASS, this.cause);
+						volume.setBlockType(x, y, z, BlockTypes.DIRT);
+					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.GRASS);
 				}
 			}
 	}

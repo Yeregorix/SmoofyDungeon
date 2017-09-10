@@ -51,53 +51,53 @@ public class BlazeRoomPopulator extends RoomPopulator {
 
 		for (int dx = 0; dx < 8; dx++)
 			for (int dz = 0; dz < 8; dz++) {
-				c.setBlockType(x + dx, floorY, z + dz, BlockTypes.NETHER_BRICK, this.cause);
-				c.setBlockType(x + dx, floorY - 1, z + dz, BlockTypes.COBBLESTONE, this.cause);
+				c.setBlockType(x + dx, floorY, z + dz, BlockTypes.NETHER_BRICK);
+				c.setBlockType(x + dx, floorY - 1, z + dz, BlockTypes.COBBLESTONE);
 				for (int y2 = floorY + 1; y2 < ceilingY; y2++)
-					c.setBlockType(x + dx, y2, z + dz, BlockTypes.AIR, this.cause);
+					c.setBlockType(x + dx, y2, z + dz, BlockTypes.AIR);
 			}
 
 		for (int y2 = floorY + 1; y2 < ceilingY; y2++) {
-			c.setBlockType(x, y2, z, BlockTypes.NETHER_BRICK, this.cause);
-			c.setBlockType(x + 7, y2, z, BlockTypes.NETHER_BRICK, this.cause);
-			c.setBlockType(x, y2, z + 7, BlockTypes.NETHER_BRICK, this.cause);
-			c.setBlockType(x + 7, y2, z + 7, BlockTypes.NETHER_BRICK, this.cause);
+			c.setBlockType(x, y2, z, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x + 7, y2, z, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x, y2, z + 7, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x + 7, y2, z + 7, BlockTypes.NETHER_BRICK);
 
-			c.setBlockType(x + 1, y2, z, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x + 6, y2, z, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x + 7, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x + 1, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x + 7, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-			c.setBlockType(x + 6, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE, this.cause);
+			c.setBlockType(x + 1, y2, z, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 6, y2, z, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 7, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 1, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 7, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 6, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE);
 		}
 
 		for (int dx = 2; dx < 6; dx++)
 			for (int dz = 2; dz < 6; dz++)
-				c.setBlockType(x + dx, floorY + 1, z + dz, BlockTypes.NETHER_BRICK, this.cause);
+				c.setBlockType(x + dx, floorY + 1, z + dz, BlockTypes.NETHER_BRICK);
 
-		c.setBlock(x + 3, floorY + 1, z + 2, SOUTH_STAIRS, this.cause);
-		c.setBlock(x + 4, floorY + 1, z + 2, SOUTH_STAIRS, this.cause);
+		c.setBlock(x + 3, floorY + 1, z + 2, SOUTH_STAIRS);
+		c.setBlock(x + 4, floorY + 1, z + 2, SOUTH_STAIRS);
 
-		c.setBlock(x + 3, floorY + 1, z + 5, NORTH_STAIRS, this.cause);
-		c.setBlock(x + 4, floorY + 1, z + 5, NORTH_STAIRS, this.cause);
+		c.setBlock(x + 3, floorY + 1, z + 5, NORTH_STAIRS);
+		c.setBlock(x + 4, floorY + 1, z + 5, NORTH_STAIRS);
 
-		c.setBlock(x + 2, floorY + 1, z + 3, EAST_STAIRS, this.cause);
-		c.setBlock(x + 2, floorY + 1, z + 4, EAST_STAIRS, this.cause);
+		c.setBlock(x + 2, floorY + 1, z + 3, EAST_STAIRS);
+		c.setBlock(x + 2, floorY + 1, z + 4, EAST_STAIRS);
 
-		c.setBlock(x + 5, floorY + 1, z + 3, WEST_STAIRS, this.cause);
-		c.setBlock(x + 5, floorY + 1, z + 4, WEST_STAIRS, this.cause);
+		c.setBlock(x + 5, floorY + 1, z + 3, WEST_STAIRS);
+		c.setBlock(x + 5, floorY + 1, z + 4, WEST_STAIRS);
 
-		c.setBlockType(x + 2, floorY + 2, z + 2, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-		c.setBlockType(x + 5, floorY + 2, z + 2, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-		c.setBlockType(x + 2, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
-		c.setBlockType(x + 5, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE, this.cause);
+		c.setBlockType(x + 2, floorY + 2, z + 2, BlockTypes.NETHER_BRICK_FENCE);
+		c.setBlockType(x + 5, floorY + 2, z + 2, BlockTypes.NETHER_BRICK_FENCE);
+		c.setBlockType(x + 2, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE);
+		c.setBlockType(x + 5, floorY + 2, z + 5, BlockTypes.NETHER_BRICK_FENCE);
 
-		generateSpawner(c, x + 3, floorY + 2, z + 3, EntityTypes.BLAZE, this.cause);
+		generateSpawner(c, x + 3, floorY + 2, z + 3, EntityTypes.BLAZE);
 
-		CHEST_GENERATOR.generateBlock(c, x + 3, floorY, z + 3, this.cause, r);
-		CHEST_GENERATOR.generateBlock(c, x + 4, floorY, z + 4, this.cause, r);
+		CHEST_GENERATOR.generateBlock(c, x + 3, floorY, z + 3, r);
+		CHEST_GENERATOR.generateBlock(c, x + 4, floorY, z + 4, r);
 	}
 
 	@Override

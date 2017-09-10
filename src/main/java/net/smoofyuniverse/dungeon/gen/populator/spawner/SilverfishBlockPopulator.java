@@ -76,14 +76,14 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 		if (type == BlockTypes.STONEBRICK) {
 			BrickType bType = ((Optional<BrickType>) state.getTraitValue(EnumTraits.STONEBRICK_VARIANT)).orElse(BrickTypes.DEFAULT);
 			if (bType == BrickTypes.DEFAULT)
-				c.setBlock(x, y, z, STONEBRICK_EGG, this.cause);
+				c.setBlock(x, y, z, STONEBRICK_EGG);
 			else if (bType == BrickTypes.MOSSY)
-				c.setBlock(x, y, z, MOSSY_STONEBRICK_EGG, this.cause);
+				c.setBlock(x, y, z, MOSSY_STONEBRICK_EGG);
 			else if (bType == BrickTypes.CRACKED)
-				c.setBlock(x, y, z, CRACKED_STONEBRICK_EGG, this.cause);
+				c.setBlock(x, y, z, CRACKED_STONEBRICK_EGG);
 		} else if (type == BlockTypes.COBBLESTONE)
-			c.setBlock(x, y, z, COBBLESTONE_EGG, this.cause);
+			c.setBlock(x, y, z, COBBLESTONE_EGG);
 		else if (type == BlockTypes.STONE)
-			c.setBlock(x, y, z, STONE_EGG, this.cause);
+			c.setBlock(x, y, z, STONE_EGG);
 	}
 }

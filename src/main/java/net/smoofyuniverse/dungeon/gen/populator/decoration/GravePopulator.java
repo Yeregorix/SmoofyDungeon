@@ -45,11 +45,11 @@ public class GravePopulator extends RoomPopulator {
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
-		c.setBlockType(x, y, z, BlockTypes.DOUBLE_STONE_SLAB, this.cause);
-		c.setBlockType(x - 1, y, z, BlockTypes.STONE_SLAB, this.cause);
-		c.setBlockType(x - 2, y, z, BlockTypes.STONE_SLAB, this.cause);
+		c.setBlockType(x, y, z, BlockTypes.DOUBLE_STONE_SLAB);
+		c.setBlockType(x - 1, y, z, BlockTypes.STONE_SLAB);
+		c.setBlockType(x - 2, y, z, BlockTypes.STONE_SLAB);
 
-		c.setBlock(x, y + 1, z, SIGN, this.cause);
+		c.setBlock(x, y + 1, z, SIGN);
 		c.getTileEntity(x, y + 1, z).get().offer(Keys.SIGN_LINES, LINES);
 	}
 

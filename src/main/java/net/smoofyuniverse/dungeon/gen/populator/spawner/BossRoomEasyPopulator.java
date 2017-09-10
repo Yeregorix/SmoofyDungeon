@@ -40,14 +40,14 @@ public class BossRoomEasyPopulator extends RoomPopulator {
 
 		for (int dx = 0; dx < 7; dx++)
 			for (int dz = 0; dz < 7; dz++)
-				c.setBlockType(x + dx, y, z + dz, BlockTypes.MOSSY_COBBLESTONE, this.cause);
+				c.setBlockType(x + dx, y, z + dz, BlockTypes.MOSSY_COBBLESTONE);
 
-		generateSpawner(c, x + 1, y + 1, z + 1, EntityTypes.ZOMBIE, this.cause);
-		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.PIG_ZOMBIE, this.cause);
-		generateSpawner(c, x + 5, y + 1, z + 5, EntityTypes.SPIDER, this.cause);
+		generateSpawner(c, x + 1, y + 1, z + 1, EntityTypes.ZOMBIE);
+		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.PIG_ZOMBIE);
+		generateSpawner(c, x + 5, y + 1, z + 5, EntityTypes.SPIDER);
 
-		c.setBlockType(x + 1, y + 1, z + 5, BlockTypes.COAL_ORE, this.cause);
-		c.setBlockType(x + 5, y + 1, z + 1, BlockTypes.COAL_ORE, this.cause);
+		c.setBlockType(x + 1, y + 1, z + 5, BlockTypes.COAL_ORE);
+		c.setBlockType(x + 5, y + 1, z + 1, BlockTypes.COAL_ORE);
 	}
 
 	@Override

@@ -58,6 +58,6 @@ public class SoulSandPopulator extends RoomPopulator {
 		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE)
-			c.setBlockType(x, y, z, BlockTypes.SOUL_SAND, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.SOUL_SAND);
 	}
 }

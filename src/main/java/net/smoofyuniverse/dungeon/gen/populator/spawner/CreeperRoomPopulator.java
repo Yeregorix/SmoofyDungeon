@@ -38,13 +38,13 @@ public class CreeperRoomPopulator extends RoomPopulator {
 		info.setFlag(layer, room, true);
 		y += getFloorOffset(c, x, y, z);
 
-		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHER_BRICK, this.cause);
-		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.NETHER_BRICK, this.cause);
-		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHER_BRICK, this.cause);
-		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHER_BRICK, this.cause);
-		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK, this.cause);
+		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK);
 
-		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER, this.cause);
+		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER);
 	}
 
 	@Override

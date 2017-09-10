@@ -64,6 +64,6 @@ public class SlabPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + (ceiling ? 1 : -1), z) != BlockTypes.AIR)
-			c.setBlock(x, y, z, ceiling ? TOP_SLAB : BOTTOM_SLAB, this.cause);
+			c.setBlock(x, y, z, ceiling ? TOP_SLAB : BOTTOM_SLAB);
 	}
 }

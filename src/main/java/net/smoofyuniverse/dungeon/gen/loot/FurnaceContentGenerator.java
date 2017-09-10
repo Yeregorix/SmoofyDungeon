@@ -24,7 +24,6 @@ package net.smoofyuniverse.dungeon.gen.loot;
 
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.Furnace;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.slot.OutputSlot;
@@ -44,8 +43,8 @@ public class FurnaceContentGenerator {
 		this.outputChance = outputChance;
 	}
 
-	public void generateBlock(Extent c, int x, int y, int z, Cause cause, Random r) {
-		c.setBlockType(x, y, z, BlockTypes.FURNACE, cause);
+	public void generateBlock(Extent c, int x, int y, int z, Random r) {
+		c.setBlockType(x, y, z, BlockTypes.FURNACE);
 		((Furnace) c.getTileEntity(x, y, z).get()).getInventory().query(OutputSlot.class).set(generate(r).orElse(ItemStack.empty()));
 	}
 

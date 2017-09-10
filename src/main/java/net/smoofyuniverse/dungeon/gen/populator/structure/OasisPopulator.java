@@ -48,28 +48,28 @@ public class OasisPopulator extends ChunkPopulator {
 
 		for (int dx = 0; dx < 16; dx++) {
 			for (int dz = 0; dz < 16; dz++) {
-				c.setBlockType(x + dx, 29, z + dz, r.nextFloat() < 0.1f ? BlockTypes.CLAY : BlockTypes.DIRT, this.cause);
-				c.setBlockType(x + dx, 30, z + dz, BlockTypes.GRASS, this.cause);
-				c.setBlockType(x + dx, 31, z + dz, r.nextFloat() < 0.1f ? BlockTypes.TALLGRASS : BlockTypes.AIR, this.cause);
+				c.setBlockType(x + dx, 29, z + dz, r.nextFloat() < 0.1f ? BlockTypes.CLAY : BlockTypes.DIRT);
+				c.setBlockType(x + dx, 30, z + dz, BlockTypes.GRASS);
+				c.setBlockType(x + dx, 31, z + dz, r.nextFloat() < 0.1f ? BlockTypes.TALLGRASS : BlockTypes.AIR);
 				for (int y = 32; y <= 100; y++)
-					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR, this.cause);
+					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR);
 			}
 		}
 
 		for (int dx = 5; dx <= 11; dx++) {
-			c.setBlockType(x + dx, 30, z + 5, BlockTypes.WATER, this.cause);
-			c.setBlockType(x + dx, 30, z + 11, BlockTypes.WATER, this.cause);
+			c.setBlockType(x + dx, 30, z + 5, BlockTypes.WATER);
+			c.setBlockType(x + dx, 30, z + 11, BlockTypes.WATER);
 		}
 
 		for (int dz = 5; dz <= 11; dz++) {
-			c.setBlockType(x + 5, 30, z + dz, BlockTypes.WATER, this.cause);
-			c.setBlockType(x + 11, 30, z + dz, BlockTypes.WATER, this.cause);
+			c.setBlockType(x + 5, 30, z + dz, BlockTypes.WATER);
+			c.setBlockType(x + 11, 30, z + dz, BlockTypes.WATER);
 		}
 
-		c.setBlockType(x + 6, 31, z + 6, BlockTypes.REEDS, this.cause);
-		c.setBlockType(x + 6, 31, z + 10, BlockTypes.REEDS, this.cause);
-		c.setBlockType(x + 10, 31, z + 6, BlockTypes.REEDS, this.cause);
-		c.setBlockType(x + 10, 31, z + 10, BlockTypes.REEDS, this.cause);
+		c.setBlockType(x + 6, 31, z + 6, BlockTypes.REEDS);
+		c.setBlockType(x + 6, 31, z + 10, BlockTypes.REEDS);
+		c.setBlockType(x + 10, 31, z + 6, BlockTypes.REEDS);
+		c.setBlockType(x + 10, 31, z + 10, BlockTypes.REEDS);
 
 		TREES[r.nextInt(TREES.length)].placeObject(w, r, x + 8, 31, z + 8);
 	}

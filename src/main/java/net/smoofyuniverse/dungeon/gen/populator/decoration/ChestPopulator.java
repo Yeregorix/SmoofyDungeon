@@ -52,7 +52,7 @@ public class ChestPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			CHEST_GENERATOR.generateBlock(c, x, y, z, this.cause, r);
+			CHEST_GENERATOR.generateBlock(c, x, y, z, r);
 	}
 
 	static {

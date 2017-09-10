@@ -22,14 +22,12 @@
 
 package net.smoofyuniverse.dungeon.gen.populator;
 
-import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityArchetype;
 import org.spongepowered.api.entity.EntityType;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.util.weighted.WeightedSerializableObject;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -40,11 +38,8 @@ import org.spongepowered.api.world.gen.PopulatorTypes;
 import java.util.Random;
 
 public abstract class ChunkPopulator implements Populator {
-	protected final Cause cause;
 
-	protected ChunkPopulator() {
-		this.cause = SmoofyDungeon.get().newCause().named("Populator", this).build();
-	}
+	protected ChunkPopulator() {}
 
 	@Override
 	public PopulatorType getType() {
@@ -92,8 +87,8 @@ public abstract class ChunkPopulator implements Populator {
 
 	public void populateChunk(World w, Extent c, Random r) {}
 
-	public static void generateSpawner(Extent e, int x, int y, int z, EntityType t, Cause cause) {
-		e.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER, cause);
+	public static void generateSpawner(Extent e, int x, int y, int z, EntityType t) {
+		e.setBlockType(x, y, z, BlockTypes.MOB_SPAWNER);
 		e.getTileEntity(x, y, z).get().offer(Keys.SPAWNER_NEXT_ENTITY_TO_SPAWN, new WeightedSerializableObject<>(EntityArchetype.of(t), 1));
 	}
 }

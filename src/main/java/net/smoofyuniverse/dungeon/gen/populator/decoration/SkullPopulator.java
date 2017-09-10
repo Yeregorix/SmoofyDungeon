@@ -57,11 +57,11 @@ public class SkullPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (r.nextBoolean()) {
-			c.setBlockType(x, y, z, BlockTypes.FENCE, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.FENCE);
 			y++;
 		}
 
-		c.setBlock(x, y, z, SKULL, this.cause);
+		c.setBlock(x, y, z, SKULL);
 		c.getTileEntity(x, y, z).get().offer(Keys.DIRECTION, Direction.values()[r.nextInt(16)]);
 	}
 }

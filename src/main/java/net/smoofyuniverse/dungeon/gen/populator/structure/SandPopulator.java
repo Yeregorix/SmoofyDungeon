@@ -74,7 +74,7 @@ public class SandPopulator extends RoomPopulator {
 		while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 			for (int dy = 0; dy < height; dy++) {
 				if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-					c.setBlock(x + dx, y + dy, z + dz, state, this.cause);
+					c.setBlock(x + dx, y + dy, z + dz, state);
 			}
 
 			if (r.nextBoolean())
@@ -90,7 +90,7 @@ public class SandPopulator extends RoomPopulator {
 			while (height > 0 && dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 				for (int dy = 0; dy < height; dy++) {
 					if (c.getBlockType(x + dx, y + dy, z + dz) == BlockTypes.AIR)
-						c.setBlock(x + dx, y + dy, z + dz, state, this.cause);
+						c.setBlock(x + dx, y + dy, z + dz, state);
 				}
 
 				if (r.nextBoolean())

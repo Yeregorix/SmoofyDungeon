@@ -26,7 +26,6 @@ import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -49,10 +48,6 @@ public final class SmoofyDungeon {
 
 	public PluginContainer getContainer() {
 		return this.container;
-	}
-
-	public Cause.Builder newCause() {
-		return Cause.source(this.container);
 	}
 
 	public static SmoofyDungeon get() {

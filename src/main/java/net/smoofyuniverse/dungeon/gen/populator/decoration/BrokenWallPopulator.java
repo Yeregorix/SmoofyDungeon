@@ -48,7 +48,7 @@ public class BrokenWallPopulator extends RoomPopulator {
 			x += r.nextBoolean() ? 0 : 7;
 		}
 
-		c.setBlockType(x, y, z, BlockTypes.AIR, this.cause);
-		c.setBlockType(x, y + 1, z, BlockTypes.AIR, this.cause);
+		c.setBlockType(x, y, z, BlockTypes.AIR);
+		c.setBlockType(x, y + 1, z, BlockTypes.AIR);
 	}
 }

@@ -44,9 +44,9 @@ public class MossPopulator extends RoomPopulator {
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE)
-			c.setBlockType(x, y, z, BlockTypes.MOSSY_COBBLESTONE, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.MOSSY_COBBLESTONE);
 		else if (type == BlockTypes.STONEBRICK)
-			c.setBlock(x, y, z, MOSSY_STONEBRICK, this.cause);
+			c.setBlock(x, y, z, MOSSY_STONEBRICK);
 	}
 
 	@Override

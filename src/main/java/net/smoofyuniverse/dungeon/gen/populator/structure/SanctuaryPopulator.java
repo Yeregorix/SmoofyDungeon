@@ -50,27 +50,27 @@ public class SanctuaryPopulator extends RoomPopulator {
 
 		for (int dx = 0; dx < 8; dx++) {
 			for (int dz = 0; dz < 8; dz++)
-				c.setBlockType(x + dx, y, z + dz, BlockTypes.OBSIDIAN, this.cause);
+				c.setBlockType(x + dx, y, z + dz, BlockTypes.OBSIDIAN);
 		}
 
-		c.setBlockType(x + 2, y + 1, z + 2, BlockTypes.GOLD_BLOCK, this.cause);
-		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHERRACK, this.cause);
-		c.setBlockType(x + 4, y + 1, z + 2, BlockTypes.NETHERRACK, this.cause);
-		c.setBlockType(x + 5, y + 1, z + 2, BlockTypes.GOLD_BLOCK, this.cause);
+		c.setBlockType(x + 2, y + 1, z + 2, BlockTypes.GOLD_BLOCK);
+		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 4, y + 1, z + 2, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 5, y + 1, z + 2, BlockTypes.GOLD_BLOCK);
 
-		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHERRACK, this.cause);
-		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.SOUL_SAND, this.cause);
-		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.SOUL_SAND, this.cause);
-		c.setBlockType(x + 5, y + 1, z + 3, BlockTypes.NETHERRACK, this.cause);
+		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.SOUL_SAND);
+		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.SOUL_SAND);
+		c.setBlockType(x + 5, y + 1, z + 3, BlockTypes.NETHERRACK);
 
-		c.setBlockType(x + 2, y + 1, z + 4, BlockTypes.GOLD_BLOCK, this.cause);
-		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHERRACK, this.cause);
-		c.setBlockType(x + 4, y + 1, z + 4, BlockTypes.NETHERRACK, this.cause);
-		c.setBlockType(x + 5, y + 1, z + 4, BlockTypes.GOLD_BLOCK, this.cause);
+		c.setBlockType(x + 2, y + 1, z + 4, BlockTypes.GOLD_BLOCK);
+		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 4, y + 1, z + 4, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 5, y + 1, z + 4, BlockTypes.GOLD_BLOCK);
 
-		c.setBlockType(x + 2, y + 2, z + 2, BlockTypes.TORCH, this.cause);
-		c.setBlockType(x + 5, y + 2, z + 2, BlockTypes.TORCH, this.cause);
-		c.setBlockType(x + 2, y + 2, z + 4, BlockTypes.TORCH, this.cause);
-		c.setBlockType(x + 5, y + 2, z + 4, BlockTypes.TORCH, this.cause);
+		c.setBlockType(x + 2, y + 2, z + 2, BlockTypes.TORCH);
+		c.setBlockType(x + 5, y + 2, z + 2, BlockTypes.TORCH);
+		c.setBlockType(x + 2, y + 2, z + 4, BlockTypes.TORCH);
+		c.setBlockType(x + 5, y + 2, z + 4, BlockTypes.TORCH);
 	}
 }

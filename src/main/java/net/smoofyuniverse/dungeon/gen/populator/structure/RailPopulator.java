@@ -76,7 +76,7 @@ public class RailPopulator extends RoomPopulator {
 		int dz = oz;
 		while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 			if (r.nextFloat() > 0.2f) {
-				c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL, this.cause);
+				c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL);
 				if (r.nextFloat() < 0.01f)
 					entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
 			}
@@ -90,7 +90,7 @@ public class RailPopulator extends RoomPopulator {
 			dz = oz;
 			while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
 				if (r.nextFloat() > 0.2f) {
-					c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL, this.cause);
+					c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL);
 					if (r.nextFloat() < 0.01f)
 						entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
 				}
@@ -101,6 +101,6 @@ public class RailPopulator extends RoomPopulator {
 		}
 
 		if (!entities.isEmpty()) // TODO fix / report issue
-			c.spawnEntities(entities, this.cause);
+			c.spawnEntities(entities);
 	}
 }

@@ -46,7 +46,7 @@ public class HighRoomPopulator extends RoomPopulator {
 		for (int dx = 0; dx < 8; dx++) {
 			for (int dz = 0; dz < 8; dz++) {
 				if (c.getBlockType(x + dx, y, z + dz) == BlockTypes.COBBLESTONE)
-					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR, this.cause);
+					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR);
 			}
 		}
 	}

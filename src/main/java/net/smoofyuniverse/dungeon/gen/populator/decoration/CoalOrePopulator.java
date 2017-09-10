@@ -38,7 +38,7 @@ public class CoalOrePopulator extends RoomPopulator {
 		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE)
-			c.setBlockType(x, y, z, BlockTypes.COAL_ORE, this.cause);
+			c.setBlockType(x, y, z, BlockTypes.COAL_ORE);
 	}
 
 	@Override

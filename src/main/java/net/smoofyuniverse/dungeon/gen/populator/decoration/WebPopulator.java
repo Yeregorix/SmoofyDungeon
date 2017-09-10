@@ -69,6 +69,6 @@ public class WebPopulator extends RoomPopulator {
 			}
 		}
 
-		c.setBlockType(x, y, z, BlockTypes.WEB, this.cause);
+		c.setBlockType(x, y, z, BlockTypes.WEB);
 	}
 }

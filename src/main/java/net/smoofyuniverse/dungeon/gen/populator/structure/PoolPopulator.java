@@ -47,21 +47,21 @@ public class PoolPopulator extends RoomPopulator {
 		for (int dy = 0; dy < 4; dy++) {
 			for (int i = 0; i < 8; i++) {
 				if (c.getBlockType(x + i, y + dy, z) == BlockTypes.AIR)
-					c.setBlockType(x + i, y + dy, z, BlockTypes.BRICK_BLOCK, this.cause);
+					c.setBlockType(x + i, y + dy, z, BlockTypes.BRICK_BLOCK);
 
 				if (c.getBlockType(x + i, y + dy, z + 7) == BlockTypes.AIR)
-					c.setBlockType(x + i, y + dy, z + 7, BlockTypes.BRICK_BLOCK, this.cause);
+					c.setBlockType(x + i, y + dy, z + 7, BlockTypes.BRICK_BLOCK);
 
 				if (c.getBlockType(x, y + dy, z + i) == BlockTypes.AIR)
-					c.setBlockType(x, y + dy, z + i, BlockTypes.BRICK_BLOCK, this.cause);
+					c.setBlockType(x, y + dy, z + i, BlockTypes.BRICK_BLOCK);
 
 				if (c.getBlockType(x + 7, y + dy, z + i) == BlockTypes.AIR)
-					c.setBlockType(x + 7, y + dy, z + i, BlockTypes.BRICK_BLOCK, this.cause);
+					c.setBlockType(x + 7, y + dy, z + i, BlockTypes.BRICK_BLOCK);
 			}
 
 			for (int dx = 1; dx < 7; dx++) {
 				for (int dz = 1; dz < 7; dz++)
-					c.setBlockType(x + dx, y + dy, z + dz, water ? BlockTypes.WATER : BlockTypes.LAVA, this.cause);
+					c.setBlockType(x + dx, y + dy, z + dz, water ? BlockTypes.WATER : BlockTypes.LAVA);
 			}
 		}
 	}

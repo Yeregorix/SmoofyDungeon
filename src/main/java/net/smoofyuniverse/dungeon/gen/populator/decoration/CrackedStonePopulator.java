@@ -52,6 +52,6 @@ public class CrackedStonePopulator extends RoomPopulator {
 		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK)
-			c.setBlock(x, y, z, CRACKED_STONEBRICK, this.cause);
+			c.setBlock(x, y, z, CRACKED_STONEBRICK);
 	}
 }

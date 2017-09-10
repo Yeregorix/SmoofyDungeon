@@ -26,7 +26,6 @@ import net.smoofyuniverse.dungeon.util.RandomQueue;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.Chest;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -45,8 +44,8 @@ public class ChestContentGenerator {
 		this.counts = counts;
 	}
 
-	public void generateBlock(Extent c, int x, int y, int z, Cause cause, Random r) {
-		c.setBlockType(x, y, z, BlockTypes.CHEST, cause);
+	public void generateBlock(Extent c, int x, int y, int z, Random r) {
+		c.setBlockType(x, y, z, BlockTypes.CHEST);
 		fill(((Chest) c.getTileEntity(x, y, z).get()).getInventory(), r);
 	}
 

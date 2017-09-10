@@ -43,7 +43,7 @@ public class ExplosionPopulator extends ChunkPopulator {
 		while (count < 10) {
 			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, x + (r.nextDouble() * 16d), 30d + (r.nextDouble() * 42d), z + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
 			for (Vector3i b : blocks)
-				w.setBlockType(b, BlockTypes.AIR, this.cause);
+				w.setBlockType(b, BlockTypes.AIR);
 
 			count += blocks.size();
 		}

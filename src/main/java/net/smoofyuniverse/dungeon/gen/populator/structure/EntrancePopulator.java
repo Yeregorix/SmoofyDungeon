@@ -68,77 +68,77 @@ public class EntrancePopulator extends RoomPopulator {
 					for (int dz = 0; dz < 8; dz++) {
 						BlockType type = dx == 0 || dx == 7 || dz == 0 || dz == 7 ? BlockTypes.STONEBRICK : BlockTypes.AIR;
 						for (int cy = y; cy < ground; cy++)
-							c.setBlockType(x + dx, cy, z + dz, type, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, type);
 
 						for (int cy = ground; cy < ground + 3; cy++)
-							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR);
 					}
 				}
 
 				for (int cy = y; cy < ground; cy++) {
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 1, cy, z + 3, LADDER_EAST, this.cause);
+						c.setBlock(x + 1, cy, z + 3, LADDER_EAST);
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 1, cy, z + 4, LADDER_EAST, this.cause);
+						c.setBlock(x + 1, cy, z + 4, LADDER_EAST);
 				}
 
 				int floor = y - 6;
 				floor += getFloorOffset(c, x, floor, z);
 
 				if (c.getBlockType(x + 1, floor, z + 1) == BlockTypes.AIR) {
-					c.setBlockType(x + 1, floor, z + 1, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 1, floor, z + 6, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 6, floor, z + 1, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 6, floor, z + 6, BlockTypes.PLANKS, this.cause);
+					c.setBlockType(x + 1, floor, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 1, floor, z + 6, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, floor, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, floor, z + 6, BlockTypes.PLANKS);
 				}
 
 				for (int cy = floor + 1; cy < ground + 3; cy++) {
-					c.setBlockType(x + 1, cy, z + 1, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 1, cy, z + 6, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 6, cy, z + 1, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 6, cy, z + 6, BlockTypes.PLANKS, this.cause);
+					c.setBlockType(x + 1, cy, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 1, cy, z + 6, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, cy, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, cy, z + 6, BlockTypes.PLANKS);
 				}
 
 				for (int cy = ground; cy < ground + 3; cy++) {
-					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
+					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK);
 				}
 
 				for (int i = 1; i < 7; i++) {
 					for (int cy = ground; cy < ground + 3; cy++) {
-						c.setBlockType(x + i, cy, z, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x + i, cy, z + 7, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x, cy, z + i, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x + 7, cy, z + i, BlockTypes.COBBLESTONE, this.cause);
+						c.setBlockType(x + i, cy, z, BlockTypes.COBBLESTONE);
+						c.setBlockType(x + i, cy, z + 7, BlockTypes.COBBLESTONE);
+						c.setBlockType(x, cy, z + i, BlockTypes.COBBLESTONE);
+						c.setBlockType(x + 7, cy, z + i, BlockTypes.COBBLESTONE);
 					}
 				}
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
 						if (r.nextFloat() < 0.9f || (dx == 0 || dx == 7 || dz == 0 || dz == 7))
-							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.STONEBRICK, this.cause);
+							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.STONEBRICK);
 					}
 				}
 
 				for (int dz = 1; dz < 7; dz++) {
-					c.setBlockType(x + 2, ground + 2, z + dz, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + 5, ground + 2, z + dz, BlockTypes.PLANKS, this.cause);
+					c.setBlockType(x + 2, ground + 2, z + dz, BlockTypes.PLANKS);
+					c.setBlockType(x + 5, ground + 2, z + dz, BlockTypes.PLANKS);
 				}
 
-				c.setBlockType(x, ground, z + 2, BlockTypes.FENCE, this.cause);
-				c.setBlockType(x, ground, z + 5, BlockTypes.FENCE, this.cause);
-				c.setBlockType(x, ground + 1, z + 2, BlockTypes.FENCE, this.cause);
-				c.setBlockType(x, ground + 1, z + 5, BlockTypes.FENCE, this.cause);
-				c.setBlockType(x, ground, z + 3, BlockTypes.AIR, this.cause);
-				c.setBlockType(x, ground, z + 4, BlockTypes.AIR, this.cause);
-				c.setBlockType(x, ground + 1, z + 3, BlockTypes.AIR, this.cause);
-				c.setBlockType(x, ground + 1, z + 4, BlockTypes.AIR, this.cause);
+				c.setBlockType(x, ground, z + 2, BlockTypes.FENCE);
+				c.setBlockType(x, ground, z + 5, BlockTypes.FENCE);
+				c.setBlockType(x, ground + 1, z + 2, BlockTypes.FENCE);
+				c.setBlockType(x, ground + 1, z + 5, BlockTypes.FENCE);
+				c.setBlockType(x, ground, z + 3, BlockTypes.AIR);
+				c.setBlockType(x, ground, z + 4, BlockTypes.AIR);
+				c.setBlockType(x, ground + 1, z + 3, BlockTypes.AIR);
+				c.setBlockType(x, ground + 1, z + 4, BlockTypes.AIR);
 				for (int dz = 2; dz < 6; dz++)
-					c.setBlockType(x, ground + 2, z + dz, BlockTypes.PLANKS, this.cause);
-				c.setBlock(x - 1, ground + 1, z + 1, TORCH_WEST, this.cause);
-				c.setBlock(x - 1, ground + 1, z + 6, TORCH_WEST, this.cause);
+					c.setBlockType(x, ground + 2, z + dz, BlockTypes.PLANKS);
+				c.setBlock(x - 1, ground + 1, z + 1, TORCH_WEST);
+				c.setBlock(x - 1, ground + 1, z + 6, TORCH_WEST);
 				break;
 			case 1:
 				while (!isGround(c.getBlockType(x + 3, ground, z + 7)))
@@ -149,54 +149,54 @@ public class EntrancePopulator extends RoomPopulator {
 					for (int dz = 0; dz < 8; dz++) {
 						BlockType type = dx == 0 || dx == 7 || dz == 0 || dz == 7 ? BlockTypes.STONEBRICK : BlockTypes.AIR;
 						for (int cy = y; cy < ground; cy++)
-							c.setBlockType(x + dx, cy, z + dz, type, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, type);
 
 						for (int cy = ground; cy < ground + 3; cy++)
-							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR);
 					}
 				}
 
 				for (int cy = y; cy < ground; cy++) {
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 3, cy, z + 6, LADDER_NORTH, this.cause);
+						c.setBlock(x + 3, cy, z + 6, LADDER_NORTH);
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 4, cy, z + 6, LADDER_NORTH, this.cause);
+						c.setBlock(x + 4, cy, z + 6, LADDER_NORTH);
 				}
 
 				for (int cy = ground; cy < ground + 3; cy++) {
-					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
+					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK);
 				}
 
 				for (int i = 1; i < 7; i++) {
 					for (int cy = ground; cy < ground + 3; cy++) {
-						c.setBlockType(x + i, cy, z, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x + i, cy, z + 7, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x, cy, z + i, BlockTypes.COBBLESTONE, this.cause);
-						c.setBlockType(x + 7, cy, z + i, BlockTypes.COBBLESTONE, this.cause);
+						c.setBlockType(x + i, cy, z, BlockTypes.COBBLESTONE);
+						c.setBlockType(x + i, cy, z + 7, BlockTypes.COBBLESTONE);
+						c.setBlockType(x, cy, z + i, BlockTypes.COBBLESTONE);
+						c.setBlockType(x + 7, cy, z + i, BlockTypes.COBBLESTONE);
 					}
 				}
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
 						if (r.nextFloat() < 0.9f || (dx == 0 || dx == 7 || dz == 0 || dz == 7))
-							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.STONEBRICK, this.cause);
+							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.STONEBRICK);
 					}
 				}
 
 				for (int dx = 1; dx < 7; dx++) {
-					c.setBlockType(x + dx, ground + 2, z + 2, BlockTypes.PLANKS, this.cause);
-					c.setBlockType(x + dx, ground + 2, z + 5, BlockTypes.PLANKS, this.cause);
+					c.setBlockType(x + dx, ground + 2, z + 2, BlockTypes.PLANKS);
+					c.setBlockType(x + dx, ground + 2, z + 5, BlockTypes.PLANKS);
 				}
 
-				c.setBlockType(x + 3, ground, z + 7, BlockTypes.AIR, this.cause);
-				c.setBlockType(x + 4, ground, z + 7, BlockTypes.AIR, this.cause);
-				c.setBlockType(x + 3, ground + 1, z + 7, BlockTypes.AIR, this.cause);
-				c.setBlockType(x + 4, ground + 1, z + 7, BlockTypes.AIR, this.cause);
-				c.setBlock(x + 2, ground + 1, z + 8, TORCH_SOUTH, this.cause);
-				c.setBlock(x + 5, ground + 1, z + 8, TORCH_SOUTH, this.cause);
+				c.setBlockType(x + 3, ground, z + 7, BlockTypes.AIR);
+				c.setBlockType(x + 4, ground, z + 7, BlockTypes.AIR);
+				c.setBlockType(x + 3, ground + 1, z + 7, BlockTypes.AIR);
+				c.setBlockType(x + 4, ground + 1, z + 7, BlockTypes.AIR);
+				c.setBlock(x + 2, ground + 1, z + 8, TORCH_SOUTH);
+				c.setBlock(x + 5, ground + 1, z + 8, TORCH_SOUTH);
 				break;
 			case 2:
 				while (!isGround(c.getBlockType(x + 3, ground, z + 3)))
@@ -207,39 +207,39 @@ public class EntrancePopulator extends RoomPopulator {
 					for (int dz = 0; dz < 8; dz++) {
 						BlockType type = dx == 0 || dx == 7 || dz == 0 || dz == 7 ? BlockTypes.STONEBRICK : BlockTypes.AIR;
 						for (int cy = y; cy < ground; cy++)
-							c.setBlockType(x + dx, cy, z + dz, type, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, type);
 
 						for (int cy = ground; cy < ground + 3; cy++)
-							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR);
 					}
 				}
 
 				for (int cy = y; cy < ground; cy++) {
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 1, cy, z + 3, LADDER_EAST, this.cause);
+						c.setBlock(x + 1, cy, z + 3, LADDER_EAST);
 					if (r.nextFloat() < 0.8f)
-						c.setBlock(x + 1, cy, z + 4, LADDER_EAST, this.cause);
+						c.setBlock(x + 1, cy, z + 4, LADDER_EAST);
 				}
 
 				for (int cy = ground; cy < ground + 3; cy++) {
-					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK, this.cause);
-					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK, this.cause);
+					c.setBlockType(x, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x, cy, z + 7, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z, BlockTypes.STONEBRICK);
+					c.setBlockType(x + 7, cy, z + 7, BlockTypes.STONEBRICK);
 				}
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
 						if (dx == 0 || dx == 7 || dz == 0 || dz == 7)
-							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.NETHER_BRICK, this.cause);
+							c.setBlockType(x + dx, ground + 3, z + dz, BlockTypes.NETHER_BRICK);
 						else if (r.nextFloat() < 0.95f)
-							c.setBlock(x + dx, ground + 3, z + dz, STONEBRICK_SLAB, this.cause);
+							c.setBlock(x + dx, ground + 3, z + dz, STONEBRICK_SLAB);
 					}
 				}
 
 				for (int dx = 1; dx < 7; dx++) {
-					c.setBlockType(x + dx, ground + 3, z + 2, BlockTypes.NETHER_BRICK, this.cause);
-					c.setBlockType(x + dx, ground + 3, z + 5, BlockTypes.NETHER_BRICK, this.cause);
+					c.setBlockType(x + dx, ground + 3, z + 2, BlockTypes.NETHER_BRICK);
+					c.setBlockType(x + dx, ground + 3, z + 5, BlockTypes.NETHER_BRICK);
 				}
 				break;
 			case 3:
@@ -251,33 +251,33 @@ public class EntrancePopulator extends RoomPopulator {
 					for (int dz = 0; dz < 8; dz++) {
 						BlockType type = dx == 0 || dx == 7 || dz == 0 || dz == 7 ? BlockTypes.STONEBRICK : BlockTypes.AIR;
 						for (int cy = y; cy < ground; cy++)
-							c.setBlockType(x + dx, cy, z + dz, type, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, type);
 
 						for (int cy = ground; cy < ground + 3; cy++)
-							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR, this.cause);
+							c.setBlockType(x + dx, cy, z + dz, BlockTypes.AIR);
 					}
 				}
 
 				if (r.nextFloat() < 0.33f) {
 					for (int cy = y; cy < ground; cy++) {
 						if (r.nextFloat() < 0.8f)
-							c.setBlock(x + 3, cy, z + 6, LADDER_NORTH, this.cause);
+							c.setBlock(x + 3, cy, z + 6, LADDER_NORTH);
 						if (r.nextFloat() < 0.8f)
-							c.setBlock(x + 4, cy, z + 6, LADDER_NORTH, this.cause);
+							c.setBlock(x + 4, cy, z + 6, LADDER_NORTH);
 					}
 				} else {
 					for (int cy = y; cy < ground; cy++) {
 						if (r.nextFloat() < 0.6f)
-							c.setBlock(x + 3, cy, z + 1, VINE_NORTH, this.cause);
+							c.setBlock(x + 3, cy, z + 1, VINE_NORTH);
 						if (r.nextFloat() < 0.6f)
-							c.setBlock(x + 4, cy, z + 1, VINE_NORTH, this.cause);
+							c.setBlock(x + 4, cy, z + 1, VINE_NORTH);
 					}
 				}
 
-				c.setBlockType(x, ground, z, BlockTypes.TORCH, this.cause);
-				c.setBlockType(x, ground, z + 7, BlockTypes.TORCH, this.cause);
-				c.setBlockType(x + 7, ground, z, BlockTypes.TORCH, this.cause);
-				c.setBlockType(x + 7, ground, z + 7, BlockTypes.TORCH, this.cause);
+				c.setBlockType(x, ground, z, BlockTypes.TORCH);
+				c.setBlockType(x, ground, z + 7, BlockTypes.TORCH);
+				c.setBlockType(x + 7, ground, z, BlockTypes.TORCH);
+				c.setBlockType(x + 7, ground, z + 7, BlockTypes.TORCH);
 				break;
 		}
 	}

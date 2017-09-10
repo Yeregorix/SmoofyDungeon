@@ -62,27 +62,27 @@ public class VinePopulator extends RoomPopulator {
 					z += r.nextInt(6) + 1;
 
 					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // +x = facing east
-						c.setBlock(x + 1, y, z, VINE_WEST, this.cause);
+						c.setBlock(x + 1, y, z, VINE_WEST);
 					break;
 				case 1:
 					x += 7;
 					z += r.nextInt(6) + 1;
 
 					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // -x = facing west
-						c.setBlock(x - 1, y, z, VINE_EAST, this.cause);
+						c.setBlock(x - 1, y, z, VINE_EAST);
 					break;
 				case 2:
 					x += r.nextInt(6) + 1;
 
 					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // +z = facing south
-						c.setBlock(x, y, z + 1, VINE_NORTH, this.cause);
+						c.setBlock(x, y, z + 1, VINE_NORTH);
 					break;
 				case 3:
 					x += r.nextInt(6) + 1;
 					z += 7;
 
 					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // -z = facing north
-						c.setBlock(x, y, z - 1, VINE_SOUTH, this.cause);
+						c.setBlock(x, y, z - 1, VINE_SOUTH);
 					break;
 			}
 		} else {
@@ -91,7 +91,7 @@ public class VinePopulator extends RoomPopulator {
 			z += r.nextInt(6) + 1;
 
 			if (c.getBlockType(x, y + 1, z) != BlockTypes.AIR)
-				c.setBlock(x, y, z, VINE_UP, this.cause);
+				c.setBlock(x, y, z, VINE_UP);
 		}
 	}
 }

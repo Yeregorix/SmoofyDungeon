@@ -50,7 +50,7 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			generateSpawner(c, x, y, z, randomEntityType(r), this.cause);
+			generateSpawner(c, x, y, z, randomEntityType(r));
 	}
 
 	public static EntityType randomEntityType(Random r) {
