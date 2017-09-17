@@ -100,7 +100,7 @@ public class RailPopulator extends RoomPopulator {
 			}
 		}
 
-		if (!entities.isEmpty()) // TODO fix / report issue
+		if (!entities.isEmpty())
 			c.spawnEntities(entities);
 	}
 }

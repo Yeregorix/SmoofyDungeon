@@ -56,17 +56,21 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 	public static EntityType randomEntityType(Random r) {
 		float f = r.nextFloat();
 		if (f < 0.4f)
-			return EntityTypes.ZOMBIE;        // p = 0.4
+			return EntityTypes.ZOMBIE;            // p = 0.4
 		if (f < 0.6f)
-			return EntityTypes.SKELETON;    // p = 0.2
-		if (f < 0.8f)
-			return EntityTypes.SPIDER;        // p = 0.2
+			return EntityTypes.SKELETON;        // p = 0.2
+		if (f < 0.76f)
+			return EntityTypes.SPIDER;            // p = 0.16
+		if (f < 0.84f)
+			return EntityTypes.PIG_ZOMBIE;        // p = 0.08
 		if (f < 0.88f)
-			return EntityTypes.PIG_ZOMBIE;    // p = 0.08
+			return EntityTypes.CAVE_SPIDER;        // p = 0.04
 		if (f < 0.92f)
-			return EntityTypes.ENDERMAN;    // p = 0.04
+			return EntityTypes.ENDERMAN;        // p = 0.04
 		if (f < 0.96f)
-			return EntityTypes.MAGMA_CUBE;    // p = 0.04
-		return EntityTypes.SILVERFISH;        // p = 0.04
+			return EntityTypes.MAGMA_CUBE;        // p = 0.04
+		if (f < 0.98f)
+			return EntityTypes.WITCH;            // p = 0.02
+		return EntityTypes.SILVERFISH;            // p = 0.02
 	}
 }
