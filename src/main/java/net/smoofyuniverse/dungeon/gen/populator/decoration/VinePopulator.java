@@ -32,11 +32,12 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public class VinePopulator extends RoomPopulator {
-	public static final BlockState VINE_UP = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_UP, true).get(),
-			VINE_EAST = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_EAST, true).get(),
-			VINE_NORTH = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_NORTH, true).get(),
-			VINE_SOUTH = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_SOUTH, true).get(),
-			VINE_WEST = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_WEST, true).get();
+	public static final BlockState VINE = BlockTypes.VINE.getDefaultState(),
+			VINE_UP = VINE.withTrait(BooleanTraits.VINE_UP, true).get(),
+			VINE_EAST = VINE.withTrait(BooleanTraits.VINE_EAST, true).get(),
+			VINE_NORTH = VINE.withTrait(BooleanTraits.VINE_NORTH, true).get(),
+			VINE_SOUTH = VINE.withTrait(BooleanTraits.VINE_SOUTH, true).get(),
+			VINE_WEST = VINE.withTrait(BooleanTraits.VINE_WEST, true).get();
 
 	@Override
 	public float getRoomIterationChance() {
@@ -61,27 +62,27 @@ public class VinePopulator extends RoomPopulator {
 				case 0:
 					z += r.nextInt(6) + 1;
 
-					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // +x = facing east
+					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK && c.getBlockType(x + 1, y, z) == BlockTypes.AIR) // +x = facing east
 						c.setBlock(x + 1, y, z, VINE_WEST);
 					break;
 				case 1:
 					x += 7;
 					z += r.nextInt(6) + 1;
 
-					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // -x = facing west
+					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK && c.getBlockType(x - 1, y, z) == BlockTypes.AIR) // -x = facing west
 						c.setBlock(x - 1, y, z, VINE_EAST);
 					break;
 				case 2:
 					x += r.nextInt(6) + 1;
 
-					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // +z = facing south
+					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK && c.getBlockType(x, y, z + 1) == BlockTypes.AIR) // +z = facing south
 						c.setBlock(x, y, z + 1, VINE_NORTH);
 					break;
 				case 3:
 					x += r.nextInt(6) + 1;
 					z += 7;
 
-					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) // -z = facing north
+					if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK && c.getBlockType(x, y, z - 1) == BlockTypes.AIR) // -z = facing north
 						c.setBlock(x, y, z - 1, VINE_SOUTH);
 					break;
 			}
