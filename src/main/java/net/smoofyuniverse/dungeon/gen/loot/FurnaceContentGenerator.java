@@ -22,11 +22,14 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.Furnace;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.slot.OutputSlot;
+import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.ArrayList;
@@ -44,8 +47,12 @@ public class FurnaceContentGenerator {
 	}
 
 	public void generateBlock(Extent c, int x, int y, int z, Random r) {
-		c.setBlockType(x, y, z, BlockTypes.FURNACE);
-		((Furnace) c.getTileEntity(x, y, z).get()).getInventory().query(OutputSlot.class).set(generate(r).orElse(ItemStack.empty()));
+		generateBlock(c, x, y, z, r, ResourceUtil.randomCardinal(r));
+	}
+
+	public void generateBlock(Extent c, int x, int y, int z, Random r, Direction dir) {
+		c.setBlock(x, y, z, BlockTypes.FURNACE.getDefaultState().with(Keys.DIRECTION, dir).get());
+		((Furnace) c.getTileEntity(x, y, z).get()).getInventory().query(OutputSlot.class).set(generate(r).orElse(ItemStack.empty())); // TODO fix or report
 	}
 
 	public Optional<ItemStack> generate(Random r) {
