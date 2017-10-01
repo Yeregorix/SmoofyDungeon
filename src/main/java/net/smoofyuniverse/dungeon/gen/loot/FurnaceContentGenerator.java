@@ -66,7 +66,17 @@ public class FurnaceContentGenerator {
 		if (items.isEmpty())
 			return Optional.empty();
 
-		return r.nextFloat() < this.outputChance ? Optional.of(items.get(r.nextInt(items.size()))) : Optional.empty();
+		return r.nextFloat() < this.outputChance ? Optional.of(items.get(r.nextInt(items.size())).copy()) : Optional.empty();
+	}
+
+	private static class ItemEntry {
+		public final ItemStack item;
+		public final float chance;
+
+		private ItemEntry(ItemStack item, float chance) {
+			this.item = item;
+			this.chance = chance;
+		}
 	}
 
 	public static Builder builder() {
@@ -84,11 +94,7 @@ public class FurnaceContentGenerator {
 		}
 
 		public Builder add(ItemStack item, float chance) {
-			return add(new ItemEntry(item, chance));
-		}
-
-		public Builder add(ItemEntry e) {
-			this.entries.add(e);
+			this.entries.add(new ItemEntry(item, chance));
 			return this;
 		}
 

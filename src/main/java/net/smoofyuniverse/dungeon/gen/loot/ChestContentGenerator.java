@@ -75,9 +75,19 @@ public class ChestContentGenerator {
 
 		RandomQueue<ItemStack> queue = RandomQueue.of(items, r);
 		for (int i = 0; i < count; i++)
-			result[i] = queue.next();
+			result[i] = queue.next().copy();
 
 		return result;
+	}
+
+	private static class ItemEntry {
+		public final ItemStack item;
+		public final float chance;
+
+		public ItemEntry(ItemStack item, float chance) {
+			this.item = item;
+			this.chance = chance;
+		}
 	}
 
 	public static Builder builder() {
@@ -95,7 +105,8 @@ public class ChestContentGenerator {
 		}
 
 		public Builder add(ItemStack item, float chance) {
-			return add(new ItemEntry(item, chance));
+			this.entries.add(new ItemEntry(item, chance));
+			return this;
 		}
 
 		public Builder add(ItemEntry e) {
