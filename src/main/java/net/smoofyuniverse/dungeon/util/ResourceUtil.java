@@ -30,11 +30,17 @@ import org.spongepowered.api.data.property.PropertyHolder;
 import org.spongepowered.api.data.property.block.BlastResistanceProperty;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
 
 import java.util.*;
 
 public class ResourceUtil {
+	private static final Direction[] CARDINALS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
+	public static Direction randomCardinal(Random r) {
+		return CARDINALS[r.nextInt(4)];
+	}
 
 	public static void fill(Inventory inv, Random r, ItemStack... stacks) {
 		List<Inventory> slots = asList(inv.slots());

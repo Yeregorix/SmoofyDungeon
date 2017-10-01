@@ -42,9 +42,7 @@ public class LavaInWallPopulator extends RoomPopulator {
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.STONEBRICK) {
-//			LoggerFactory.getLogger("test").info("lava: " + x + " " + y + " " + z);
-			c.setBlockType(x, y, z, BlockTypes.LAVA);
-//			Minecraft.immediateBlockUpdate(w, r, x, y, z);
+			c.setBlockType(x, y, z, BlockTypes.FLOWING_LAVA);
 		}
 	}
 

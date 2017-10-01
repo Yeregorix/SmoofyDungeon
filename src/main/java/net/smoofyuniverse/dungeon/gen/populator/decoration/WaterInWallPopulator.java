@@ -25,7 +25,6 @@ package net.smoofyuniverse.dungeon.gen.populator.decoration;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
@@ -58,9 +57,7 @@ public class WaterInWallPopulator extends RoomPopulator {
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.STONEBRICK) {
-//			LoggerFactory.getLogger("test").info("water: " + x + " " + y + " " + z);
-			c.setBlockType(x, y, z, BlockTypes.WATER, BlockChangeFlag.ALL);
-//			Minecraft.immediateBlockUpdate(w, r, x, y, z);
+			c.setBlockType(x, y, z, BlockTypes.FLOWING_WATER);
 		}
 	}
 }

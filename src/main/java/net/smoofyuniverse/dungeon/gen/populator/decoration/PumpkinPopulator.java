@@ -23,16 +23,15 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
 public class PumpkinPopulator extends RoomPopulator {
-	public static final Direction[] DIRECTIONS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
@@ -41,7 +40,7 @@ public class PumpkinPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			c.setBlock(x, y, z, (r.nextFloat() < 0.33f ? BlockTypes.LIT_PUMPKIN : BlockTypes.PUMPKIN).getDefaultState().with(Keys.DIRECTION, DIRECTIONS[r.nextInt(4)]).get());
+			c.setBlock(x, y, z, (r.nextFloat() < 0.33f ? BlockTypes.LIT_PUMPKIN : BlockTypes.PUMPKIN).getDefaultState().with(Keys.DIRECTION, ResourceUtil.randomCardinal(r)).get());
 	}
 
 	@Override
