@@ -25,8 +25,11 @@ package net.smoofyuniverse.dungeon.gen.populator.structure;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.block.trait.EnumTraits;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.PortionType;
 import org.spongepowered.api.data.type.PortionTypes;
+import org.spongepowered.api.data.type.SlabTypes;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -36,10 +39,7 @@ import java.util.Random;
 public class StairsPopulator extends RoomPopulator {
 
 	public static final BlockState STAIRS = BlockTypes.STONE_STAIRS.getDefaultState(),
-			STAIRS_BOTTOM_WEST = STAIRS.with(Keys.PORTION_TYPE, PortionTypes.BOTTOM).get().with(Keys.DIRECTION, Direction.WEST).get(),
-			STAIRS_BOTTOM_SOUTH = STAIRS.with(Keys.PORTION_TYPE, PortionTypes.BOTTOM).get().with(Keys.DIRECTION, Direction.SOUTH).get(),
-			STAIRS_TOP_EAST = STAIRS.with(Keys.PORTION_TYPE, PortionTypes.TOP).get().with(Keys.DIRECTION, Direction.EAST).get(),
-			STAIRS_TOP_NORTH = STAIRS.with(Keys.PORTION_TYPE, PortionTypes.TOP).get().with(Keys.DIRECTION, Direction.NORTH).get();
+			SLAB = BlockTypes.STONE_SLAB.getDefaultState().withTrait(EnumTraits.STONE_SLAB_VARIANT, SlabTypes.COBBLESTONE).get();
 
 	@Override
 	public int getMaximumLayer() {
@@ -53,62 +53,98 @@ public class StairsPopulator extends RoomPopulator {
 
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		y += getFloorOffset(c, x, y, z) + 1;
+		int floorOffset = getFloorOffset(c, x, y, z), ceilingOffset = getCeilingOffset(c, x, y, z);
+		int ceilingY = y + ceilingOffset + 6;
+		int d = ceilingOffset - floorOffset;
 
-		c.setBlock(x + 5, y, z + 2, STAIRS_BOTTOM_SOUTH);
-		c.setBlock(x + 6, y, z + 2, STAIRS_BOTTOM_SOUTH);
-		c.setBlock(x + 5, y + 1, z + 3, STAIRS_BOTTOM_SOUTH);
-		c.setBlock(x + 6, y + 1, z + 3, STAIRS_BOTTOM_SOUTH);
-		c.setBlock(x + 5, y + 2, z + 4, STAIRS_BOTTOM_SOUTH);
-		c.setBlock(x + 6, y + 2, z + 4, STAIRS_BOTTOM_SOUTH);
+		y += floorOffset + 1;
 
-		c.setBlock(x + 5, y, z + 3, STAIRS_TOP_NORTH);
-		c.setBlock(x + 6, y, z + 3, STAIRS_TOP_NORTH);
-		c.setBlock(x + 5, y + 1, z + 4, STAIRS_TOP_NORTH);
-		c.setBlock(x + 6, y + 1, z + 4, STAIRS_TOP_NORTH);
+		c.setBlock(x + 5, y, z + 2, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+		c.setBlock(x + 6, y, z + 2, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+
+		c.setBlock(x + 5, y + 1, z + 3, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+		c.setBlock(x + 6, y + 1, z + 3, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+		c.setBlock(x + 5, y, z + 3, getBlock(PortionTypes.TOP, Direction.NORTH, r));
+		c.setBlock(x + 6, y, z + 3, getBlock(PortionTypes.TOP, Direction.NORTH, r));
+
+		c.setBlock(x + 5, y + 2, z + 4, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+		c.setBlock(x + 6, y + 2, z + 4, getBlock(PortionTypes.BOTTOM, Direction.SOUTH, r));
+		c.setBlock(x + 5, y + 1, z + 4, getBlock(PortionTypes.TOP, Direction.NORTH, r));
+		c.setBlock(x + 6, y + 1, z + 4, getBlock(PortionTypes.TOP, Direction.NORTH, r));
 
 		c.setBlockType(x + 5, y + 2, z + 5, BlockTypes.COBBLESTONE);
 		c.setBlockType(x + 6, y + 2, z + 5, BlockTypes.COBBLESTONE);
 		c.setBlockType(x + 5, y + 2, z + 6, BlockTypes.COBBLESTONE);
 		c.setBlockType(x + 6, y + 2, z + 6, BlockTypes.COBBLESTONE);
 
-		c.setBlock(x + 4, y + 3, z + 5, STAIRS_BOTTOM_WEST);
-		c.setBlock(x + 4, y + 3, z + 6, STAIRS_BOTTOM_WEST);
-		c.setBlock(x + 3, y + 4, z + 5, STAIRS_BOTTOM_WEST);
-		c.setBlock(x + 3, y + 4, z + 6, STAIRS_BOTTOM_WEST);
-		c.setBlock(x + 2, y + 5, z + 5, STAIRS_BOTTOM_WEST);
-		c.setBlock(x + 2, y + 5, z + 6, STAIRS_BOTTOM_WEST);
+		c.setBlock(x + 4, y + 3, z + 5, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+		c.setBlock(x + 4, y + 3, z + 6, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+		c.setBlock(x + 4, y + 2, z + 5, getBlock(PortionTypes.TOP, Direction.EAST, r));
+		c.setBlock(x + 4, y + 2, z + 6, getBlock(PortionTypes.TOP, Direction.EAST, r));
 
-		c.setBlock(x + 4, y + 2, z + 5, STAIRS_TOP_EAST);
-		c.setBlock(x + 4, y + 2, z + 6, STAIRS_TOP_EAST);
-		c.setBlock(x + 3, y + 3, z + 5, STAIRS_TOP_EAST);
-		c.setBlock(x + 3, y + 3, z + 6, STAIRS_TOP_EAST);
-		c.setBlock(x + 2, y + 4, z + 5, STAIRS_TOP_EAST);
-		c.setBlock(x + 2, y + 4, z + 6, STAIRS_TOP_EAST);
+		c.setBlock(x + 3, y + 4, z + 5, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+		c.setBlock(x + 3, y + 4, z + 6, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+		c.setBlock(x + 3, y + 3, z + 5, getBlock(PortionTypes.TOP, Direction.EAST, r));
+		c.setBlock(x + 3, y + 3, z + 6, getBlock(PortionTypes.TOP, Direction.EAST, r));
 
-		c.setBlockType(x + 3, y + 5, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 3, y + 5, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 5, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 5, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 5, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 5, z + 6, BlockTypes.AIR);
+		if (d != -1) {
+			c.setBlock(x + 2, y + 5, z + 5, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+			c.setBlock(x + 2, y + 5, z + 6, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+			c.setBlock(x + 2, y + 4, z + 5, getBlock(PortionTypes.TOP, Direction.EAST, r));
+			c.setBlock(x + 2, y + 4, z + 6, getBlock(PortionTypes.TOP, Direction.EAST, r));
+		}
 
-		c.setBlockType(x + 2, y + 6, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 2, y + 6, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 3, y + 6, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 3, y + 6, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 6, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 6, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 6, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 6, z + 6, BlockTypes.AIR);
+		if (d == 1) {
+			c.setBlock(x + 1, y + 6, z + 5, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+			c.setBlock(x + 1, y + 6, z + 6, getBlock(PortionTypes.BOTTOM, Direction.WEST, r));
+			c.setBlock(x + 1, y + 5, z + 5, getBlock(PortionTypes.TOP, Direction.EAST, r));
+			c.setBlock(x + 1, y + 5, z + 6, getBlock(PortionTypes.TOP, Direction.EAST, r));
+		}
 
-		c.setBlockType(x + 2, y + 7, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 2, y + 7, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 3, y + 7, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 3, y + 7, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 7, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 4, y + 7, z + 6, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 7, z + 5, BlockTypes.AIR);
-		c.setBlockType(x + 5, y + 7, z + 6, BlockTypes.AIR);
+		if (r.nextBoolean()) {
+			for (int cy = y; cy < ceilingY; cy++)
+				c.setBlockType(x + 4, cy, z + 4, BlockTypes.STONEBRICK);
+		}
+
+		int dx = x - d;
+		c.setBlockType(dx + 3, ceilingY, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 3, ceilingY, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY, z + 6, BlockTypes.AIR);
+
+		c.setBlockType(dx + 2, ceilingY + 1, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 2, ceilingY + 1, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 3, ceilingY + 1, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 3, ceilingY + 1, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY + 1, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY + 1, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY + 1, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY + 1, z + 6, BlockTypes.AIR);
+
+		c.setBlockType(dx + 2, ceilingY + 2, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 2, ceilingY + 2, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 3, ceilingY + 2, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 3, ceilingY + 2, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY + 2, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 4, ceilingY + 2, z + 6, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY + 2, z + 5, BlockTypes.AIR);
+		c.setBlockType(dx + 5, ceilingY + 2, z + 6, BlockTypes.AIR);
+
+		if (d == -1) {
+			c.setBlockType(x + 5, ceilingY, z + 3, BlockTypes.AIR);
+			c.setBlockType(x + 6, ceilingY, z + 3, BlockTypes.AIR);
+			c.setBlockType(x + 5, ceilingY, z + 4, BlockTypes.AIR);
+			c.setBlockType(x + 6, ceilingY, z + 4, BlockTypes.AIR);
+		}
+	}
+
+	public static BlockState getBlock(PortionType portion, Direction dir, Random r) {
+		return getBlock(portion, dir, r, 0.9f);
+	}
+
+	public static BlockState getBlock(PortionType portion, Direction dir, Random r, float chance) {
+		return r.nextFloat() < chance ? STAIRS.with(Keys.PORTION_TYPE, portion).get().with(Keys.DIRECTION, dir).get() : SLAB.with(Keys.PORTION_TYPE, portion).get();
 	}
 }
