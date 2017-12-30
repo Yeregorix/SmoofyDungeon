@@ -23,6 +23,8 @@
 package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.HashMap;
@@ -32,7 +34,7 @@ import java.util.UUID;
 public final class FlagManager {
 	private static final Map<UUID, FlagManager> worlds = new HashMap<>();
 
-	private Map<Long, ChunkInfo> chunks = new HashMap(); // TODO use fastutil
+	private Long2ObjectMap<ChunkInfo> chunks = new Long2ObjectOpenHashMap();
 	private UUID worldId;
 
 	private FlagManager(UUID worldId) {
@@ -73,9 +75,7 @@ public final class FlagManager {
 
 	public static final class ChunkInfo {
 		public final int x, z;
-		private boolean chunk = false;
-		private boolean[] layers = new boolean[7];
-		private boolean[] rooms = new boolean[28];
+		private long values;
 
 		private ChunkInfo(int x, int z) {
 			this.x = x;
@@ -83,39 +83,52 @@ public final class FlagManager {
 		}
 
 		public boolean getFlag() {
-			return this.chunk;
+			return get(0);
+		}
+
+		private boolean get(int index) {
+			return (this.values & (1L << index)) != 0;
 		}
 
 		public void setFlag(boolean value) {
-			this.chunk = value;
+			set(0, value);
+		}
+
+		private void set(int index, boolean value) {
+			if (value)
+				this.values |= (1L << index);
+			else
+				this.values &= ~(1L << index);
 		}
 
 		public boolean getFlag(int layer) {
+			return get(index(layer));
+		}
+
+		private int index(int layer) {
 			if (layer < 0 || layer > 6)
 				throw new IllegalArgumentException("layer");
-			return this.layers[layer];
+			return layer + 1;
 		}
 
 		public void setFlag(int layer, boolean value) {
-			if (layer < 0 || layer > 6)
-				throw new IllegalArgumentException("layer");
-			this.layers[layer] = value;
+			set(index(layer), value);
 		}
 
 		public boolean getFlag(int layer, int room) {
+			return get(index(layer, room));
+		}
+
+		private int index(int layer, int room) {
 			if (layer < 0 || layer > 6)
 				throw new IllegalArgumentException("layer");
 			if (room < 0 || room > 3)
 				throw new IllegalArgumentException("room");
-			return this.rooms[layer * 4 + room];
+			return layer * 4 + room + 8;
 		}
 
 		public void setFlag(int layer, int room, boolean value) {
-			if (layer < 0 || layer > 6)
-				throw new IllegalArgumentException("layer");
-			if (room < 0 || room > 3)
-				throw new IllegalArgumentException("room");
-			this.rooms[layer * 4 + room] = value;
+			set(index(layer, room), value);
 		}
 	}
 }

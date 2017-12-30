@@ -39,4 +39,5 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
+    compile 'it.unimi.dsi:fastutil:7.1.0'
 }
