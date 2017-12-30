@@ -99,6 +99,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		pops.add(new SandPopulator());
 		pops.add(new GravelPopulator());
 		pops.add(new StairsPopulator());
+		pops.add(new StrutPopulator());
 
 		// 2- LAYERS
 		// Spawners
