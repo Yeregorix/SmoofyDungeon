@@ -60,17 +60,16 @@ public class FurnaceContentGenerator {
 	}
 
 	public Optional<ItemStack> generate(Random r) {
-		List<ItemStack> items = new ArrayList<>();
+		if (r.nextFloat() > this.outputChance)
+			return Optional.empty();
 
+		List<ItemStack> items = new ArrayList<>();
 		for (ItemEntry e : this.entries) {
 			if (r.nextFloat() < e.chance)
 				items.add(e.item);
 		}
 
-		if (items.isEmpty())
-			return Optional.empty();
-
-		return r.nextFloat() < this.outputChance ? Optional.of(items.get(r.nextInt(items.size())).copy()) : Optional.empty();
+		return items.isEmpty() ? Optional.empty() : Optional.of(items.get(r.nextInt(items.size())).copy());
 	}
 
 	private static class ItemEntry {
