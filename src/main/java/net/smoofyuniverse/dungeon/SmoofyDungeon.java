@@ -24,9 +24,8 @@ package net.smoofyuniverse.dungeon;
 
 import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
@@ -35,15 +34,18 @@ import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 public final class SmoofyDungeon {
 	private static SmoofyDungeon instance;
 
+	public SmoofyDungeon() {
+		if (instance != null)
+			throw new IllegalStateException();
+		instance = this;
+	}
+
 	@Inject
 	private PluginContainer container;
 
 	@Listener
-	public void onGameInitialization(GameInitializationEvent e) {
-		if (instance == null) {
-			instance = this;
-			Sponge.getRegistry().register(WorldGeneratorModifier.class, new DungeonWorldModifier());
-		}
+	public void onRegister(GameRegistryEvent.Register<WorldGeneratorModifier> e) {
+		e.register(new DungeonWorldModifier());
 	}
 
 	public PluginContainer getContainer() {

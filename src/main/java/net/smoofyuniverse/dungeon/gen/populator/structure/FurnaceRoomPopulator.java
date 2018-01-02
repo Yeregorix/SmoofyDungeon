@@ -27,6 +27,8 @@ import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -49,6 +51,8 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
+
+		MessageChannel.TO_PLAYERS.send(Text.of("furnace: " + x + " " + y + " " + z));
 
 		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 

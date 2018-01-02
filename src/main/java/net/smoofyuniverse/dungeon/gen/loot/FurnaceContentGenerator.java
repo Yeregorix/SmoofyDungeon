@@ -28,6 +28,8 @@ import org.spongepowered.api.block.tileentity.carrier.Furnace;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.query.QueryOperation;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.slot.OutputSlot;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.extent.Extent;
@@ -38,6 +40,8 @@ import java.util.Optional;
 import java.util.Random;
 
 public class FurnaceContentGenerator {
+	private static final QueryOperation<?> QUERY = QueryOperationTypes.INVENTORY_TYPE.of(OutputSlot.class);
+
 	private List<ItemEntry> entries;
 	private float outputChance;
 
@@ -52,7 +56,7 @@ public class FurnaceContentGenerator {
 
 	public void generateBlock(Extent c, int x, int y, int z, Random r, Direction dir) {
 		c.setBlock(x, y, z, BlockTypes.FURNACE.getDefaultState().with(Keys.DIRECTION, dir).get());
-		((Furnace) c.getTileEntity(x, y, z).get()).getInventory().query(OutputSlot.class).set(generate(r).orElse(ItemStack.empty())); // TODO fix or report
+		((Furnace) c.getTileEntity(x, y, z).get()).getInventory().query(QUERY).set(generate(r).orElse(ItemStack.empty())); // TODO fix or report
 	}
 
 	public Optional<ItemStack> generate(Random r) {
