@@ -15,6 +15,10 @@
 log/
 target/
 
-#Gradle
+# Gradle
 .gradle/
 build/
+
+# Build
+out/
+run/

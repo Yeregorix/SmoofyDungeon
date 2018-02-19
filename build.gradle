@@ -20,14 +20,19 @@
  * SOFTWARE.
  */
 
-group = 'net.smoofyuniverse'
-version = '1.0.0'
-description = 'An advanced dungeon generator'
-
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'com.qixalite.spongestart' version '1.6.2'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+spongestart {
+    eula true
+    minecraft '1.12.2'
+    type 'stable'
+}
 
 repositories {
     mavenCentral()
@@ -38,6 +43,18 @@ repositories {
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:8.0.0-SNAPSHOT'
+    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
     compile 'it.unimi.dsi:fastutil:7.1.0'
 }
+
+task updatePlugin <<{
+    copy {
+        from 'build/libs/SmoofyDungeon.jar'
+        into spongestart.forgeServerFolder + "/mods"
+    }
+    copy {
+        from 'build/libs/SmoofyDungeon.jar'
+        into spongestart.vanillaServerFolder + "/mods"
+    }
+}
+updatePlugin.dependsOn build
