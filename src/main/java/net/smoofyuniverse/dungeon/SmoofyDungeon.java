@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon;
 
 import com.google.inject.Inject;
+import net.smoofyuniverse.dungeon.bstats.MetricsLite;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -52,6 +53,9 @@ public final class SmoofyDungeon {
 	private Path configDir;
 	@Inject
 	private PluginContainer container;
+
+	@Inject
+	private MetricsLite metrics;
 
 	private Path worldConfigsDir;
 
