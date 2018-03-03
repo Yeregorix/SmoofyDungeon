@@ -37,6 +37,10 @@ import java.util.Random;
 public class RailPopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
+	public RailPopulator() {
+		super("rail");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 2;

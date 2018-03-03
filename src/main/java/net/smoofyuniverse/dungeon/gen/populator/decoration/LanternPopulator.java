@@ -32,6 +32,10 @@ import java.util.Random;
 
 public class LanternPopulator extends RoomPopulator {
 
+	public LanternPopulator() {
+		super("lantern");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 2;

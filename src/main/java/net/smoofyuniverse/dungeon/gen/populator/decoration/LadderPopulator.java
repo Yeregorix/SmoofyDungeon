@@ -34,6 +34,10 @@ import java.util.Random;
 
 public class LadderPopulator extends RoomPopulator {
 
+	public LadderPopulator() {
+		super("ladder");
+	}
+
 	@Override
 	public float getRoomChance() {
 		return 0.05f;

@@ -32,8 +32,11 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public class ChestPopulator extends RoomPopulator {
-
 	public static final ChestContentGenerator CHEST_GENERATOR;
+
+	public ChestPopulator() {
+		super("chest");
+	}
 
 	@Override
 	public float getRoomIterationChance() {

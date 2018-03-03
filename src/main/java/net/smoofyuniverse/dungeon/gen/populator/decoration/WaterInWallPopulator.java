@@ -32,6 +32,10 @@ import java.util.Random;
 
 public class WaterInWallPopulator extends RoomPopulator {
 
+	public WaterInWallPopulator() {
+		super("water_in_wall");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 4;

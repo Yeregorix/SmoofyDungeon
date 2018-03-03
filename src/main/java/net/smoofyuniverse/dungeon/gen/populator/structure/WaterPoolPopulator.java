@@ -30,11 +30,15 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class PoolPopulator extends RoomPopulator {
+public class WaterPoolPopulator extends RoomPopulator {
+
+	public WaterPoolPopulator() {
+		super("water_pool");
+	}
 
 	@Override
 	public float getRoomChance() {
-		return 0.005f;
+		return 0.003f;
 	}
 
 	@Override
@@ -42,7 +46,6 @@ public class PoolPopulator extends RoomPopulator {
 		info.setFlag(layer, room, true);
 
 		y += getFloorOffset(c, x, y, z) + 1;
-		boolean water = r.nextBoolean();
 
 		for (int dy = 0; dy < 4; dy++) {
 			for (int i = 0; i < 8; i++) {
@@ -61,7 +64,7 @@ public class PoolPopulator extends RoomPopulator {
 
 			for (int dx = 1; dx < 7; dx++) {
 				for (int dz = 1; dz < 7; dz++)
-					c.setBlockType(x + dx, y + dy, z + dz, water ? BlockTypes.WATER : BlockTypes.LAVA);
+					c.setBlockType(x + dx, y + dy, z + dz, BlockTypes.WATER);
 			}
 		}
 	}

@@ -33,6 +33,10 @@ import java.util.Random;
 
 public class CreeperRoomPopulator extends RoomPopulator {
 
+	public CreeperRoomPopulator() {
+		super("creeper_room");
+	}
+
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);

@@ -34,6 +34,10 @@ import java.util.Set;
 
 public class ExplosionPopulator extends ChunkPopulator {
 
+	public ExplosionPopulator() {
+		super("explosion");
+	}
+
 	@Override
 	public void populateChunk(World w, Extent c, Random r) {
 		Vector3i chunkMin = c.getBlockMin();

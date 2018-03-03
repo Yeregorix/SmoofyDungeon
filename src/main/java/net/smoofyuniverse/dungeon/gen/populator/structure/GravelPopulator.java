@@ -32,6 +32,10 @@ import java.util.Random;
 public class GravelPopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
+	public GravelPopulator() {
+		super("gravel");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 1;

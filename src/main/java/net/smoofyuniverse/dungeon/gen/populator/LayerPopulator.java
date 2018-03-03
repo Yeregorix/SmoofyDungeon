@@ -31,7 +31,9 @@ import java.util.Random;
 
 public abstract class LayerPopulator extends ChunkPopulator {
 
-	protected LayerPopulator() {}
+	protected LayerPopulator(String name) {
+		super(name);
+	}
 
 	@Override
 	public final void populateChunk(ChunkInfo info, World w, Extent c, Random r) {

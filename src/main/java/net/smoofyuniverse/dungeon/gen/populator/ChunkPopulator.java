@@ -38,8 +38,15 @@ import org.spongepowered.api.world.gen.PopulatorTypes;
 import java.util.Random;
 
 public abstract class ChunkPopulator implements Populator {
+	protected final String name;
 
-	protected ChunkPopulator() {}
+	protected ChunkPopulator(String name) {
+		this.name = name;
+	}
+
+	public final String getName() {
+		return this.name;
+	}
 
 	@Override
 	public PopulatorType getType() {

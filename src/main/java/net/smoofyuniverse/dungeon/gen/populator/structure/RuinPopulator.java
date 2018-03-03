@@ -30,8 +30,12 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class RuinsPopulator extends RoomPopulator {
+public class RuinPopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+	public RuinPopulator() {
+		super("ruin");
+	}
 
 	@Override
 	public int getMaximumLayer() {

@@ -43,6 +43,10 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 			COBBLESTONE_EGG = BlockTypes.MONSTER_EGG.getDefaultState().withTrait(EnumTraits.MONSTER_EGG_VARIANT, DisguisedBlockTypes.COBBLESTONE).get(),
 			STONE_EGG = BlockTypes.MONSTER_EGG.getDefaultState().withTrait(EnumTraits.MONSTER_EGG_VARIANT, DisguisedBlockTypes.STONE).get();
 
+	public SilverfishBlockPopulator() {
+		super("silverfish_block");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 2;

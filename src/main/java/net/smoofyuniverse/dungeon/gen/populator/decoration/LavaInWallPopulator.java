@@ -32,6 +32,10 @@ import java.util.Random;
 
 public class LavaInWallPopulator extends RoomPopulator {
 
+	public LavaInWallPopulator() {
+		super("lava_in_wall");
+	}
+
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int floorOffset = getFloorOffset(c, x, y, z);

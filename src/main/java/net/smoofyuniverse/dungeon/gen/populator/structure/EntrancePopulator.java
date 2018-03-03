@@ -44,6 +44,10 @@ public class EntrancePopulator extends RoomPopulator {
 			TORCH_WEST = BlockTypes.TORCH.getDefaultState().with(Keys.DIRECTION, Direction.WEST).get(),
 			TORCH_SOUTH = BlockTypes.TORCH.getDefaultState().with(Keys.DIRECTION, Direction.SOUTH).get();
 
+	public EntrancePopulator() {
+		super("entrance");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 6;

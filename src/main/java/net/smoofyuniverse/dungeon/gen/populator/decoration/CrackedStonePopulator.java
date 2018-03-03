@@ -35,6 +35,10 @@ import java.util.Random;
 public class CrackedStonePopulator extends RoomPopulator {
 	public static final BlockState CRACKED_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.CRACKED).get();
 
+	public CrackedStonePopulator() {
+		super("cracked_stone");
+	}
+
 	@Override
 	public float getRoomIterationChance() {
 		return 0.7f;

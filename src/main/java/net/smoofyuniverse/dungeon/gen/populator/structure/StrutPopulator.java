@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class StrutPopulator extends RoomPopulator {
 
+	public StrutPopulator() {
+		super("strut");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 1;

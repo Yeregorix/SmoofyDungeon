@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class WebPopulator extends RoomPopulator {
 
+	public WebPopulator() {
+		super("web");
+	}
+
 	@Override
 	public float getRoomIterationChance() {
 		return 0.25f;

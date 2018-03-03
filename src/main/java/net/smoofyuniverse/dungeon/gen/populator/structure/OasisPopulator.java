@@ -39,6 +39,10 @@ import java.util.Random;
 public class OasisPopulator extends ChunkPopulator {
 	public static final PopulatorObject[] TREES;
 
+	public OasisPopulator() {
+		super("oasis");
+	}
+
 	@Override
 	public void populateChunk(ChunkInfo info, World w, Extent c, Random r) {
 		info.setFlag(true);

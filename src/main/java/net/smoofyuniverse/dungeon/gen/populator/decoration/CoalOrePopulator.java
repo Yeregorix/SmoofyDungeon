@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class CoalOrePopulator extends RoomPopulator {
 
+	public CoalOrePopulator() {
+		super("coal_ore");
+	}
+
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);

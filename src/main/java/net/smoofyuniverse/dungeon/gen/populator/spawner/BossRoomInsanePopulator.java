@@ -34,8 +34,11 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public class BossRoomInsanePopulator extends LayerPopulator {
-
 	public static final ChestContentGenerator CHEST_GENERATOR = BossRoomHardPopulator.CHEST_GENERATOR;
+
+	public BossRoomInsanePopulator() {
+		super("boss_room_insane");
+	}
 
 	@Override
 	public int getMaximumLayer() {

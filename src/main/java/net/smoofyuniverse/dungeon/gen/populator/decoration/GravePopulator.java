@@ -39,6 +39,10 @@ public class GravePopulator extends RoomPopulator {
 	public static final BlockState SIGN = BlockTypes.STANDING_SIGN.getDefaultState().with(Keys.DIRECTION, Direction.WEST).get();
 	public static final List<Text> LINES = Arrays.asList(Text.EMPTY, Text.of("R.I.P"), Text.EMPTY, Text.EMPTY);
 
+	public GravePopulator() {
+		super("grave");
+	}
+
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(4) + 3;

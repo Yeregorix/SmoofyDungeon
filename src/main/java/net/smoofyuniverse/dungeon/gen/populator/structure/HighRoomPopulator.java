@@ -32,6 +32,10 @@ import java.util.Random;
 
 public class HighRoomPopulator extends RoomPopulator {
 
+	public HighRoomPopulator() {
+		super("high_room");
+	}
+
 	@Override
 	public float getRoomChance() {
 		return 0.006f;

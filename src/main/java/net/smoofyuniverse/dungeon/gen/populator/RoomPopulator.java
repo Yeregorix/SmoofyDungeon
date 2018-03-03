@@ -34,7 +34,9 @@ import java.util.Random;
 
 public abstract class RoomPopulator extends LayerPopulator {
 
-	protected RoomPopulator() {}
+	protected RoomPopulator(String name) {
+		super(name);
+	}
 
 	@Override
 	public final void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {

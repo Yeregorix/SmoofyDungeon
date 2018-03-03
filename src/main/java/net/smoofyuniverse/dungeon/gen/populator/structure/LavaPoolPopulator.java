@@ -20,61 +20,52 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.spawner;
+package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.entity.EntityType;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class RandomSpawnerPopulator extends RoomPopulator {
+public class LavaPoolPopulator extends RoomPopulator {
 
-	public RandomSpawnerPopulator() {
-		super("random_spawner");
+	public LavaPoolPopulator() {
+		super("lava_pool");
 	}
 
 	@Override
-	public float getRoomIterationChance() {
-		return 0.08f;
+	public float getRoomChance() {
+		return 0.002f;
 	}
 
 	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.002f;
-	}
+	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		info.setFlag(layer, room, true);
 
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			generateSpawner(c, x, y, z, randomEntityType(r));
-	}
+		for (int dy = 0; dy < 4; dy++) {
+			for (int i = 0; i < 8; i++) {
+				if (c.getBlockType(x + i, y + dy, z) == BlockTypes.AIR)
+					c.setBlockType(x + i, y + dy, z, BlockTypes.BRICK_BLOCK);
 
-	public static EntityType randomEntityType(Random r) {
-		float f = r.nextFloat();
-		if (f < 0.4f)
-			return EntityTypes.ZOMBIE;            // p = 0.4
-		if (f < 0.6f)
-			return EntityTypes.SKELETON;        // p = 0.2
-		if (f < 0.76f)
-			return EntityTypes.SPIDER;            // p = 0.16
-		if (f < 0.84f)
-			return EntityTypes.PIG_ZOMBIE;        // p = 0.08
-		if (f < 0.88f)
-			return EntityTypes.CAVE_SPIDER;        // p = 0.04
-		if (f < 0.92f)
-			return EntityTypes.ENDERMAN;        // p = 0.04
-		if (f < 0.96f)
-			return EntityTypes.MAGMA_CUBE;        // p = 0.04
-		if (f < 0.98f)
-			return EntityTypes.WITCH;            // p = 0.02
-		return EntityTypes.SILVERFISH;            // p = 0.02
+				if (c.getBlockType(x + i, y + dy, z + 7) == BlockTypes.AIR)
+					c.setBlockType(x + i, y + dy, z + 7, BlockTypes.BRICK_BLOCK);
+
+				if (c.getBlockType(x, y + dy, z + i) == BlockTypes.AIR)
+					c.setBlockType(x, y + dy, z + i, BlockTypes.BRICK_BLOCK);
+
+				if (c.getBlockType(x + 7, y + dy, z + i) == BlockTypes.AIR)
+					c.setBlockType(x + 7, y + dy, z + i, BlockTypes.BRICK_BLOCK);
+			}
+
+			for (int dx = 1; dx < 7; dx++) {
+				for (int dz = 1; dz < 7; dz++)
+					c.setBlockType(x + dx, y + dy, z + dz, BlockTypes.LAVA);
+			}
+		}
 	}
 }

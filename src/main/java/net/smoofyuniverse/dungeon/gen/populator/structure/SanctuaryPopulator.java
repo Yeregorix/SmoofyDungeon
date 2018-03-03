@@ -32,6 +32,10 @@ import java.util.Random;
 
 public class SanctuaryPopulator extends RoomPopulator {
 
+	public SanctuaryPopulator() {
+		super("sanctuary");
+	}
+
 	@Override
 	public int getMaximumLayer() {
 		return 0;

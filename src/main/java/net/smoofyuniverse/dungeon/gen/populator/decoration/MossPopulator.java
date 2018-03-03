@@ -36,6 +36,10 @@ import java.util.Random;
 public class MossPopulator extends RoomPopulator {
 	public static final BlockState MOSSY_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.MOSSY).get();
 
+	public MossPopulator() {
+		super("moss");
+	}
+
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);

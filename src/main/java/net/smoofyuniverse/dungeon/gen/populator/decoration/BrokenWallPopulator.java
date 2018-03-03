@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class BrokenWallPopulator extends RoomPopulator {
 
+	public BrokenWallPopulator() {
+		super("broken_wall");
+	}
+
 	@Override
 	public float getRoomChance() {
 		return 0.33f;

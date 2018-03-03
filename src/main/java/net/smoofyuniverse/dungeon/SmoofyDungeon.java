@@ -24,15 +24,36 @@ package net.smoofyuniverse.dungeon;
 
 import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.0.0", authors = "Yeregorix", description = "An advanced dungeon generator")
 public final class SmoofyDungeon {
+	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
 	private static SmoofyDungeon instance;
+
+	@Inject
+	@ConfigDir(sharedRoot = false)
+	private Path configDir;
+	@Inject
+	private PluginContainer container;
+
+	private Path worldConfigsDir;
 
 	public SmoofyDungeon() {
 		if (instance != null)
@@ -40,16 +61,46 @@ public final class SmoofyDungeon {
 		instance = this;
 	}
 
-	@Inject
-	private PluginContainer container;
+	@Listener
+	public void onGamePreInit(GamePreInitializationEvent e) {
+		this.worldConfigsDir = this.configDir.resolve("worlds");
+		try {
+			Files.createDirectories(this.worldConfigsDir);
+		} catch (IOException ignored) {
+		}
+	}
+
+	@Listener
+	public void onServerStarted(GameStartedServerEvent e) {
+		LOGGER.info("SmoofyDungeon " + this.container.getVersion().orElse("?") + " was loaded successfully.");
+	}
 
 	@Listener
 	public void onRegister(GameRegistryEvent.Register<WorldGeneratorModifier> e) {
 		e.register(new DungeonWorldModifier());
 	}
 
-	public PluginContainer getContainer() {
-		return this.container;
+	public ConfigurationLoader<CommentedConfigurationNode> createConfigLoader(Path file) {
+		return HoconConfigurationLoader.builder().setPath(file).build();
+	}
+
+	public boolean backupFile(Path file) throws IOException {
+		if (!Files.exists(file))
+			return false;
+
+		String fn = file.getFileName() + ".backup";
+		Path backup = null;
+		for (int i = 0; i < 100; i++) {
+			backup = file.resolveSibling(fn + i);
+			if (!Files.exists(backup))
+				break;
+		}
+		Files.move(file, backup);
+		return true;
+	}
+
+	public Path getWorldConfigsDirectory() {
+		return this.worldConfigsDir;
 	}
 
 	public static SmoofyDungeon get() {

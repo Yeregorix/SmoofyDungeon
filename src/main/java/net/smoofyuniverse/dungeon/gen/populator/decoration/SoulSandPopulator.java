@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class SoulSandPopulator extends RoomPopulator {
 
+	public SoulSandPopulator() {
+		super("soulsand");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 2;

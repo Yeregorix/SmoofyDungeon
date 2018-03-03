@@ -36,6 +36,10 @@ import java.util.Random;
 public class FurnaceRoomPopulator extends RoomPopulator {
 	public static final FurnaceContentGenerator CONTENT_GENERATOR;
 
+	public FurnaceRoomPopulator() {
+		super("furnace_room");
+	}
+
 	@Override
 	public int getMaximumLayer() {
 		return 4;

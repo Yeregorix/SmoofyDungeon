@@ -31,6 +31,10 @@ import java.util.Random;
 
 public class NetherrackPopulator extends RoomPopulator {
 
+	public NetherrackPopulator() {
+		super("netherrack");
+	}
+
 	@Override
 	public int getMaximumLayer() {
 		return 1;

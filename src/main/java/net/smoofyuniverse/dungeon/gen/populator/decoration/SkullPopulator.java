@@ -35,6 +35,10 @@ import java.util.Random;
 public class SkullPopulator extends RoomPopulator {
 	public static final BlockState SKULL = BlockTypes.SKULL.getDefaultState().with(Keys.DIRECTION, Direction.UP).get();
 
+	public SkullPopulator() {
+		super("skull");
+	}
+
 	@Override
 	public int getMaximumLayer() {
 		return 3;

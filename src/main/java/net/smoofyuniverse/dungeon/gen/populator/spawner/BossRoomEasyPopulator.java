@@ -33,6 +33,10 @@ import java.util.Random;
 
 public class BossRoomEasyPopulator extends RoomPopulator {
 
+	public BossRoomEasyPopulator() {
+		super("boss_room_easy");
+	}
+
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);

@@ -35,6 +35,10 @@ public class StoneRoomPopulator extends RoomPopulator {
 	private static final BlockType[] ORES = {BlockTypes.COAL_ORE, BlockTypes.DIAMOND_ORE, BlockTypes.EMERALD_ORE,
 			BlockTypes.GOLD_ORE, BlockTypes.IRON_ORE, BlockTypes.LAPIS_ORE, BlockTypes.REDSTONE_ORE, BlockTypes.QUARTZ_ORE};
 
+	public StoneRoomPopulator() {
+		super("stone_room");
+	}
+
 	@Override
 	public float getRoomChance() {
 		return 0.005f;

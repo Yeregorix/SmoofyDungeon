@@ -41,6 +41,10 @@ public class StairsPopulator extends RoomPopulator {
 	public static final BlockState STAIRS = BlockTypes.STONE_STAIRS.getDefaultState(),
 			SLAB = BlockTypes.STONE_SLAB.getDefaultState().withTrait(EnumTraits.STONE_SLAB_VARIANT, SlabTypes.COBBLESTONE).get();
 
+	public StairsPopulator() {
+		super("stairs");
+	}
+
 	@Override
 	public int getMaximumLayer() {
 		return 5;

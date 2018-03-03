@@ -41,6 +41,10 @@ public class SlabPopulator extends RoomPopulator {
 			.withTrait(EnumTraits.STONE_SLAB_HALF, PortionTypes.BOTTOM).get()
 			.withTrait(EnumTraits.STONE_SLAB_VARIANT, SlabTypes.COBBLESTONE).get();
 
+	public SlabPopulator() {
+		super("slab");
+	}
+
 	@Override
 	public float getRoomIterationChance() {
 		return 0.25f;

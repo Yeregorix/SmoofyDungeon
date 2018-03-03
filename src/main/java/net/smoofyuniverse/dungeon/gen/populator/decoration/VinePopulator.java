@@ -39,6 +39,10 @@ public class VinePopulator extends RoomPopulator {
 			VINE_SOUTH = VINE.withTrait(BooleanTraits.VINE_SOUTH, true).get(),
 			VINE_WEST = VINE.withTrait(BooleanTraits.VINE_WEST, true).get();
 
+	public VinePopulator() {
+		super("vine");
+	}
+
 	@Override
 	public float getRoomIterationChance() {
 		return 0.3f;

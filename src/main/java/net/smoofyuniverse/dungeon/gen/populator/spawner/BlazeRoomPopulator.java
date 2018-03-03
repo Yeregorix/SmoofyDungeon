@@ -44,6 +44,10 @@ public class BlazeRoomPopulator extends RoomPopulator {
 
 	public static final ChestContentGenerator CHEST_GENERATOR = ChestPopulator.CHEST_GENERATOR;
 
+	public BlazeRoomPopulator() {
+		super("blaze_room");
+	}
+
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);

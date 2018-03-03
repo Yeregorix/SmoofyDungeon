@@ -37,6 +37,10 @@ public class SandPopulator extends RoomPopulator {
 
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
+	public SandPopulator() {
+		super("sand");
+	}
+
 	@Override
 	public int getMinimumLayer() {
 		return 4;
