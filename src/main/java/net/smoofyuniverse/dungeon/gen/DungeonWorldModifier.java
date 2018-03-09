@@ -164,7 +164,6 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		ImmutableList.Builder<ChunkPopulator> b = ImmutableList.builder();
 
-		// 1- CHUNKS
 		// Structures
 		b.add(new OasisPopulator());
 		b.add(new HighRoomPopulator());
@@ -181,13 +180,9 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new StairsPopulator());
 		b.add(new StrutPopulator());
 
-		// 2- LAYERS
 		// Spawners
 		b.add(new BossRoomHardPopulator());
 		b.add(new BossRoomInsanePopulator());
-
-		// 3- ROOMS
-		// Spawners
 		b.add(new RandomSpawnerPopulator());
 		b.add(new SilverfishBlockPopulator());
 		b.add(new CreeperRoomPopulator());
@@ -195,6 +190,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new BossRoomEasyPopulator());
 
 		// Decorators
+		b.add(new WaterWellPopulator());
 		b.add(new BrokenWallPopulator());
 		b.add(new NetherrackPopulator());
 		b.add(new CoalOrePopulator());
@@ -213,8 +209,6 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new WebPopulator());
 		b.add(new LanternPopulator());
 		b.add(new TorchPopulator());
-
-		// 4- OTHERS
 		b.add(new ExplosionPopulator());
 
 		POPULATORS = b.build();
