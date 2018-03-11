@@ -22,7 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
-import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import com.flowpowered.math.vector.Vector3i;
+import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -33,7 +34,7 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class MossPopulator extends RoomPopulator {
+public class MossPopulator extends LayerPopulator {
 	public static final BlockState MOSSY_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.MOSSY).get();
 
 	public MossPopulator() {
@@ -41,29 +42,25 @@ public class MossPopulator extends RoomPopulator {
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		apply(c, r, x, y, z);
+	public int getLayerIterations() {
+		return 320;
 	}
 
-	public static void apply(Extent c, Random r, int x, int y, int z) {
-		x += r.nextInt(8);
+	@Override
+	public float getLayerIterationChance() {
+		return 0.75f;
+	}
+
+	@Override
+	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
+		Vector3i min = c.getBlockMin();
+		int x = min.getX() + r.nextInt(16), z = min.getZ() + r.nextInt(16);
 		y += r.nextInt(7);
-		z += r.nextInt(8);
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE)
 			c.setBlockType(x, y, z, BlockTypes.MOSSY_COBBLESTONE);
 		else if (type == BlockTypes.STONEBRICK)
 			c.setBlock(x, y, z, MOSSY_STONEBRICK);
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 80;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.75f;
 	}
 }

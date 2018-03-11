@@ -22,7 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
-import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import com.flowpowered.math.vector.Vector3i;
+import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.EnumTraits;
@@ -32,7 +33,7 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class CrackedStonePopulator extends RoomPopulator {
+public class CrackedStonePopulator extends LayerPopulator {
 	public static final BlockState CRACKED_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.CRACKED).get();
 
 	public CrackedStonePopulator() {
@@ -40,24 +41,20 @@ public class CrackedStonePopulator extends RoomPopulator {
 	}
 
 	@Override
-	public float getRoomIterationChance() {
+	public int getLayerIterations() {
+		return 240;
+	}
+
+	@Override
+	public float getLayerIterationChance() {
 		return 0.7f;
 	}
 
 	@Override
-	public int getRoomIterations() {
-		return 60;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		apply(c, r, x, y, z);
-	}
-
-	public static void apply(Extent c, Random r, int x, int y, int z) {
-		x += r.nextInt(8);
+	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
+		Vector3i min = c.getBlockMin();
+		int x = min.getX() + r.nextInt(16), z = min.getZ() + r.nextInt(16);
 		y += r.nextInt(7);
-		z += r.nextInt(8);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK)
 			c.setBlock(x, y, z, CRACKED_STONEBRICK);

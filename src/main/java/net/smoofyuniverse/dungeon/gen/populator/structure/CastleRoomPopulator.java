@@ -27,8 +27,6 @@ import net.smoofyuniverse.dungeon.gen.loot.FurnaceContentGenerator;
 import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.decoration.CrackedStonePopulator;
-import net.smoofyuniverse.dungeon.gen.populator.decoration.MossPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.IntegerTraits;
 import org.spongepowered.api.util.Direction;
@@ -136,15 +134,5 @@ public class CastleRoomPopulator extends RoomPopulator {
 		FURNACE_GENERATOR.generateBlock(c, x + 5, floorY, z + 5, r, Direction.WEST);
 
 		c.setBlock(x + 5, floorY + 1, z + 5, BlockTypes.CAKE.getDefaultState().withTrait(IntegerTraits.CAKE_BITES, r.nextInt(4)).get());
-
-		for (int i = 0; i < 70; i++) {
-			if (r.nextFloat() < 0.70f)
-				CrackedStonePopulator.apply(c, r, x, y, z);
-		}
-
-		for (int i = 0; i < 80; i++) {
-			if (r.nextFloat() < 0.75f)
-				MossPopulator.apply(c, r, x, y, z);
-		}
 	}
 }
