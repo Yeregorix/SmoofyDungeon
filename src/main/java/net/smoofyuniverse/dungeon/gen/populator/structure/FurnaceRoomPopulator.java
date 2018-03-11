@@ -34,7 +34,7 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public class FurnaceRoomPopulator extends RoomPopulator {
-	public static final FurnaceContentGenerator CONTENT_GENERATOR;
+	public static final FurnaceContentGenerator FURNACE_GENERATOR;
 
 	public FurnaceRoomPopulator() {
 		super("furnace_room");
@@ -70,10 +70,10 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 			c.setBlockType(x + 7, cy, z + 7, BlockTypes.COBBLESTONE);
 		}
 
-		CONTENT_GENERATOR.generateBlock(c, x + 2, y + 2, z + 2, r, Direction.NORTH);
+		FURNACE_GENERATOR.generateBlock(c, x + 2, y + 2, z + 2, r, Direction.NORTH);
 		c.setBlockType(x + 3, y + 2, z + 2, BlockTypes.GLASS);
 		c.setBlockType(x + 4, y + 2, z + 2, BlockTypes.GLASS);
-		CONTENT_GENERATOR.generateBlock(c, x + 5, y + 2, z + 2, r, Direction.NORTH);
+		FURNACE_GENERATOR.generateBlock(c, x + 5, y + 2, z + 2, r, Direction.NORTH);
 		c.setBlockType(x + 2, y + 2, z + 3, BlockTypes.GLASS);
 		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.LAVA);
 		c.setBlockType(x + 4, y + 2, z + 3, BlockTypes.LAVA);
@@ -82,10 +82,10 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 3, y + 2, z + 4, BlockTypes.LAVA);
 		c.setBlockType(x + 4, y + 2, z + 4, BlockTypes.LAVA);
 		c.setBlockType(x + 5, y + 2, z + 4, BlockTypes.GLASS);
-		CONTENT_GENERATOR.generateBlock(c, x + 2, y + 2, z + 5, r, Direction.SOUTH);
+		FURNACE_GENERATOR.generateBlock(c, x + 2, y + 2, z + 5, r, Direction.SOUTH);
 		c.setBlockType(x + 3, y + 2, z + 5, BlockTypes.GLASS);
 		c.setBlockType(x + 4, y + 2, z + 5, BlockTypes.GLASS);
-		CONTENT_GENERATOR.generateBlock(c, x + 5, y + 2, z + 5, r, Direction.SOUTH);
+		FURNACE_GENERATOR.generateBlock(c, x + 5, y + 2, z + 5, r, Direction.SOUTH);
 
 		for (int dx = 3; dx <= 4; dx++) {
 			for (int dz = 3; dz <= 4; dz++) {
@@ -96,7 +96,7 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 	}
 
 	static {
-		CONTENT_GENERATOR = FurnaceContentGenerator.builder()
+		FURNACE_GENERATOR = FurnaceContentGenerator.builder()
 				.add(ItemTypes.GOLD_BLOCK, 1, 0.05f).add(ItemTypes.IRON_BLOCK, 1, 0.05f)
 				.add(ItemTypes.BRICK_BLOCK, 1, 0.20f).add(ItemTypes.COAL, 1, 0.80f).add(ItemTypes.COAL, 1, 0.80f)
 				.add(ItemTypes.IRON_INGOT, 2, 0.80f).add(ItemTypes.IRON_INGOT, 4, 0.20f).add(ItemTypes.GOLD_INGOT, 2, 0.80f).add(ItemTypes.GOLD_INGOT, 4, 0.20f)

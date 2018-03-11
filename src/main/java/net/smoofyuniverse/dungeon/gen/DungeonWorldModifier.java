@@ -168,11 +168,12 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new OasisPopulator());
 		b.add(new HighRoomPopulator());
 		b.add(new FurnaceRoomPopulator());
+		b.add(new CastleRoomPopulator());
 		b.add(new SanctuaryPopulator());
-		b.add(new StoneRoomPopulator());
 		b.add(new LavaPoolPopulator());
 		b.add(new WaterPoolPopulator());
 		b.add(new EntrancePopulator());
+		b.add(new StoneRoomPopulator());
 		b.add(new RailPopulator());
 		b.add(new RuinPopulator());
 		b.add(new SandPopulator());

@@ -42,8 +42,12 @@ public class MossPopulator extends RoomPopulator {
 
 	@Override
 	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		apply(c, r, x, y, z);
+	}
+
+	public static void apply(Extent c, Random r, int x, int y, int z) {
 		x += r.nextInt(8);
-		y += r.nextInt((y + 6) - y + 1);
+		y += r.nextInt(7);
 		z += r.nextInt(8);
 
 		BlockType type = c.getBlockType(x, y, z);
