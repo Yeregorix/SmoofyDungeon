@@ -24,17 +24,20 @@ package net.smoofyuniverse.dungeon;
 
 import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.bstats.MetricsLite;
+import net.smoofyuniverse.dungeon.command.ConfigCommand;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.api.Game;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
@@ -48,6 +51,8 @@ public final class SmoofyDungeon {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
 	private static SmoofyDungeon instance;
 
+	@Inject
+	private Game game;
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
@@ -72,6 +77,11 @@ public final class SmoofyDungeon {
 			Files.createDirectories(this.worldConfigsDir);
 		} catch (IOException ignored) {
 		}
+	}
+
+	@Listener
+	public void onServerStarting(GameStartingServerEvent e) {
+		this.game.getCommandManager().register(this, ConfigCommand.createMainSpec("smoofydungeon.config"), "sdcfg", "sdconfig", "smoofydungeonconfig");
 	}
 
 	@Listener

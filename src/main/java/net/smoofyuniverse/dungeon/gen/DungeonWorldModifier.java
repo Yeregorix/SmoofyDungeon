@@ -23,17 +23,13 @@
 package net.smoofyuniverse.dungeon.gen;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.reflect.TypeToken;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
+import net.smoofyuniverse.dungeon.config.WorldConfig;
 import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
 import net.smoofyuniverse.dungeon.gen.populator.structure.*;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
@@ -44,17 +40,12 @@ import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class DungeonWorldModifier implements WorldGeneratorModifier {
-	public static final int CURRENT_CONFIG_VERSION = 1, MINIMUM_CONFIG_VERSION = 1;
 	public static final List<ChunkPopulator> POPULATORS;
 
-	private static final Set<String> allConfigPopulators;
 	private static Class<?> animalPopulatorClass;
 
 	@Override
@@ -74,10 +65,10 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		Set<String> set;
 		try {
-			set = loadConfig(name);
+			set = WorldConfig.of(name).getPopulators();
 		} catch (Exception e) {
-			SmoofyDungeon.LOGGER.error("Failed to load configuration for world " + name, e);
-			set = allConfigPopulators;
+			SmoofyDungeon.LOGGER.error("Failed to load configuration for world '" + name + "'", e);
+			set = WorldConfig.POPULATORS;
 		}
 
 		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator());
@@ -123,36 +114,6 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		if (animalPop != null)
 			pops.add(new WrappedPopulator(animalPop));
-	}
-
-	public static Set<String> loadConfig(String worldName) throws IOException, ObjectMappingException {
-		Path file = SmoofyDungeon.get().getWorldConfigsDirectory().resolve(worldName + ".conf");
-		ConfigurationLoader<CommentedConfigurationNode> loader = SmoofyDungeon.get().createConfigLoader(file);
-
-		CommentedConfigurationNode root = loader.load();
-		int version = root.getNode("Version").getInt();
-		if ((version > CURRENT_CONFIG_VERSION || version < MINIMUM_CONFIG_VERSION) && SmoofyDungeon.get().backupFile(file)) {
-			SmoofyDungeon.LOGGER.info("Your config version is not supported. A new one will be generated.");
-			root = loader.createEmptyNode();
-		}
-
-		ConfigurationNode cfgNode = root.getNode("Populators");
-		List<String> list = cfgNode.getList(TypeToken.of(String.class));
-		Set<String> set;
-
-		if (list.isEmpty()) {
-			set = new LinkedHashSet<>(allConfigPopulators);
-		} else {
-			set = new LinkedHashSet<>(list);
-			set.retainAll(allConfigPopulators);
-		}
-
-		version = CURRENT_CONFIG_VERSION;
-		root.getNode("Version").setValue(version);
-		cfgNode.setValue(set);
-		loader.save(root);
-
-		return set;
 	}
 
 	static {
@@ -214,11 +175,5 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new ExplosionPopulator());
 
 		POPULATORS = b.build();
-
-		allConfigPopulators = new LinkedHashSet<>();
-		for (ChunkPopulator pop : POPULATORS)
-			allConfigPopulators.add(pop.getName());
-		allConfigPopulators.add("forest");
-		allConfigPopulators.add("animal");
 	}
 }
