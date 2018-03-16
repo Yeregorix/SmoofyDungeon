@@ -46,7 +46,7 @@ public class SkullPopulator extends RoomPopulator {
 
 	@Override
 	public float getRoomIterationChance() {
-		return 0.001f;
+		return 0.002f;
 	}
 
 	@Override
@@ -59,6 +59,9 @@ public class SkullPopulator extends RoomPopulator {
 		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
+
+		if (c.getBlockType(x, y - 1, z) == BlockTypes.AIR)
+			return;
 
 		if (r.nextBoolean()) {
 			c.setBlockType(x, y, z, BlockTypes.FENCE);
