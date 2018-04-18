@@ -22,8 +22,11 @@
 
 package net.smoofyuniverse.dungeon.config;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
@@ -35,11 +38,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 public final class WorldConfig {
-	public static final int CURRENT_CONFIG_VERSION = 1, MINIMUM_CONFIG_VERSION = 1;
+	public static final int CURRENT_CONFIG_VERSION = 2, MINIMUM_CONFIG_VERSION = 1;
 	public static final Set<String> POPULATORS;
 
+	private static final Int2ObjectMap<UnaryOperator<String>> updaters = new Int2ObjectOpenHashMap<>();
 	private static final Map<String, WorldConfig> worlds = new HashMap<>();
 
 	private final String worldName;
@@ -86,10 +91,23 @@ public final class WorldConfig {
 			return new LinkedHashSet<>(POPULATORS);
 		}
 
+		int step = version;
+		while (step != CURRENT_CONFIG_VERSION) {
+			UnaryOperator<String> operator = updaters.get(++step);
+			if (operator != null) {
+				ListIterator<String> it = list.listIterator();
+				while (it.hasNext()) {
+					String r = operator.apply(it.next());
+					if (r != null)
+						it.set(r);
+				}
+			}
+		}
+
 		Set<String> set = new LinkedHashSet<>(list);
 		set.retainAll(POPULATORS);
 
-		if (set.size() != list.size())
+		if (set.size() != list.size() || version != CURRENT_CONFIG_VERSION)
 			setPopulators(set);
 
 		return set;
@@ -114,6 +132,14 @@ public final class WorldConfig {
 		return cfg;
 	}
 
+	private static void setUpdater(int toVersion, Map<String, String> map) {
+		setUpdater(toVersion, map::get);
+	}
+
+	private static void setUpdater(int toVersion, UnaryOperator<String> operator) {
+		updaters.put(toVersion, operator);
+	}
+
 	static {
 		ImmutableSet.Builder<String> b = ImmutableSet.builder();
 
@@ -123,5 +149,7 @@ public final class WorldConfig {
 		b.add("animal");
 
 		POPULATORS = b.build();
+
+		setUpdater(2, ImmutableMap.of("random_spawner", "simple_spawner"));
 	}
 }
