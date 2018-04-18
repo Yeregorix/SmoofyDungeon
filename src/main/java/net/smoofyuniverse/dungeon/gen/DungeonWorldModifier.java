@@ -146,7 +146,8 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		// Spawners
 		b.add(new BossRoomHardPopulator());
 		b.add(new BossRoomInsanePopulator());
-		b.add(new RandomSpawnerPopulator());
+		b.add(new SimpleSpawnerPopulator());
+		b.add(new CeilingSpawnerPopulator());
 		b.add(new SilverfishBlockPopulator());
 		b.add(new CreeperRoomPopulator());
 		b.add(new BlazeRoomPopulator());

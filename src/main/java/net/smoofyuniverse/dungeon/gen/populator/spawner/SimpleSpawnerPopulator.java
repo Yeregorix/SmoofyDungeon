@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import net.smoofyuniverse.dungeon.util.WeightedList;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
@@ -31,20 +32,21 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-public class RandomSpawnerPopulator extends RoomPopulator {
+public class SimpleSpawnerPopulator extends RoomPopulator {
+	public static final WeightedList<EntityType> ENTITIES;
 
-	public RandomSpawnerPopulator() {
-		super("random_spawner");
+	public SimpleSpawnerPopulator() {
+		super("simple_spawner");
 	}
 
 	@Override
 	public float getRoomIterationChance() {
-		return 0.09f;
+		return 0.1f;
 	}
 
 	@Override
 	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0025f;
+		return -0.003f;
 	}
 
 	@Override
@@ -54,27 +56,20 @@ public class RandomSpawnerPopulator extends RoomPopulator {
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
-			generateSpawner(c, x, y, z, randomEntityType(r));
+			generateSpawner(c, x, y, z, ENTITIES.get(r));
 	}
 
-	public static EntityType randomEntityType(Random r) {
-		float f = r.nextFloat();
-		if (f < 0.4f)
-			return EntityTypes.ZOMBIE;                // p = 0.4
-		if (f < 0.6f)
-			return EntityTypes.SKELETON;            // p = 0.2
-		if (f < 0.76f)
-			return EntityTypes.SPIDER;                // p = 0.16
-		if (f < 0.84f)
-			return EntityTypes.PIG_ZOMBIE;            // p = 0.08
-		if (f < 0.88f)
-			return EntityTypes.CAVE_SPIDER;            // p = 0.04
-		if (f < 0.92f)
-			return EntityTypes.ENDERMAN;            // p = 0.04
-		if (f < 0.96f)
-			return EntityTypes.MAGMA_CUBE;            // p = 0.04
-		if (f < 0.98f)
-			return EntityTypes.WITCH;                // p = 0.02
-		return EntityTypes.SILVERFISH;                // p = 0.02
+	static {
+		ENTITIES = WeightedList.<EntityType>builder()
+				.add(EntityTypes.ZOMBIE, 4)
+				.add(EntityTypes.SKELETON, 2)
+				.add(EntityTypes.SPIDER, 1.6)
+				.add(EntityTypes.PIG_ZOMBIE, 0.8)
+				.add(EntityTypes.CAVE_SPIDER, 0.4)
+				.add(EntityTypes.ENDERMAN, 0.4)
+				.add(EntityTypes.MAGMA_CUBE, 0.4)
+				.add(EntityTypes.WITCH, 0.2)
+				.add(EntityTypes.SILVERFISH, 0.2)
+				.build();
 	}
 }
