@@ -71,24 +71,26 @@ public class ResourceUtil {
 	public static Set<Vector3i> simulateExplosion(World w, Random r, double x, double y, double z, float size) {
 		Set<Vector3i> set = new HashSet<>();
 
-		for (int j = 0; j < 16; ++j) {
-			for (int k = 0; k < 16; ++k) {
-				for (int l = 0; l < 16; ++l) {
-					if (j == 0 || j == 15 || k == 0 || k == 15 || l == 0 || l == 15) {
-						double d0 = (double) ((float) j / 15f * 2f - 1f);
-						double d1 = (double) ((float) k / 15f * 2f - 1f);
-						double d2 = (double) ((float) l / 15f * 2f - 1f);
-						double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-						d0 = d0 / d3;
-						d1 = d1 / d3;
-						d2 = d2 / d3;
+		for (int a = 0; a < 16; a++) {
+			for (int b = 0; b < 16; b++) {
+				for (int c = 0; c < 16; c++) {
+					if (a == 0 || a == 15 || b == 0 || b == 15 || c == 0 || c == 15) {
+						double dx = (double) ((float) a / 15f * 2f - 1f);
+						double dy = (double) ((float) b / 15f * 2f - 1f);
+						double dz = (double) ((float) c / 15f * 2f - 1f);
+
+						double l = Math.sqrt(dx * dx + dy * dy + dz * dz);
+						dx /= l;
+						dy /= l;
+						dz /= l;
+
 						float f = size * (0.7f + r.nextFloat() * 0.6f);
-						double d4 = x;
-						double d6 = y;
-						double d8 = z;
+						double cx = x;
+						double cy = y;
+						double cz = z;
 
 						while (f > 0f) {
-							Vector3i pos = new Vector3i(d4, d6, d8);
+							Vector3i pos = new Vector3i(cx, cy, cz);
 							BlockState block = w.getBlock(pos);
 
 							if (block.getType() != BlockTypes.AIR) {
@@ -97,9 +99,9 @@ public class ResourceUtil {
 									set.add(pos);
 							}
 
-							d4 += d0 * 0.30000001192092896D;
-							d6 += d1 * 0.30000001192092896D;
-							d8 += d2 * 0.30000001192092896D;
+							cx += dx * 0.30000001192092896D;
+							cy += dy * 0.30000001192092896D;
+							cz += dz * 0.30000001192092896D;
 
 							f -= 0.22500001f;
 						}
