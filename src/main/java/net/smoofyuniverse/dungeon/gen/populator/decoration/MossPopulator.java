@@ -29,13 +29,15 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.EnumTraits;
 import org.spongepowered.api.data.type.BrickTypes;
+import org.spongepowered.api.data.type.WallTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
 public class MossPopulator extends LayerPopulator {
-	public static final BlockState MOSSY_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.MOSSY).get();
+	public static final BlockState MOSSY_STONEBRICK = BlockTypes.STONEBRICK.getDefaultState().withTrait(EnumTraits.STONEBRICK_VARIANT, BrickTypes.MOSSY).get(),
+			MOSSY_COBBLESTONE_WALL = BlockTypes.COBBLESTONE_WALL.getDefaultState().withTrait(EnumTraits.COBBLESTONE_WALL_VARIANT, WallTypes.MOSSY).get();
 
 	public MossPopulator() {
 		super("moss");
@@ -62,5 +64,7 @@ public class MossPopulator extends LayerPopulator {
 			c.setBlockType(x, y, z, BlockTypes.MOSSY_COBBLESTONE);
 		else if (type == BlockTypes.STONEBRICK)
 			c.setBlock(x, y, z, MOSSY_STONEBRICK);
+		else if (type == BlockTypes.COBBLESTONE_WALL)
+			c.setBlock(x, y, z, MOSSY_COBBLESTONE_WALL);
 	}
 }
