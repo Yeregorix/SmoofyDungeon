@@ -22,27 +22,27 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
-import net.smoofyuniverse.dungeon.util.RandomQueue;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
+import net.smoofyuniverse.dungeon.util.WeightedList;
+import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.block.tileentity.carrier.Chest;
+import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.extent.Extent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class ChestContentGenerator {
-	private List<ItemEntry> entries;
-	private int[] counts;
+	private final WeightedList<ItemStackSnapshot> items;
+	private final int[] counts;
 
-	private ChestContentGenerator(List<ItemEntry> entries, int[] counts) {
-		this.entries = entries;
+	private ChestContentGenerator(WeightedList<ItemStackSnapshot> items, int[] counts) {
+		this.items = items;
 		this.counts = counts;
 	}
 
@@ -51,43 +51,26 @@ public class ChestContentGenerator {
 	}
 
 	public void generateBlock(Extent c, int x, int y, int z, Random r, Direction dir) {
-		c.setBlock(x, y, z, BlockTypes.CHEST.getDefaultState().with(Keys.DIRECTION, dir).get());
-		fill(((Chest) c.getTileEntity(x, y, z).get()).getInventory(), r);
+		generateCarrier(c, x, y, z, r, BlockTypes.CHEST.getDefaultState().with(Keys.DIRECTION, dir).get());
 	}
 
-	public void fill(Inventory inv, Random r) {
-		ResourceUtil.fill(inv, r, generate(r));
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockState state) {
+		c.setBlock(x, y, z, state);
+		ResourceUtil.fill(((TileEntityCarrier) c.getTileEntity(x, y, z).get()).getInventory(), r, generateItems(r));
 	}
 
-	public ItemStack[] generate(Random r) {
-		List<ItemStack> items = new ArrayList<>();
-
-		for (ItemEntry e : this.entries) {
-			if (r.nextFloat() < e.chance)
-				items.add(e.item);
-		}
-
-		if (items.isEmpty())
-			return new ItemStack[0];
-
+	public ItemStack[] generateItems(Random r) {
 		int count = this.counts[r.nextInt(this.counts.length)];
-		ItemStack[] result = new ItemStack[count];
 
-		RandomQueue<ItemStack> queue = RandomQueue.of(items, r);
+		ItemStack[] items = new ItemStack[count];
 		for (int i = 0; i < count; i++)
-			result[i] = queue.next().copy();
+			items[i] = this.items.get(r).createStack();
 
-		return result;
+		return items;
 	}
 
-	private static class ItemEntry {
-		public final ItemStack item;
-		public final float chance;
-
-		public ItemEntry(ItemStack item, float chance) {
-			this.item = item;
-			this.chance = chance;
-		}
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
+		generateCarrier(c, x, y, z, r, type.getDefaultState());
 	}
 
 	public static Builder builder() {
@@ -95,27 +78,28 @@ public class ChestContentGenerator {
 	}
 
 	public static class Builder {
-		private List<ItemEntry> entries = new ArrayList<>();
+		private WeightedList.Builder<ItemStackSnapshot> items = WeightedList.builder();
 		private int[] counts;
 
 		private Builder() {}
 
-		public Builder add(ItemType type, int count, float chance) {
-			return add(ItemStack.of(type, count), chance);
+		public Builder add(ItemType type, int count, double weight) {
+			return add(ItemStack.of(type, count), weight);
 		}
 
-		public Builder add(ItemStack item, float chance) {
-			this.entries.add(new ItemEntry(item, chance));
-			return this;
+		public Builder add(ItemStack item, double weight) {
+			return add(item.createSnapshot(), weight);
 		}
 
-		public Builder add(ItemEntry e) {
-			this.entries.add(e);
+		public Builder add(ItemStackSnapshot item, double weight) {
+			if (item == null || item.isEmpty())
+				throw new IllegalArgumentException();
+			this.items.add(item, weight);
 			return this;
 		}
 
 		public ChestContentGenerator build(int... counts) {
-			return new ChestContentGenerator(this.entries, counts);
+			return new ChestContentGenerator(this.items.build(), counts);
 		}
 	}
 }

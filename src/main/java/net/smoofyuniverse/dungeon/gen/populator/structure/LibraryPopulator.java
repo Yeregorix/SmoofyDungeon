@@ -58,9 +58,7 @@ public class LibraryPopulator extends RoomPopulator {
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
-
-		int floorOffset = getFloorOffset(c, x, y, z), ceilingOffset = getCeilingOffset(c, x, y, z);
-		int floorY = y + floorOffset + 1, ceilingY = y + ceilingOffset + 6;
+		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		for (int cy = floorY; cy < ceilingY; cy++) {
 			for (int dx = 1; dx < 7; dx++) {
@@ -105,15 +103,15 @@ public class LibraryPopulator extends RoomPopulator {
 
 	static {
 		CHEST_GENERATOR = ChestContentGenerator.builder()
-				.add(ItemTypes.TORCH, 16, 0.8f).add(ItemTypes.TORCH, 20, 0.4f)
-				.add(ItemTypes.ARROW, 24, 0.8f).add(ItemTypes.ARROW, 5, 0.4f)
-				.add(ItemTypes.DIAMOND, 3, 0.2f).add(ItemTypes.GOLD_INGOT, 3, 0.5f).add(ItemTypes.IRON_INGOT, 3, 0.5f)
-				.add(ItemTypes.IRON_SWORD, 1, 0.5f).add(ItemTypes.BEETROOT_SOUP, 1, 0.8f)
-				.add(ItemTypes.IRON_HELMET, 1, 0.2f).add(ItemTypes.IRON_CHESTPLATE, 1, 0.2f).add(ItemTypes.IRON_LEGGINGS, 1, 0.2f).add(ItemTypes.IRON_BOOTS, 1, 0.2f)
-				.add(ItemTypes.DIAMOND_HELMET, 1, 0.05f).add(ItemTypes.DIAMOND_CHESTPLATE, 1, 0.05f).add(ItemTypes.DIAMOND_LEGGINGS, 1, 0.05f).add(ItemTypes.DIAMOND_BOOTS, 1, 0.05f)
-				.add(ItemTypes.FLINT, 1, 0.4f).add(ItemTypes.COOKED_MUTTON, 1, 0.8f)
-				.add(ItemTypes.GOLDEN_APPLE, 1, 0.1f).add(ItemTypes.REDSTONE, 7, 0.2f)
-				.add(ItemTypes.CAKE, 1, 0.2f).add(ItemTypes.COOKIE, 8, 0.8f)
+				.add(ItemTypes.TORCH, 16, 0.8).add(ItemTypes.TORCH, 20, 0.4)
+				.add(ItemTypes.ARROW, 24, 0.8).add(ItemTypes.ARROW, 5, 0.4)
+				.add(ItemTypes.DIAMOND, 3, 0.2).add(ItemTypes.GOLD_INGOT, 3, 0.5).add(ItemTypes.IRON_INGOT, 3, 0.5)
+				.add(ItemTypes.IRON_SWORD, 1, 0.5).add(ItemTypes.BEETROOT_SOUP, 1, 0.8)
+				.add(ItemTypes.IRON_HELMET, 1, 0.2).add(ItemTypes.IRON_CHESTPLATE, 1, 0.2).add(ItemTypes.IRON_LEGGINGS, 1, 0.2).add(ItemTypes.IRON_BOOTS, 1, 0.2)
+				.add(ItemTypes.DIAMOND_HELMET, 1, 0.05).add(ItemTypes.DIAMOND_CHESTPLATE, 1, 0.05).add(ItemTypes.DIAMOND_LEGGINGS, 1, 0.05).add(ItemTypes.DIAMOND_BOOTS, 1, 0.05)
+				.add(ItemTypes.FLINT, 1, 0.4).add(ItemTypes.COOKED_MUTTON, 1, 0.8)
+				.add(ItemTypes.GOLDEN_APPLE, 1, 0.1).add(ItemTypes.REDSTONE, 7, 0.2)
+				.add(ItemTypes.CAKE, 1, 0.2).add(ItemTypes.COOKIE, 8, 0.8)
 				.build(3, 3, 4, 4, 4, 5, 5, 6);
 	}
 }

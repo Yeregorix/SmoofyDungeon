@@ -97,17 +97,17 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 
 	static {
 		FURNACE_GENERATOR = FurnaceContentGenerator.builder()
-				.add(ItemTypes.GOLD_BLOCK, 1, 0.05f).add(ItemTypes.IRON_BLOCK, 1, 0.05f)
-				.add(ItemTypes.BRICK_BLOCK, 1, 0.20f).add(ItemTypes.COAL, 1, 0.80f).add(ItemTypes.COAL, 1, 0.80f)
-				.add(ItemTypes.IRON_INGOT, 2, 0.80f).add(ItemTypes.IRON_INGOT, 4, 0.20f).add(ItemTypes.GOLD_INGOT, 2, 0.80f).add(ItemTypes.GOLD_INGOT, 4, 0.20f)
-				.add(ItemTypes.BREAD, 1, 0.40f).add(ItemTypes.BUCKET, 1, 0.40f)
-				.add(ItemTypes.COOKED_CHICKEN, 2, 0.80f).add(ItemTypes.COOKED_CHICKEN, 4, 0.20f)
-				.add(ItemTypes.FLINT, 3, 0.80f).add(ItemTypes.FLINT, 5, 0.40f)
-				.add(ItemTypes.COOKED_PORKCHOP, 1, 0.80f).add(ItemTypes.COOKED_FISH, 1, 0.40f)
-				.add(ItemTypes.ENDER_PEARL, 1, 0.30f).add(ItemTypes.BLAZE_ROD, 1, 0.30f).add(ItemTypes.GHAST_TEAR, 1, 0.30f)
-				.add(ItemTypes.GOLD_NUGGET, 1, 0.45f).add(ItemTypes.NETHER_WART, 1, 0.30f)
-				.add(ItemTypes.SPIDER_EYE, 1, 0.30f).add(ItemTypes.BLAZE_POWDER, 1, 0.30f).add(ItemTypes.MAGMA_CREAM, 1, 0.30f)
-				.add(ItemTypes.ENDER_EYE, 1, 0.30f).add(ItemTypes.SPECKLED_MELON, 1, 0.30f)
-				.build(0.8f);
+				.add(ItemTypes.GOLD_BLOCK, 1, 0.05).add(ItemTypes.IRON_BLOCK, 1, 0.05)
+				.add(ItemTypes.BRICK_BLOCK, 1, 0.20).add(ItemTypes.COAL, 1, 0.80).add(ItemTypes.COAL, 1, 0.80)
+				.add(ItemTypes.IRON_INGOT, 2, 0.80).add(ItemTypes.IRON_INGOT, 4, 0.20).add(ItemTypes.GOLD_INGOT, 2, 0.80).add(ItemTypes.GOLD_INGOT, 4, 0.20)
+				.add(ItemTypes.BREAD, 1, 0.40).add(ItemTypes.BUCKET, 1, 0.40)
+				.add(ItemTypes.COOKED_CHICKEN, 2, 0.80).add(ItemTypes.COOKED_CHICKEN, 4, 0.20)
+				.add(ItemTypes.FLINT, 3, 0.80).add(ItemTypes.FLINT, 5, 0.40)
+				.add(ItemTypes.COOKED_PORKCHOP, 1, 0.80).add(ItemTypes.COOKED_FISH, 1, 0.40)
+				.add(ItemTypes.ENDER_PEARL, 1, 0.30).add(ItemTypes.BLAZE_ROD, 1, 0.30).add(ItemTypes.GHAST_TEAR, 1, 0.30)
+				.add(ItemTypes.GOLD_NUGGET, 1, 0.45).add(ItemTypes.NETHER_WART, 1, 0.30)
+				.add(ItemTypes.SPIDER_EYE, 1, 0.30).add(ItemTypes.BLAZE_POWDER, 1, 0.30).add(ItemTypes.MAGMA_CREAM, 1, 0.30)
+				.add(ItemTypes.ENDER_EYE, 1, 0.30).add(ItemTypes.SPECKLED_MELON, 1, 0.30)
+				.addNone(2).build();
 	}
 }

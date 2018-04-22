@@ -23,28 +23,26 @@
 package net.smoofyuniverse.dungeon.gen.loot;
 
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
+import net.smoofyuniverse.dungeon.util.WeightedList;
+import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.block.tileentity.carrier.Furnace;
+import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.extent.Extent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 public class FurnaceContentGenerator {
-//	private static final QueryOperation<?> QUERY = QueryOperationTypes.INVENTORY_TYPE.of(OutputSlot.class);
+	private final WeightedList<ItemStackSnapshot> items;
 
-	private List<ItemEntry> entries;
-	private float outputChance;
-
-	private FurnaceContentGenerator(List<ItemEntry> entries, float outputChance) {
-		this.entries = entries;
-		this.outputChance = outputChance;
+	private FurnaceContentGenerator(WeightedList<ItemStackSnapshot> items) {
+		this.items = items;
 	}
 
 	public void generateBlock(Extent c, int x, int y, int z, Random r) {
@@ -52,31 +50,21 @@ public class FurnaceContentGenerator {
 	}
 
 	public void generateBlock(Extent c, int x, int y, int z, Random r, Direction dir) {
-		c.setBlock(x, y, z, BlockTypes.FURNACE.getDefaultState().with(Keys.DIRECTION, dir).get());
-		((Furnace) c.getTileEntity(x, y, z).get()).getInventory()/*.query(QUERY)*/.set(generate(r).orElse(ItemStack.empty()));
+		generateCarrier(c, x, y, z, r, BlockTypes.FURNACE.getDefaultState().with(Keys.DIRECTION, dir).get());
 	}
 
-	public Optional<ItemStack> generate(Random r) {
-		if (r.nextFloat() > this.outputChance)
-			return Optional.empty();
-
-		List<ItemStack> items = new ArrayList<>();
-		for (ItemEntry e : this.entries) {
-			if (r.nextFloat() < e.chance)
-				items.add(e.item);
-		}
-
-		return items.isEmpty() ? Optional.empty() : Optional.of(items.get(r.nextInt(items.size())).copy());
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockState state) {
+		c.setBlock(x, y, z, state);
+		((TileEntityCarrier) c.getTileEntity(x, y, z).get()).getInventory().set(generateItem(r).orElseGet(ItemStack::empty));
 	}
 
-	private static class ItemEntry {
-		public final ItemStack item;
-		public final float chance;
+	public Optional<ItemStack> generateItem(Random r) {
+		ItemStackSnapshot item = this.items.get(r);
+		return item.isEmpty() ? Optional.empty() : Optional.of(item.createStack());
+	}
 
-		private ItemEntry(ItemStack item, float chance) {
-			this.item = item;
-			this.chance = chance;
-		}
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
+		generateCarrier(c, x, y, z, r, type.getDefaultState());
 	}
 
 	public static Builder builder() {
@@ -84,22 +72,36 @@ public class FurnaceContentGenerator {
 	}
 
 	public static class Builder {
-		private List<ItemEntry> entries = new ArrayList<>();
-		private float outputChance;
+		private WeightedList.Builder<ItemStackSnapshot> items = WeightedList.builder();
 
 		private Builder() {}
 
-		public Builder add(ItemType type, int count, float chance) {
-			return add(ItemStack.of(type, count), chance);
-		}
-
-		public Builder add(ItemStack item, float chance) {
-			this.entries.add(new ItemEntry(item, chance));
+		public Builder reset() {
+			this.items.reset();
 			return this;
 		}
 
-		public FurnaceContentGenerator build(float outputChance) {
-			return new FurnaceContentGenerator(this.entries, outputChance);
+		public Builder add(ItemType type, int count, double weight) {
+			return add(ItemStack.of(type, count), weight);
+		}
+
+		public Builder add(ItemStack item, double weight) {
+			return add(item.createSnapshot(), weight);
+		}
+
+		public Builder add(ItemStackSnapshot item, double weight) {
+			if (item == null)
+				throw new IllegalArgumentException();
+			this.items.add(item, weight);
+			return this;
+		}
+
+		public Builder addNone(double weight) {
+			return add(ItemStackSnapshot.NONE, weight);
+		}
+
+		public FurnaceContentGenerator build() {
+			return new FurnaceContentGenerator(this.items.build());
 		}
 	}
 }

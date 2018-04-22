@@ -61,9 +61,7 @@ public class CastleRoomPopulator extends RoomPopulator {
 	@Override
 	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
-
-		int floorOffset = getFloorOffset(c, x, y, z), ceilingOffset = getCeilingOffset(c, x, y, z);
-		int floorY = y + floorOffset + 1, ceilingY = y + ceilingOffset + 6;
+		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		for (int i = 1; i < 7; i++) {
 			for (int cy = floorY; cy < ceilingY; cy++) {

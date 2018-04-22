@@ -163,19 +163,19 @@ public class BossRoomHardPopulator extends LayerPopulator {
 
 	static {
 		CHEST_GENERATOR = ChestContentGenerator.builder()
-				.add(ItemTypes.TORCH, 16, 0.8f).add(ItemTypes.TORCH, 20, 0.4f)
-				.add(ItemTypes.ARROW, 24, 0.8f).add(ItemTypes.ARROW, 1, 0.4f)
-				.add(ItemTypes.DIAMOND, 3, 0.2f).add(ItemTypes.IRON_INGOT, 3, 0.5f).add(ItemTypes.GOLD_INGOT, 3, 0.5f)
-				.add(ItemTypes.IRON_SWORD, 1, 0.5f)
-				.add(ItemTypes.MUSHROOM_STEW, 1, 0.8f)
-				.add(ItemTypes.IRON_HELMET, 1, 0.2f).add(ItemTypes.IRON_CHESTPLATE, 1, 0.2f).add(ItemTypes.IRON_LEGGINGS, 1, 0.2f).add(ItemTypes.IRON_BOOTS, 1, 0.2f)
-				.add(ItemTypes.DIAMOND_HELMET, 1, 0.05f).add(ItemTypes.DIAMOND_CHESTPLATE, 1, 0.05f).add(ItemTypes.DIAMOND_LEGGINGS, 1, 0.05f).add(ItemTypes.DIAMOND_BOOTS, 1, 0.05f)
-				.add(ItemTypes.FLINT, 1, 0.4f)
-				.add(ItemTypes.COOKED_PORKCHOP, 1, 0.8f)
-				.add(ItemTypes.GOLDEN_APPLE, 1, 0.1f)
-				.add(ItemTypes.REDSTONE, 7, 0.2f)
-				.add(ItemTypes.CAKE, 1, 0.2f)
-				.add(ItemTypes.COOKIE, 8, 0.8f)
+				.add(ItemTypes.TORCH, 16, 0.8).add(ItemTypes.TORCH, 20, 0.4)
+				.add(ItemTypes.ARROW, 24, 0.8).add(ItemTypes.ARROW, 1, 0.4)
+				.add(ItemTypes.DIAMOND, 3, 0.2).add(ItemTypes.IRON_INGOT, 3, 0.5).add(ItemTypes.GOLD_INGOT, 3, 0.5)
+				.add(ItemTypes.IRON_SWORD, 1, 0.5)
+				.add(ItemTypes.MUSHROOM_STEW, 1, 0.8)
+				.add(ItemTypes.IRON_HELMET, 1, 0.2).add(ItemTypes.IRON_CHESTPLATE, 1, 0.2).add(ItemTypes.IRON_LEGGINGS, 1, 0.2).add(ItemTypes.IRON_BOOTS, 1, 0.2)
+				.add(ItemTypes.DIAMOND_HELMET, 1, 0.05).add(ItemTypes.DIAMOND_CHESTPLATE, 1, 0.05).add(ItemTypes.DIAMOND_LEGGINGS, 1, 0.05).add(ItemTypes.DIAMOND_BOOTS, 1, 0.05)
+				.add(ItemTypes.FLINT, 1, 0.4)
+				.add(ItemTypes.COOKED_PORKCHOP, 1, 0.8)
+				.add(ItemTypes.GOLDEN_APPLE, 1, 0.1)
+				.add(ItemTypes.REDSTONE, 7, 0.2)
+				.add(ItemTypes.CAKE, 1, 0.2)
+				.add(ItemTypes.COOKIE, 8, 0.8)
 				.build(4, 5, 5, 6, 6, 6, 7, 7);
 	}
 }
