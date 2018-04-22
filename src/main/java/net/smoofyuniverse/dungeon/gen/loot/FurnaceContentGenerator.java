@@ -30,6 +30,7 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.util.Direction;
@@ -53,18 +54,22 @@ public class FurnaceContentGenerator {
 		generateCarrier(c, x, y, z, r, BlockTypes.FURNACE.getDefaultState().with(Keys.DIRECTION, dir).get());
 	}
 
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
+		generateCarrier(c, x, y, z, r, type.getDefaultState());
+	}
+
 	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockState state) {
 		c.setBlock(x, y, z, state);
-		((TileEntityCarrier) c.getTileEntity(x, y, z).get()).getInventory().set(generateItem(r).orElseGet(ItemStack::empty));
+		fill((TileEntityCarrier) c.getTileEntity(x, y, z).get(), r);
+	}
+
+	public void fill(Carrier carrier, Random r) {
+		carrier.getInventory().set(generateItem(r).orElseGet(ItemStack::empty));
 	}
 
 	public Optional<ItemStack> generateItem(Random r) {
 		ItemStackSnapshot item = this.items.get(r);
 		return item.isEmpty() ? Optional.empty() : Optional.of(item.createStack());
-	}
-
-	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
-		generateCarrier(c, x, y, z, r, type.getDefaultState());
 	}
 
 	public static Builder builder() {
@@ -91,7 +96,8 @@ public class FurnaceContentGenerator {
 
 		public Builder add(ItemStackSnapshot item, double weight) {
 			if (item == null)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("item");
+
 			this.items.add(item, weight);
 			return this;
 		}

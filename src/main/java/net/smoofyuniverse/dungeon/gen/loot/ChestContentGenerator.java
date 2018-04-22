@@ -30,6 +30,7 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.util.Direction;
@@ -54,9 +55,17 @@ public class ChestContentGenerator {
 		generateCarrier(c, x, y, z, r, BlockTypes.CHEST.getDefaultState().with(Keys.DIRECTION, dir).get());
 	}
 
+	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
+		generateCarrier(c, x, y, z, r, type.getDefaultState());
+	}
+
 	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockState state) {
 		c.setBlock(x, y, z, state);
-		ResourceUtil.fill(((TileEntityCarrier) c.getTileEntity(x, y, z).get()).getInventory(), r, generateItems(r));
+		fill((TileEntityCarrier) c.getTileEntity(x, y, z).get(), r);
+	}
+
+	public void fill(Carrier carrier, Random r) {
+		ResourceUtil.fill(carrier.getInventory(), r, generateItems(r));
 	}
 
 	public ItemStack[] generateItems(Random r) {
@@ -67,10 +76,6 @@ public class ChestContentGenerator {
 			items[i] = this.items.get(r).createStack();
 
 		return items;
-	}
-
-	public void generateCarrier(Extent c, int x, int y, int z, Random r, BlockType type) {
-		generateCarrier(c, x, y, z, r, type.getDefaultState());
 	}
 
 	public static Builder builder() {
@@ -93,7 +98,8 @@ public class ChestContentGenerator {
 
 		public Builder add(ItemStackSnapshot item, double weight) {
 			if (item == null || item.isEmpty())
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("item");
+
 			this.items.add(item, weight);
 			return this;
 		}
