@@ -52,6 +52,6 @@ public class RandomQueue<T> {
 	}
 
 	public static <T> RandomQueue<T> of(List<T> values, Random r) {
-		return new RandomQueue(values.toArray(new Object[values.size()]), r);
+		return new RandomQueue(values.toArray(new Object[0]), r);
 	}
 }

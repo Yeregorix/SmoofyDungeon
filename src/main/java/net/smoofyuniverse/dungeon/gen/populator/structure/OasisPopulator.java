@@ -89,6 +89,6 @@ public class OasisPopulator extends ChunkPopulator {
 			trees.add(type.getPopulatorObject());
 			type.getLargePopulatorObject().ifPresent(trees::add);
 		}
-		TREES = trees.toArray(new PopulatorObject[trees.size()]);
+		TREES = trees.toArray(new PopulatorObject[0]);
 	}
 }
