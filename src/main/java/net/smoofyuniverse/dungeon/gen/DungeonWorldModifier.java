@@ -24,7 +24,7 @@ package net.smoofyuniverse.dungeon.gen;
 
 import com.google.common.collect.ImmutableList;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
-import net.smoofyuniverse.dungeon.config.WorldConfig;
+import net.smoofyuniverse.dungeon.config.world.WorldConfig;
 import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;

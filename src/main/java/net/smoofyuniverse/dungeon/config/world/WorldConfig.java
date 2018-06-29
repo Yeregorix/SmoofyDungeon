@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.config;
+package net.smoofyuniverse.dungeon.config.world;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -30,6 +30,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
+import net.smoofyuniverse.dungeon.util.IOUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -41,7 +42,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 
 public final class WorldConfig {
-	public static final int CURRENT_CONFIG_VERSION = 2, MINIMUM_CONFIG_VERSION = 1;
+	public static final int CURRENT_VERSION = 2, MINIMUM_VERSION = 1;
 	public static final Set<String> POPULATORS;
 
 	private static final Int2ObjectMap<UnaryOperator<String>> updaters = new Int2ObjectOpenHashMap<>();
@@ -73,7 +74,7 @@ public final class WorldConfig {
 		CommentedConfigurationNode root = this.loader.load();
 
 		int version = root.getNode("Version").getInt();
-		if ((version > CURRENT_CONFIG_VERSION || version < MINIMUM_CONFIG_VERSION) && SmoofyDungeon.get().backupFile(this.file)) {
+		if ((version > CURRENT_VERSION || version < MINIMUM_VERSION) && IOUtil.backupFile(this.file)) {
 			SmoofyDungeon.LOGGER.info("Your config version is not supported. A new one will be generated.");
 			setPopulators(POPULATORS);
 			return new LinkedHashSet<>(POPULATORS);
@@ -92,7 +93,7 @@ public final class WorldConfig {
 		}
 
 		int step = version;
-		while (step != CURRENT_CONFIG_VERSION) {
+		while (step != CURRENT_VERSION) {
 			UnaryOperator<String> operator = updaters.get(++step);
 			if (operator != null) {
 				ListIterator<String> it = list.listIterator();
@@ -107,7 +108,7 @@ public final class WorldConfig {
 		Set<String> set = new LinkedHashSet<>(list);
 		set.retainAll(POPULATORS);
 
-		if (set.size() != list.size() || version != CURRENT_CONFIG_VERSION)
+		if (set.size() != list.size() || version != CURRENT_VERSION)
 			setPopulators(set);
 
 		return set;
@@ -116,7 +117,7 @@ public final class WorldConfig {
 	public void setPopulators(Set<String> set) throws IOException {
 		CommentedConfigurationNode root = this.loader.createEmptyNode();
 
-		root.getNode("Version").setValue(CURRENT_CONFIG_VERSION);
+		root.getNode("Version").setValue(CURRENT_VERSION);
 		root.getNode("Populators").setValue(set);
 
 		this.loader.save(root);
