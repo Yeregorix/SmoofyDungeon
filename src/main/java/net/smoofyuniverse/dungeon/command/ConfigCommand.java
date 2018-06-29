@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.command;
 
-import net.smoofyuniverse.dungeon.config.WorldConfig;
+import net.smoofyuniverse.dungeon.config.world.WorldConfig;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;

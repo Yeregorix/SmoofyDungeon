@@ -63,7 +63,7 @@ import java.nio.file.Path;
 
 import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 
-@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.0.0", authors = "Yeregorix", description = "An advanced dungeon generator")
+@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.1.0", authors = "Yeregorix", description = "An advanced dungeon generator")
 public final class SmoofyDungeon {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
 	private static SmoofyDungeon instance;
