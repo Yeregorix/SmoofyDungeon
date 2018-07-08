@@ -57,7 +57,7 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 			}
 
 		// Iterate over each layer
-		for (int y = 30; y < 30 + (7 * 6); y += 6) {
+		for (int y = 30; y < 72; y += 6) {
 			// Iterate over each room
 			for (int x = 0; x < 16; x += 8)
 				for (int z = 0; z < 16; z += 8) {
@@ -83,29 +83,32 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 
 		// Create the noise generator which generates wave forms to use for the surface
 		SimplexOctaveGenerator octave = new SimplexOctaveGenerator(seed, 8);
-		octave.setScale(1.0 / 48.0);
+		octave.setScale(1d / 48d);
 
 		// Generate the ceiling and the grass land
 		for (int x = minX; x <= maxX; x++)
 			for (int z = minZ; z <= maxZ; z++) {
-				double height = octave.noise(x, z, 0.5, 0.5) * 4 + 9;
+				double noise = octave.noise(x, z, 0.5d, 0.5d);
+				int stoneLevel = (int) (noise * 3d) + 76;
+				int groundLevel = (int) (noise * 4d) + 80;
 
-				volume.setBlockType(x, 30 + (7 * 6), z, BlockTypes.COBBLESTONE);
-				for (int y = 30 + (7 * 6) + 1; y < 30 + (7 * 6) + 4; y++)
+				volume.setBlockType(x, 72, z, BlockTypes.COBBLESTONE);
+
+				for (int y = 73; y < stoneLevel; y++)
 					volume.setBlockType(x, y, z, BlockTypes.STONE);
 
 				BiomeType biome = biomes.getBiome(x, 0, z);
-				if (biome == BiomeTypes.DESERT || biome == BiomeTypes.DESERT_HILLS) {
-					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
+				if (biome == BiomeTypes.DESERT || biome == BiomeTypes.DESERT_HILLS || biome == BiomeTypes.DESERT_MOUNTAINS) {
+					for (int y = stoneLevel; y <= groundLevel; y++)
 						volume.setBlockType(x, y, z, BlockTypes.SAND);
 				} else if (biome == BiomeTypes.MUSHROOM_ISLAND) {
-					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
+					for (int y = stoneLevel; y < groundLevel; y++)
 						volume.setBlockType(x, y, z, BlockTypes.DIRT);
-					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.MYCELIUM);
+					volume.setBlockType(x, groundLevel, z, BlockTypes.MYCELIUM);
 				} else {
-					for (int y = 30 + (7 * 6) + 4; y < 30 + (7 * 6) + 2 + height; y++)
+					for (int y = stoneLevel; y < groundLevel; y++)
 						volume.setBlockType(x, y, z, BlockTypes.DIRT);
-					volume.setBlockType(x, (int) (30 + (7 * 6) + 2 + height), z, BlockTypes.GRASS);
+					volume.setBlockType(x, groundLevel, z, BlockTypes.GRASS);
 				}
 			}
 	}
