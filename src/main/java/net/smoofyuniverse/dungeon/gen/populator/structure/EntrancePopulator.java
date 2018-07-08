@@ -46,26 +46,21 @@ public class EntrancePopulator extends RoomPopulator {
 
 	public EntrancePopulator() {
 		super("entrance");
+		layers(6, 6);
+		roomChance(0.004f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 6;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.004f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int ground = 100;
 
 		switch (r.nextInt(4)) {
 			case 0:
-				while (!isGround(c.getBlockType(x, ground, z + 3)))
+				while (!isGround(c.getBlockType(x, ground, z + 3))) {
 					ground--;
+					if (ground <= y)
+						return false;
+				}
 				ground++;
 
 				for (int dx = 0; dx < 8; dx++) {
@@ -143,10 +138,14 @@ public class EntrancePopulator extends RoomPopulator {
 					c.setBlockType(x, ground + 2, z + dz, BlockTypes.PLANKS);
 				c.setBlock(x - 1, ground + 1, z + 1, TORCH_WEST);
 				c.setBlock(x - 1, ground + 1, z + 6, TORCH_WEST);
-				break;
+
+				return true;
 			case 1:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 7)))
+				while (!isGround(c.getBlockType(x + 3, ground, z + 7))) {
 					ground--;
+					if (ground <= y)
+						return false;
+				}
 				ground++;
 
 				for (int dx = 0; dx < 8; dx++) {
@@ -201,10 +200,14 @@ public class EntrancePopulator extends RoomPopulator {
 				c.setBlockType(x + 4, ground + 1, z + 7, BlockTypes.AIR);
 				c.setBlock(x + 2, ground + 1, z + 8, TORCH_SOUTH);
 				c.setBlock(x + 5, ground + 1, z + 8, TORCH_SOUTH);
-				break;
+
+				return true;
 			case 2:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 3)))
+				while (!isGround(c.getBlockType(x + 3, ground, z + 3))) {
 					ground--;
+					if (ground <= y)
+						return false;
+				}
 				ground++;
 
 				for (int dx = 0; dx < 8; dx++) {
@@ -245,10 +248,14 @@ public class EntrancePopulator extends RoomPopulator {
 					c.setBlockType(x + dx, ground + 3, z + 2, BlockTypes.NETHER_BRICK);
 					c.setBlockType(x + dx, ground + 3, z + 5, BlockTypes.NETHER_BRICK);
 				}
-				break;
+
+				return true;
 			case 3:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 3)))
+				while (!isGround(c.getBlockType(x + 3, ground, z + 3))) {
 					ground--;
+					if (ground <= y)
+						return false;
+				}
 				ground++;
 
 				for (int dx = 0; dx < 8; dx++) {
@@ -282,7 +289,10 @@ public class EntrancePopulator extends RoomPopulator {
 				c.setBlockType(x, ground, z + 7, BlockTypes.TORCH);
 				c.setBlockType(x + 7, ground, z, BlockTypes.TORCH);
 				c.setBlockType(x + 7, ground, z + 7, BlockTypes.TORCH);
-				break;
+
+				return true;
+			default:
+				return false;
 		}
 	}
 

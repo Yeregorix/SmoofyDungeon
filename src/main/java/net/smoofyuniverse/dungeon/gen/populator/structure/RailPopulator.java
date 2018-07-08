@@ -39,35 +39,13 @@ public class RailPopulator extends RoomPopulator {
 
 	public RailPopulator() {
 		super("rail");
+		layers(2, 6);
+		roomIterations(3, 2);
+		roomIterationChance(0.06f, -0.004f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.06f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.004f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 2;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 3;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		int ox = r.nextInt(6) + 1;
@@ -106,5 +84,7 @@ public class RailPopulator extends RoomPopulator {
 
 		if (!entities.isEmpty())
 			c.spawnEntities(entities);
+
+		return true;
 	}
 }

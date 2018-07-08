@@ -37,31 +37,19 @@ public class SkullPopulator extends RoomPopulator {
 
 	public SkullPopulator() {
 		super("skull");
+		layers(0, 3);
+		roomIterations(5, 3);
+		roomIterationChance(0.002f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 3;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.002f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 5;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
 		if (c.getBlockType(x, y - 1, z) == BlockTypes.AIR)
-			return;
+			return false;
 
 		if (r.nextBoolean()) {
 			c.setBlockType(x, y, z, BlockTypes.FENCE);
@@ -70,5 +58,7 @@ public class SkullPopulator extends RoomPopulator {
 
 		c.setBlock(x, y, z, SKULL);
 		c.getTileEntity(x, y, z).get().offer(Keys.DIRECTION, Direction.values()[r.nextInt(16)]);
+
+		return true;
 	}
 }

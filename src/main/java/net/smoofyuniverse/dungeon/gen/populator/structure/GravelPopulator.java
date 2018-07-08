@@ -34,30 +34,13 @@ public class GravelPopulator extends RoomPopulator {
 
 	public GravelPopulator() {
 		super("gravel");
+		layers(1, 6);
+		roomIterations(3, 2);
+		roomIterationChance(0.05f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 1;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.05f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 2;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 3;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		int ox = r.nextInt(6) + 1;
@@ -96,5 +79,7 @@ public class GravelPopulator extends RoomPopulator {
 				dz += dir2[1];
 			}
 		}
+
+		return true;
 	}
 }

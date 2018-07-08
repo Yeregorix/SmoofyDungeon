@@ -35,35 +35,13 @@ public class RuinPopulator extends RoomPopulator {
 
 	public RuinPopulator() {
 		super("ruin");
+		layers(0, 3);
+		roomIterations(5, 2);
+		roomIterationChance(0.2f, -0.02f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 3;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.2f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.02f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 2;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 5;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		int ox = r.nextInt(6) + 1;
@@ -102,5 +80,7 @@ public class RuinPopulator extends RoomPopulator {
 				dz += dir2[1];
 			}
 		}
+
+		return true;
 	}
 }

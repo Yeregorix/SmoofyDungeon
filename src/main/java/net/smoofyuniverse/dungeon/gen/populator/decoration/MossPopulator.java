@@ -41,20 +41,12 @@ public class MossPopulator extends LayerPopulator {
 
 	public MossPopulator() {
 		super("moss");
+		layerIterations(320, 0);
+		layerIterationChance(0.75f, 0f);
 	}
 
 	@Override
-	public int getLayerIterations() {
-		return 320;
-	}
-
-	@Override
-	public float getLayerIterationChance() {
-		return 0.75f;
-	}
-
-	@Override
-	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
+	public boolean populateLayer(World w, Extent c, Random r, int layer, int y) {
 		Vector3i min = c.getBlockMin();
 		int x = min.getX() + r.nextInt(16), z = min.getZ() + r.nextInt(16);
 		y += r.nextInt(7);
@@ -66,5 +58,7 @@ public class MossPopulator extends LayerPopulator {
 			c.setBlock(x, y, z, MOSSY_STONEBRICK);
 		else if (type == BlockTypes.COBBLESTONE_WALL)
 			c.setBlock(x, y, z, MOSSY_COBBLESTONE_WALL);
+
+		return true;
 	}
 }

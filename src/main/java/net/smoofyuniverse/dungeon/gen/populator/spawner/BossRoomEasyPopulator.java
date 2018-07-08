@@ -35,10 +35,12 @@ public class BossRoomEasyPopulator extends RoomPopulator {
 
 	public BossRoomEasyPopulator() {
 		super("boss_room_easy");
+		layers(0, 5);
+		roomChance(0.004f, 0f);
 	}
 
 	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		y += getFloorOffset(c, x, y, z);
 
@@ -52,15 +54,7 @@ public class BossRoomEasyPopulator extends RoomPopulator {
 
 		c.setBlockType(x + 1, y + 1, z + 5, BlockTypes.COAL_ORE);
 		c.setBlockType(x + 5, y + 1, z + 1, BlockTypes.COAL_ORE);
-	}
 
-	@Override
-	public float getRoomIterationChance() {
-		return 0.004f;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
+		return true;
 	}
 }

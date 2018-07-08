@@ -40,20 +40,12 @@ public class WaterWellPopulator extends RoomPopulator {
 
 	public WaterWellPopulator() {
 		super("water_well");
+		layers(2, 6);
+		roomChance(0.002f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.002f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		for (int dx = 2; dx < 5; dx++) {
@@ -80,5 +72,7 @@ public class WaterWellPopulator extends RoomPopulator {
 		c.setBlock(x + 3, y + 2, z + 2, SOUTH_STAIRS);
 		c.setBlock(x + 3, y + 2, z + 4, NORTH_STAIRS);
 		c.setBlock(x + 4, y + 2, z + 3, WEST_STAIRS);
+
+		return true;
 	}
 }

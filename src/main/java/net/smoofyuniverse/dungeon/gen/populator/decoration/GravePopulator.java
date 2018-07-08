@@ -41,15 +41,12 @@ public class GravePopulator extends RoomPopulator {
 
 	public GravePopulator() {
 		super("grave");
+		layers(1, 5);
+		roomChance(0.006f, 0f);
 	}
 
 	@Override
-	public float getRoomIterationChance() {
-		return 0.006f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(4) + 3;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
@@ -63,7 +60,7 @@ public class GravePopulator extends RoomPopulator {
 			air++;
 
 		if (air > 1)
-			return;
+			return false;
 
 		c.setBlockType(x, y, z, BlockTypes.DOUBLE_STONE_SLAB);
 		c.setBlockType(x - 1, y, z, BlockTypes.STONE_SLAB);
@@ -71,15 +68,7 @@ public class GravePopulator extends RoomPopulator {
 
 		c.setBlock(x, y + 1, z, SIGN);
 		c.getTileEntity(x, y + 1, z).get().offer(Keys.SIGN_LINES, LINES);
-	}
 
-	@Override
-	public int getMinimumLayer() {
-		return 1;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
+		return true;
 	}
 }

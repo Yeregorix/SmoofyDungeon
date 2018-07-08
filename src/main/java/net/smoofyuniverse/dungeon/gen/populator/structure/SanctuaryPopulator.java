@@ -34,20 +34,12 @@ public class SanctuaryPopulator extends RoomPopulator {
 
 	public SanctuaryPopulator() {
 		super("sanctuary");
+		layers(0, 0);
+		roomChance(0.003f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 0;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.003f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 
 		y += getFloorOffset(c, x, y, z);
@@ -76,5 +68,7 @@ public class SanctuaryPopulator extends RoomPopulator {
 		c.setBlockType(x + 5, y + 2, z + 2, BlockTypes.TORCH);
 		c.setBlockType(x + 2, y + 2, z + 4, BlockTypes.TORCH);
 		c.setBlockType(x + 5, y + 2, z + 4, BlockTypes.TORCH);
+
+		return true;
 	}
 }

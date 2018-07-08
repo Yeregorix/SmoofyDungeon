@@ -34,15 +34,11 @@ public class WaterPoolPopulator extends RoomPopulator {
 
 	public WaterPoolPopulator() {
 		super("water_pool");
+		roomChance(0.003f, 0f);
 	}
 
 	@Override
-	public float getRoomChance() {
-		return 0.003f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 
 		y += getFloorOffset(c, x, y, z) + 1;
@@ -67,5 +63,7 @@ public class WaterPoolPopulator extends RoomPopulator {
 					c.setBlockType(x + dx, y + dy, z + dz, BlockTypes.WATER);
 			}
 		}
+
+		return true;
 	}
 }

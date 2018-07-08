@@ -24,7 +24,6 @@ package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -33,61 +32,72 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public abstract class RoomPopulator extends LayerPopulator {
+	private float roomChance = 1f, roomChanceAPL = 0f;
+	private int roomItAttempts = 1, roomItMax = 0;
+	private float roomItChance = 1, roomItChanceAPL = 0f;
 
 	protected RoomPopulator(String name) {
 		super(name);
 	}
 
+	protected final void roomChance(float chance, float APL) {
+		validateProbability(chance, APL);
+		this.roomChance = chance;
+		this.roomChanceAPL = APL;
+	}
+
+	protected final void roomIterations(int attempts, int max) {
+		validateIterations(attempts, max);
+		this.roomItAttempts = attempts;
+		this.roomItMax = max;
+	}
+
+	protected final void roomIterationChance(float chance, float APL) {
+		validateProbability(chance, APL);
+		this.roomItChance = chance;
+		this.roomItChanceAPL = APL;
+	}
+
 	@Override
-	public final void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
+	public final boolean populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
 		Vector3i min = c.getBlockMin();
-		float itChance = getRoomIterationChance() + (getRoomIterationChanceAdditionPerLayer() * layer);
-		int itMax = getRoomIterationMax();
+		float chance = this.roomChance + layer * this.roomChanceAPL, itChance = this.roomItChance + layer * this.roomItChanceAPL;
+		boolean success = false;
+
 		int room = -1;
-		for (int x = 0; x < 16; x += 8)
+		for (int x = 0; x < 16; x += 8) {
 			for (int z = 0; z < 16; z += 8) {
 				room++;
 				if (info.getFlag(layer, room))
 					continue;
-				if (ResourceUtil.random(getRoomChance(), r)) {
+
+				if (random(r, chance)) {
 					int itCount = 0;
-					for (int it = 0; it < getRoomIterations(); it++) {
-						if (itCount >= itMax && itMax >= 0)
+
+					for (int it = 0; it < this.roomItAttempts; it++) {
+						if (this.roomItMax != 0 && itCount >= this.roomItMax)
 							break;
-						if (ResourceUtil.random(itChance, r)) {
+
+						if (random(r, itChance) && populateRoom(info, w, c, r, layer, room, min.getX() + x, y, min.getZ() + z))
 							itCount++;
-							populateRoom(info, w, c, r, layer, room, min.getX() + x, y, min.getZ() + z);
-						}
 					}
+
+					if (itCount != 0)
+						success = true;
 				}
 			}
+		}
+
+		return success;
 	}
 
-	public float getRoomIterationChance() {
-		return 1.0f;
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		return populateRoom(w, c, r, layer, room, x, y, z);
 	}
 
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return 0.0f;
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+		throw new UnsupportedOperationException();
 	}
-
-	public int getRoomIterationMax() {
-		return -1;
-	}
-
-	public float getRoomChance() {
-		return 1.0f;
-	}
-
-	public int getRoomIterations() {
-		return 1;
-	}
-
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		populateRoom(w, c, r, layer, room, x, y, z);
-	}
-
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {}
 
 	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
 		BlockType type = chunk.getBlockType(x + 3, y, z + 3);

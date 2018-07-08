@@ -36,15 +36,12 @@ public class LadderPopulator extends RoomPopulator {
 
 	public LadderPopulator() {
 		super("ladder");
+		layers(0, 5);
+		roomChance(0.05f, 0f);
 	}
 
 	@Override
-	public float getRoomChance() {
-		return 0.05f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		Direction dir = null;
@@ -76,11 +73,9 @@ public class LadderPopulator extends RoomPopulator {
 			BlockState state = BlockTypes.LADDER.getDefaultState().with(Keys.DIRECTION, dir).get();
 			for (int i = 0; i < 8; i++)
 				c.setBlock(x, y + i, z, state);
-		}
-	}
 
-	@Override
-	public int getMaximumLayer() {
-		return 5;
+			return true;
+		}
+		return false;
 	}
 }

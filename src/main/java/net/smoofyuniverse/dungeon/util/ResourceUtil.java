@@ -115,15 +115,4 @@ public class ResourceUtil {
 	public static double getBlastResistance(PropertyHolder h) {
 		return h.getProperty(BlastResistanceProperty.class).map(BlastResistanceProperty::getValue).orElse(0d);
 	}
-
-	// Micro optimizations
-	public static boolean random(float chance, Random r) {
-		if (chance >= 1f)
-			return true;
-		if (chance <= 0f)
-			return false;
-		if (chance == 0.5f)
-			return r.nextBoolean();
-		return r.nextFloat() < chance;
-	}
 }

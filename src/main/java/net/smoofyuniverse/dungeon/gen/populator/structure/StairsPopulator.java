@@ -43,20 +43,12 @@ public class StairsPopulator extends RoomPopulator {
 
 	public StairsPopulator() {
 		super("stairs");
+		layers(0, 5);
+		roomChance(0.02f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 5;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.02f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int floorOffset = getFloorOffset(c, x, y, z), ceilingOffset = getCeilingOffset(c, x, y, z);
 		int ceilingY = y + ceilingOffset + 6;
 		int d = ceilingOffset - floorOffset;
@@ -142,6 +134,8 @@ public class StairsPopulator extends RoomPopulator {
 			c.setBlockType(x + 5, ceilingY, z + 4, BlockTypes.AIR);
 			c.setBlockType(x + 6, ceilingY, z + 4, BlockTypes.AIR);
 		}
+
+		return true;
 	}
 
 	public static BlockState getBlock(PortionType portion, Direction dir, Random r) {

@@ -35,10 +35,12 @@ public class CreeperRoomPopulator extends RoomPopulator {
 
 	public CreeperRoomPopulator() {
 		super("creeper_room");
+		layers(0, 4);
+		roomChance(0.003f, -0.0003f);
 	}
 
 	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		y += getFloorOffset(c, x, y, z);
 
@@ -49,20 +51,7 @@ public class CreeperRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK);
 
 		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER);
-	}
 
-	@Override
-	public float getRoomIterationChance() {
-		return 0.003f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0003f;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 4;
+		return true;
 	}
 }

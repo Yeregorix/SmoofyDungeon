@@ -51,25 +51,12 @@ public class CeilingSpawnerPopulator extends RoomPopulator {
 
 	public CeilingSpawnerPopulator() {
 		super("ceiling_spawner");
+		layers(0, 4);
+		roomChance(0.002f, -0.0002f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 4;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.002f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0002f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
 		c.setBlockType(x + 3, ceilingY - 2, z + 3, BlockTypes.COBBLESTONE);
@@ -101,5 +88,7 @@ public class CeilingSpawnerPopulator extends RoomPopulator {
 		c.setBlockType(x + 4, ceilingY - 1, z + 4, ORES[r.nextInt(ORES.length)]);
 		generateSpawner(c, x + 3, ceilingY - 1, z + 4, ENTITIES.get(r));
 		generateSpawner(c, x + 4, ceilingY - 1, z + 3, ENTITIES.get(r));
+
+		return true;
 	}
 }

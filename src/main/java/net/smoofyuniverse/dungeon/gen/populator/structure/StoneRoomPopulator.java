@@ -37,15 +37,11 @@ public class StoneRoomPopulator extends RoomPopulator {
 
 	public StoneRoomPopulator() {
 		super("stone_room");
+		roomChance(0.005f, 0f);
 	}
 
 	@Override
-	public float getRoomChance() {
-		return 0.005f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 
 		y += getFloorOffset(c, x, y, z) + 1;
@@ -64,6 +60,8 @@ public class StoneRoomPopulator extends RoomPopulator {
 					c.setBlockType(x + dx, cy, z + dz, randomType(r));
 			}
 		}
+
+		return true;
 	}
 
 	public static BlockType randomType(Random r) {

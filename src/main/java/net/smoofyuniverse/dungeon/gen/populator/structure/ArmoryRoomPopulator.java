@@ -66,25 +66,12 @@ public class ArmoryRoomPopulator extends RoomPopulator {
 
 	public ArmoryRoomPopulator() {
 		super("armory_room");
+		layers(2, 5);
+		roomChance(0.001f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.001f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
@@ -147,6 +134,8 @@ public class ArmoryRoomPopulator extends RoomPopulator {
 		c.setBlockType(x + 4, floorY, z - 1, BlockTypes.AIR);
 		c.setBlockType(x + 3, floorY + 1, z - 1, BlockTypes.AIR);
 		c.setBlockType(x + 4, floorY + 1, z - 1, BlockTypes.AIR);
+
+		return true;
 	}
 
 	public static boolean spawnArmorStand(Extent c, Random r, int x, int y, int z, double yaw) {

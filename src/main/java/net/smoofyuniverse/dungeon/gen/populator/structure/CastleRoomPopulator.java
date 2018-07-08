@@ -41,25 +41,12 @@ public class CastleRoomPopulator extends RoomPopulator {
 
 	public CastleRoomPopulator() {
 		super("castle_room");
+		layers(1, 5);
+		roomChance(0.001f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 1;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.001f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
@@ -132,5 +119,7 @@ public class CastleRoomPopulator extends RoomPopulator {
 		FURNACE_GENERATOR.generateBlock(c, x + 5, floorY, z + 5, r, Direction.WEST);
 
 		c.setBlock(x + 5, floorY + 1, z + 5, BlockTypes.CAKE.getDefaultState().withTrait(IntegerTraits.CAKE_BITES, r.nextInt(4)).get());
+
+		return true;
 	}
 }

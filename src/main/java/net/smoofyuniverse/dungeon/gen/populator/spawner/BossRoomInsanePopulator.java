@@ -38,20 +38,12 @@ public class BossRoomInsanePopulator extends LayerPopulator {
 
 	public BossRoomInsanePopulator() {
 		super("boss_room_insane");
+		layers(0, 2);
+		layerChance(0.001f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 2;
-	}
-
-	@Override
-	public float getLayerChance() {
-		return 0.001f;
-	}
-
-	@Override
-	public void populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
+	public boolean populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
 		info.setFlag(layer, true);
 		info.setFlag(layer + 1, true);
 		info.setFlag(layer + 2, true);
@@ -162,5 +154,7 @@ public class BossRoomInsanePopulator extends LayerPopulator {
 		generateSpawner(c, x + 3, y + 1, z + 12, EntityTypes.SKELETON);
 		generateSpawner(c, x + 12, y + 1, z + 3, EntityTypes.ZOMBIE);
 		generateSpawner(c, x + 12, y + 1, z + 12, EntityTypes.SPIDER);
+
+		return true;
 	}
 }

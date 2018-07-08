@@ -35,35 +35,21 @@ public class PumpkinPopulator extends RoomPopulator {
 
 	public PumpkinPopulator() {
 		super("pumpkin");
+		roomChance(0.025f, 0f);
+		roomIterations(7, 5);
+		roomIterationChance(0.5f, 0f);
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
+		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			c.setBlock(x, y, z, (r.nextFloat() < 0.33f ? BlockTypes.LIT_PUMPKIN : BlockTypes.PUMPKIN).getDefaultState().with(Keys.DIRECTION, ResourceUtil.randomCardinal(r)).get());
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.025f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 7;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.5f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 5;
+			return true;
+		}
+		return false;
 	}
 }

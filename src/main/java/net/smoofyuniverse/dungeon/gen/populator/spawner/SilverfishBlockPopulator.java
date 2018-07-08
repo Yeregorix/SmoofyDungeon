@@ -45,30 +45,14 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 
 	public SilverfishBlockPopulator() {
 		super("silverfish_block");
+		layers(2, 6);
+		roomChance(0.33f, 0f);
+		roomIterations(10, 0);
+		roomIterationChance(0.8f, -0.04f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.75f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.04f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 8;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int floorOffset = getFloorOffset(c, x, y, z);
 
 		x += r.nextInt(8);
@@ -85,9 +69,15 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 				c.setBlock(x, y, z, MOSSY_STONEBRICK_EGG);
 			else if (bType == BrickTypes.CRACKED)
 				c.setBlock(x, y, z, CRACKED_STONEBRICK_EGG);
+			else
+				return false;
 		} else if (type == BlockTypes.COBBLESTONE)
 			c.setBlock(x, y, z, COBBLESTONE_EGG);
 		else if (type == BlockTypes.STONE)
 			c.setBlock(x, y, z, STONE_EGG);
+		else
+			return false;
+
+		return true;
 	}
 }

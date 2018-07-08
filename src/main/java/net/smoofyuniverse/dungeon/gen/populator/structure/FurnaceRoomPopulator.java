@@ -38,20 +38,12 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 
 	public FurnaceRoomPopulator() {
 		super("furnace_room");
+		layers(0, 4);
+		roomChance(0.001f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 4;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.001f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 
 		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
@@ -93,6 +85,8 @@ public class FurnaceRoomPopulator extends RoomPopulator {
 					c.setBlockType(x + dx, cy, z + dz, BlockTypes.BRICK_BLOCK);
 			}
 		}
+
+		return true;
 	}
 
 	static {

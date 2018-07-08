@@ -34,15 +34,12 @@ public class HighRoomPopulator extends RoomPopulator {
 
 	public HighRoomPopulator() {
 		super("high_room");
+		layers(0, 5);
+		roomChance(0.006f, 0f);
 	}
 
 	@Override
-	public float getRoomChance() {
-		return 0.006f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer + 1, room, true);
 
 		y += getCeilingOffset(c, x, y, z) + 6;
@@ -53,10 +50,7 @@ public class HighRoomPopulator extends RoomPopulator {
 					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR);
 			}
 		}
-	}
 
-	@Override
-	public int getMaximumLayer() {
-		return 5;
+		return true;
 	}
 }

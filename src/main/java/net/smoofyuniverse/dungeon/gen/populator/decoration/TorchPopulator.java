@@ -33,30 +33,20 @@ public class TorchPopulator extends RoomPopulator {
 
 	public TorchPopulator() {
 		super("torch");
+		layers(1, 6);
+		roomChance(0.1f, 0.04f);
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
+		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			c.setBlockType(x, y, z, BlockTypes.TORCH);
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.1f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return 0.04f;
-	}
-
-	@Override
-	public int getMinimumLayer() {
-		return 1;
+			return true;
+		}
+		return false;
 	}
 }

@@ -34,34 +34,33 @@ public class LavaInWallPopulator extends RoomPopulator {
 
 	public LavaInWallPopulator() {
 		super("lava_in_wall");
+		layers(0, 3);
+		roomChance(0.05f, -0.004f);
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int floorOffset = getFloorOffset(c, x, y, z);
+		y += r.nextInt(5 - floorOffset) + floorOffset + 1;
 
-		x += r.nextInt(8);
-		y += r.nextInt(4 - floorOffset) + 2 + floorOffset;
-		z += r.nextInt(8);
+		switch (r.nextInt(4)) {
+			case 0:
+				x += 7;
+			case 1:
+				z += r.nextInt(6) + 1;
+				break;
+			case 2:
+				z += 7;
+			case 3:
+				x += r.nextInt(6) + 1;
+				break;
+		}
 
 		BlockType type = c.getBlockType(x, y, z);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.STONEBRICK) {
 			c.setBlockType(x, y, z, BlockTypes.FLOWING_LAVA);
+			return true;
 		}
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.05f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.008f;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 3;
+		return false;
 	}
 }

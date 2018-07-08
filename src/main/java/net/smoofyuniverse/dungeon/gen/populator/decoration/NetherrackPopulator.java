@@ -33,25 +33,13 @@ public class NetherrackPopulator extends RoomPopulator {
 
 	public NetherrackPopulator() {
 		super("netherrack");
+		layers(0, 1);
+		roomIterations(5, 3);
+		roomIterationChance(0.05f, 0f);
 	}
 
 	@Override
-	public int getMaximumLayer() {
-		return 1;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.05f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 5;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);
 		y += getFloorOffset(c, x, y, z);
 		z += r.nextInt(8);
@@ -60,6 +48,8 @@ public class NetherrackPopulator extends RoomPopulator {
 			c.setBlockType(x, y, z, BlockTypes.NETHERRACK);
 			if (c.getBlockType(x, y + 1, z) == BlockTypes.AIR && r.nextFloat() < 0.33f)
 				c.setBlockType(x, y + 1, z, BlockTypes.FIRE);
+			return true;
 		}
+		return false;
 	}
 }

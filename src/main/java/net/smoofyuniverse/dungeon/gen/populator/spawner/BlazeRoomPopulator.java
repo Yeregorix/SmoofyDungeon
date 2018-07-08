@@ -46,10 +46,12 @@ public class BlazeRoomPopulator extends RoomPopulator {
 
 	public BlazeRoomPopulator() {
 		super("blaze_room");
+		layers(0, 3);
+		roomChance(0.002f, -0.0002f);
 	}
 
 	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
@@ -102,20 +104,7 @@ public class BlazeRoomPopulator extends RoomPopulator {
 
 		CHEST_GENERATOR.generateBlock(c, x + 3, floorY, z + 3, r);
 		CHEST_GENERATOR.generateBlock(c, x + 4, floorY, z + 4, r);
-	}
 
-	@Override
-	public float getRoomIterationChance() {
-		return 0.002f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0002f;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 3;
+		return true;
 	}
 }

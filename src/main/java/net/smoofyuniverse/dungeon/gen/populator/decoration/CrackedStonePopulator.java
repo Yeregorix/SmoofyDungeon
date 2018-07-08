@@ -38,25 +38,20 @@ public class CrackedStonePopulator extends LayerPopulator {
 
 	public CrackedStonePopulator() {
 		super("cracked_stone");
+		layerIterations(240, 0);
+		layerIterationChance(0.7f, 0f);
 	}
 
 	@Override
-	public int getLayerIterations() {
-		return 240;
-	}
-
-	@Override
-	public float getLayerIterationChance() {
-		return 0.7f;
-	}
-
-	@Override
-	public void populateLayer(World w, Extent c, Random r, int layer, int y) {
+	public boolean populateLayer(World w, Extent c, Random r, int layer, int y) {
 		Vector3i min = c.getBlockMin();
 		int x = min.getX() + r.nextInt(16), z = min.getZ() + r.nextInt(16);
 		y += r.nextInt(7);
 
-		if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK)
+		if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) {
 			c.setBlock(x, y, z, CRACKED_STONEBRICK);
+			return true;
+		}
+		return false;
 	}
 }

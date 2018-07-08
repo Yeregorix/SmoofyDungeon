@@ -33,26 +33,14 @@ public class StrutPopulator extends RoomPopulator {
 
 	public StrutPopulator() {
 		super("strut");
+		layers(1, 6);
+		roomChance(0.03f, 0.003f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 1;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.03f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return 0.003f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 5;
+
 		if (r.nextBoolean()) {
 			if (c.getBlockType(x + 2, ceilingY, z) == BlockTypes.AIR) {
 				for (int dx = 1; dx < 7; dx++)
@@ -62,6 +50,8 @@ public class StrutPopulator extends RoomPopulator {
 					c.setBlockType(x + 1, cy, z, BlockTypes.FENCE);
 					c.setBlockType(x + 6, cy, z, BlockTypes.FENCE);
 				}
+
+				return true;
 			}
 		} else {
 			if (c.getBlockType(x, ceilingY, z + 2) == BlockTypes.AIR) {
@@ -72,7 +62,11 @@ public class StrutPopulator extends RoomPopulator {
 					c.setBlockType(x, cy, z + 1, BlockTypes.FENCE);
 					c.setBlockType(x, cy, z + 6, BlockTypes.FENCE);
 				}
+
+				return true;
 			}
 		}
+
+		return false;
 	}
 }

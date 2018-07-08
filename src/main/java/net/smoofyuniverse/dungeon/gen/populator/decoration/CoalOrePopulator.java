@@ -33,30 +33,21 @@ public class CoalOrePopulator extends RoomPopulator {
 
 	public CoalOrePopulator() {
 		super("coal_ore");
+		layers(0, 5);
+		roomIterations(4, 0);
+		roomIterationChance(0.1f, 0f);
 	}
 
 	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);
-		y += r.nextInt((y + 6) - y + 1);
+		y += getFloorOffset(c, x, y, z);
 		z += r.nextInt(8);
 
-		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE)
+		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE) {
 			c.setBlockType(x, y, z, BlockTypes.COAL_ORE);
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 5;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.02f;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
+			return true;
+		}
+		return false;
 	}
 }

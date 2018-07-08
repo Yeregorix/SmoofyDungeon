@@ -41,10 +41,11 @@ public class OasisPopulator extends ChunkPopulator {
 
 	public OasisPopulator() {
 		super("oasis");
+		chunkChance(0.003f);
 	}
 
 	@Override
-	public void populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
 		info.setFlag(true);
 
 		Vector3i min = c.getBlockMin();
@@ -76,11 +77,8 @@ public class OasisPopulator extends ChunkPopulator {
 		c.setBlockType(x + 10, 31, z + 10, BlockTypes.REEDS);
 
 		TREES[r.nextInt(TREES.length)].placeObject(w, r, x + 8, 31, z + 8);
-	}
 
-	@Override
-	public float getChunkChance() {
-		return 0.003f;
+		return true;
 	}
 
 	static {

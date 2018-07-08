@@ -38,25 +38,12 @@ public class LibraryPopulator extends RoomPopulator {
 
 	public LibraryPopulator() {
 		super("library");
+		layers(2, 5);
+		roomChance(0.001f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public int getMaximumLayer() {
-		return 5;
-	}
-
-	@Override
-	public float getRoomChance() {
-		return 0.001f;
-	}
-
-	@Override
-	public void populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		info.setFlag(layer, room, true);
 		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
 
@@ -99,6 +86,8 @@ public class LibraryPopulator extends RoomPopulator {
 
 		c.setBlockType(x + 2, floorY, z + 1, BlockTypes.TORCH);
 		c.setBlockType(x + 5, floorY, z + 6, BlockTypes.TORCH);
+
+		return true;
 	}
 
 	static {

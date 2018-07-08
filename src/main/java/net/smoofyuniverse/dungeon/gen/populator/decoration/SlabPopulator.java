@@ -43,31 +43,21 @@ public class SlabPopulator extends RoomPopulator {
 
 	public SlabPopulator() {
 		super("slab");
+		roomIterations(8, 5);
+		roomIterationChance(0.25f, 0f);
 	}
 
 	@Override
-	public float getRoomIterationChance() {
-		return 0.25f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 5;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 8;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		boolean ceiling = r.nextBoolean();
 		x += r.nextInt(6) + 1;
 		y += ceiling ? (getCeilingOffset(c, x, y, z) + 5) : (getFloorOffset(c, x, y, z) + 1);
 		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + (ceiling ? 1 : -1), z) != BlockTypes.AIR)
+		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + (ceiling ? 1 : -1), z) != BlockTypes.AIR) {
 			c.setBlock(x, y, z, ceiling ? TOP_SLAB : BOTTOM_SLAB);
+			return true;
+		}
+		return false;
 	}
 }

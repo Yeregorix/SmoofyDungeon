@@ -33,35 +33,21 @@ public class SoulSandPopulator extends RoomPopulator {
 
 	public SoulSandPopulator() {
 		super("soulsand");
+		layers(2, 6);
+		roomIterations(8, 5);
+		roomIterationChance(0.2f, -0.012f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 2;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.2f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0015f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 8;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(8);
 		y += getFloorOffset(c, x, y, z);
 		z += r.nextInt(8);
 
-		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE)
+		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE) {
 			c.setBlockType(x, y, z, BlockTypes.SOUL_SAND);
+			return true;
+		}
+		return false;
 	}
 }

@@ -36,26 +36,20 @@ public class ChestPopulator extends RoomPopulator {
 
 	public ChestPopulator() {
 		super("chest");
+		roomChance(0.03f, -0.0033f);
 	}
 
 	@Override
-	public float getRoomIterationChance() {
-		return 0.03f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.0033f;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		y += getFloorOffset(c, x, y, z) + 1;
 		z += r.nextInt(6) + 1;
 
-		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR)
+		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			CHEST_GENERATOR.generateBlock(c, x, y, z, r);
+			return true;
+		}
+		return false;
 	}
 
 	static {

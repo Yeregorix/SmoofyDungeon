@@ -31,4 +31,8 @@ public class MathUtil {
 			return max;
 		return value;
 	}
+
+	public static boolean isValidProbability(float value) {
+		return value >= 0f && value <= 1f;
+	}
 }

@@ -33,25 +33,12 @@ public class WebPopulator extends RoomPopulator {
 
 	public WebPopulator() {
 		super("web");
+		roomIterations(4, 0);
+		roomIterationChance(0.25f, -0.03f);
 	}
 
 	@Override
-	public float getRoomIterationChance() {
-		return 0.25f;
-	}
-
-	@Override
-	public float getRoomIterationChanceAdditionPerLayer() {
-		return -0.03f;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 4;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		x += r.nextInt(6) + 1;
 		z += r.nextInt(6) + 1;
 
@@ -62,17 +49,18 @@ public class WebPopulator extends RoomPopulator {
 			while (c.getBlockType(x, y, z) != BlockTypes.AIR) {
 				y--;
 				if (y <= floorY + 1)
-					return;
+					return false;
 			}
 		} else {
 			y = floorY;
 			while (c.getBlockType(x, y, z) != BlockTypes.AIR) {
 				y++;
 				if (y >= ceilingY - 1)
-					return;
+					return false;
 			}
 		}
 
 		c.setBlockType(x, y, z, BlockTypes.WEB);
+		return true;
 	}
 }

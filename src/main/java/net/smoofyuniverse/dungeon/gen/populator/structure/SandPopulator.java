@@ -39,30 +39,13 @@ public class SandPopulator extends RoomPopulator {
 
 	public SandPopulator() {
 		super("sand");
+		layers(4, 6);
+		roomIterations(2, 0);
+		roomIterationChance(0.05f, 0f);
 	}
 
 	@Override
-	public int getMinimumLayer() {
-		return 4;
-	}
-
-	@Override
-	public float getRoomIterationChance() {
-		return 0.05f;
-	}
-
-	@Override
-	public int getRoomIterationMax() {
-		return 2;
-	}
-
-	@Override
-	public int getRoomIterations() {
-		return 2;
-	}
-
-	@Override
-	public void populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
 		int ox = r.nextInt(6) + 1;
@@ -103,5 +86,7 @@ public class SandPopulator extends RoomPopulator {
 				dz += dir2[1];
 			}
 		}
+
+		return true;
 	}
 }

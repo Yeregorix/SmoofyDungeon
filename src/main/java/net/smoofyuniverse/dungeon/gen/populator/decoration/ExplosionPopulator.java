@@ -36,10 +36,11 @@ public class ExplosionPopulator extends ChunkPopulator {
 
 	public ExplosionPopulator() {
 		super("explosion");
+		chunkChance(0.8f);
 	}
 
 	@Override
-	public void populateChunk(World w, Extent c, Random r) {
+	public boolean populateChunk(World w, Extent c, Random r) {
 		Vector3i chunkMin = c.getBlockMin();
 		double x = chunkMin.getX(), z = chunkMin.getZ();
 
@@ -51,10 +52,7 @@ public class ExplosionPopulator extends ChunkPopulator {
 
 			count += blocks.size();
 		}
-	}
 
-	@Override
-	public float getChunkIterationChance() {
-		return 0.8f;
+		return true;
 	}
 }
