@@ -169,6 +169,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new VinePopulator());
 		b.add(new GravePopulator());
 		b.add(new PumpkinPopulator());
+		b.add(new IronBarsPopulator());
 		b.add(new LavaInWallPopulator());
 		b.add(new WaterInWallPopulator());
 		b.add(new WebPopulator());
