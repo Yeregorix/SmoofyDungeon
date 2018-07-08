@@ -24,7 +24,7 @@ package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.WeightedList;
+import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;

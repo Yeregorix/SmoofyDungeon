@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.loot;
 
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
-import net.smoofyuniverse.dungeon.util.WeightedList;
+import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;

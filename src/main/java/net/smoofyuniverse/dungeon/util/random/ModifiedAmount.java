@@ -20,38 +20,36 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.util;
+package net.smoofyuniverse.dungeon.util.random;
 
-import java.util.Arrays;
-import java.util.List;
+import org.spongepowered.api.util.weighted.VariableAmount;
+
 import java.util.Random;
 
-public class RandomQueue<T> {
-	private Random random;
-	private T[] values;
-	private int remainingSize;
+public final class ModifiedAmount implements VariableAmount {
+	public final VariableAmount amount;
+	public final double offset, factor;
 
-	public RandomQueue(T[] values, Random r) {
-		this.values = values;
-		this.random = r;
+	public ModifiedAmount(VariableAmount amount, double offset, double factor) {
+		this.amount = amount;
+		this.offset = offset;
+		this.factor = factor;
 	}
 
-	public T next() {
-		if (this.remainingSize == 0)
-			this.remainingSize = this.values.length;
-		int index = this.random.nextInt(this.remainingSize);
-		T value = this.values[index];
-		this.remainingSize--;
-		this.values[index] = this.values[this.remainingSize];
-		this.values[this.remainingSize] = value;
-		return value;
+	@Override
+	public double getAmount(Random rand) {
+		return this.amount.getAmount(rand) * this.factor + this.offset;
 	}
 
-	public static <T> RandomQueue<T> of(T[] values, Random r) {
-		return new RandomQueue(Arrays.copyOf(values, values.length), r);
-	}
+	@Override
+	public int getFlooredAmount(Random rand) {
+		double valueD = getAmount(rand);
+		int valueI = (int) valueD;
 
-	public static <T> RandomQueue<T> of(List<T> values, Random r) {
-		return new RandomQueue(values.toArray(new Object[0]), r);
+		double dif = valueD - (double) valueI;
+		if (dif != 0f && rand.nextDouble() < dif)
+			valueI++;
+
+		return valueI;
 	}
 }

@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.WeightedList;
+import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;

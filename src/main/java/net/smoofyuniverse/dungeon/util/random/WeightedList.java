@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.util;
+package net.smoofyuniverse.dungeon.util.random;
 
 import com.google.common.collect.ImmutableList;
 

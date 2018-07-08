@@ -30,6 +30,7 @@ import net.smoofyuniverse.dungeon.gen.populator.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
 import net.smoofyuniverse.dungeon.gen.populator.structure.*;
+import net.smoofyuniverse.dungeon.util.random.ModifiedAmount;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
@@ -38,6 +39,7 @@ import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.WorldGenerator;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 import org.spongepowered.api.world.gen.populator.Forest;
+import org.spongepowered.api.world.gen.populator.Ore;
 import org.spongepowered.api.world.storage.WorldProperties;
 
 import java.util.List;
@@ -90,6 +92,14 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 				}
 			} else {
 				biome.getPopulators().removeIf(pop -> pop instanceof Forest);
+			}
+
+			for (Populator pop : biome.getPopulators()) {
+				if (pop instanceof Ore) {
+					Ore ore = (Ore) pop;
+					ore.setHeight(new ModifiedAmount(ore.getHeight(), 4d, 0.5d));
+					ore.setDepositsPerChunk(new ModifiedAmount(ore.getDepositsPerChunk(), 0d, 0.5d));
+				}
 			}
 		}
 

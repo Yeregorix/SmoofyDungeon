@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
-import net.smoofyuniverse.dungeon.util.WeightedList;
+import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.entity.Equipable;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
