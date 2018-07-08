@@ -155,6 +155,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new BossRoomEasyPopulator());
 
 		// Decorators
+		b.add(new RedstonePopulator());
 		b.add(new WaterWellPopulator());
 		b.add(new BrokenWallPopulator());
 		b.add(new NetherrackPopulator());

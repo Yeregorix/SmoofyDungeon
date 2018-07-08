@@ -20,26 +20,21 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.structure;
+package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
-import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-public class RailPopulator extends RoomPopulator {
+public class RedstonePopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-	public RailPopulator() {
-		super("rail");
-		layers(2, 6);
+	public RedstonePopulator() {
+		super("redstone");
+		layers(1, 5);
 		roomIterations(3, 2);
 		roomIterationChance(0.06f, -0.004f);
 	}
@@ -48,42 +43,43 @@ public class RailPopulator extends RoomPopulator {
 	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
 		y += getFloorOffset(c, x, y, z) + 1;
 
-		int ox = r.nextInt(6) + 1;
-		int oz = r.nextInt(6) + 1;
+		int ox = r.nextInt(4) + 2;
+		int oz = r.nextInt(4) + 2;
 		int[] dir1 = DIRECTIONS[r.nextInt(4)], dir2 = DIRECTIONS[r.nextInt(4)];
-
-		List<Entity> entities = new ArrayList<>();
 
 		int dx = ox;
 		int dz = oz;
-		while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
-			if (r.nextFloat() < 0.8f) {
-				c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL);
-				if (r.nextFloat() < 0.01f)
-					entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
-			}
+		while (dx >= 1 && dx < 7 && dz >= 1 && dz < 7) {
+			if (r.nextFloat() < 0.8f)
+				c.setBlockType(x + dx, y, z + dz, BlockTypes.REDSTONE_WIRE);
 
 			dx += dir1[0];
 			dz += dir1[1];
 		}
 
+		if (r.nextFloat() < 0.3f) {
+			dx -= dir1[0];
+			dz -= dir1[1];
+			c.setBlockType(x + dx, y, z + dz, BlockTypes.STONE_PRESSURE_PLATE);
+		}
+
 		if (dir1 != dir2) {
 			dx = ox;
 			dz = oz;
-			while (dx >= 0 && dx < 8 && dz >= 0 && dz < 8) {
-				if (r.nextFloat() < 0.8f) {
-					c.setBlockType(x + dx, y, z + dz, BlockTypes.RAIL);
-					if (r.nextFloat() < 0.01f)
-						entities.add(c.createEntity(EntityTypes.RIDEABLE_MINECART, new Vector3i(x + dx, y, z + dz)));
-				}
+			while (dx >= 1 && dx < 7 && dz >= 1 && dz < 7) {
+				if (r.nextFloat() < 0.8f)
+					c.setBlockType(x + dx, y, z + dz, BlockTypes.REDSTONE_WIRE);
 
 				dx += dir2[0];
 				dz += dir2[1];
 			}
-		}
 
-		if (!entities.isEmpty())
-			c.spawnEntities(entities);
+			if (r.nextFloat() < 0.3f) {
+				dx -= dir2[0];
+				dz -= dir2[1];
+				c.setBlockType(x + dx, y, z + dz, BlockTypes.TNT);
+			}
+		}
 
 		return true;
 	}
