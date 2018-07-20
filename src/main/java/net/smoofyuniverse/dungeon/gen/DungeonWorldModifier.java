@@ -187,6 +187,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		b.add(new LanternPopulator());
 		b.add(new TorchPopulator());
 		b.add(new ExplosionPopulator());
+		b.add(new RiftPopulator());
 
 		POPULATORS = b.build();
 	}

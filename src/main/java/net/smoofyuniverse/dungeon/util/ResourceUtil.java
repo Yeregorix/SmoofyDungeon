@@ -31,7 +31,7 @@ import org.spongepowered.api.data.property.block.BlastResistanceProperty;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.Direction;
-import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.extent.BlockVolume;
 
 import java.util.*;
 
@@ -64,11 +64,11 @@ public class ResourceUtil {
 		return list;
 	}
 
-	public static Set<Vector3i> simulateExplosion(World w, Random r, Vector3d pos, float size) {
-		return simulateExplosion(w, r, pos.getX(), pos.getY(), pos.getZ(), size);
+	public static Set<Vector3i> simulateExplosion(BlockVolume volume, Random r, Vector3d pos, float size) {
+		return simulateExplosion(volume, r, pos.getX(), pos.getY(), pos.getZ(), size);
 	}
 
-	public static Set<Vector3i> simulateExplosion(World w, Random r, double x, double y, double z, float size) {
+	public static Set<Vector3i> simulateExplosion(BlockVolume volume, Random r, double x, double y, double z, float size) {
 		Set<Vector3i> set = new HashSet<>();
 
 		for (int a = 0; a < 16; a++) {
@@ -91,7 +91,7 @@ public class ResourceUtil {
 
 						while (f > 0f) {
 							Vector3i pos = new Vector3i(cx, cy, cz);
-							BlockState block = w.getBlock(pos);
+							BlockState block = volume.getBlock(pos);
 
 							if (block.getType() != BlockTypes.AIR) {
 								f -= (getBlastResistance(block) + 0.3f) * 0.3f;
