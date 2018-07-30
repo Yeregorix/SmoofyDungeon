@@ -20,42 +20,21 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.populator;
 
-import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
 
 import java.util.Random;
 
-public class BrokenWallPopulator extends RoomPopulator {
+public interface DungeonPopulator {
 
-	public BrokenWallPopulator() {
-		super("broken_wall");
-		roomChance(0.33f, 0f);
+	String getName();
+
+	default void populate(ChunkInfo info, World world, Extent volume, Random random, ImmutableBiomeVolume virtualBiomes) {
+		populate(info, world, volume, random);
 	}
 
-	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		y += getFloorOffset(c, x, y, z) + r.nextInt(2) + 1;
-
-		switch (r.nextInt(4)) {
-			case 0:
-				x += 7;
-			case 1:
-				z += r.nextInt(6) + 1;
-				break;
-			case 2:
-				z += 7;
-			case 3:
-				x += r.nextInt(6) + 1;
-				break;
-		}
-
-		c.setBlockType(x, y, z, BlockTypes.AIR);
-		c.setBlockType(x, y + 1, z, BlockTypes.AIR);
-
-		return true;
-	}
+	void populate(ChunkInfo info, World world, Extent volume, Random random);
 }

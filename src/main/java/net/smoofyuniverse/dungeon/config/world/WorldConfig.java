@@ -29,7 +29,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
 import net.smoofyuniverse.dungeon.util.IOUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -144,7 +144,7 @@ public final class WorldConfig {
 	static {
 		ImmutableSet.Builder<String> b = ImmutableSet.builder();
 
-		for (ChunkPopulator pop : DungeonWorldModifier.POPULATORS)
+		for (DungeonPopulator pop : DungeonWorldModifier.POPULATORS)
 			b.add(pop.getName());
 		b.add("forest");
 		b.add("animal");

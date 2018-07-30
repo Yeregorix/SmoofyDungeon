@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator;
+package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 

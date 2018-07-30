@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.LayerPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.LayerPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;

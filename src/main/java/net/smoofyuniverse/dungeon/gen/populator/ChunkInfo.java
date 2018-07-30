@@ -22,39 +22,61 @@
 
 package net.smoofyuniverse.dungeon.gen.populator;
 
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.gen.Populator;
-import org.spongepowered.api.world.gen.PopulatorType;
+public final class ChunkInfo {
+	public final int x, z;
+	private long values;
 
-import java.util.Random;
-
-public class WrappedPopulator implements Populator {
-	private Populator delegate;
-
-	public WrappedPopulator(Populator delegate) {
-		this.delegate = delegate;
+	public ChunkInfo(int x, int z) {
+		this.x = x;
+		this.z = z;
 	}
 
-	public Populator getDelegate() {
-		return this.delegate;
+	public boolean getFlag() {
+		return get(0);
 	}
 
-	@Override
-	public PopulatorType getType() {
-		return this.delegate.getType();
+	private boolean get(int index) {
+		return (this.values & (1L << index)) != 0;
 	}
 
-	@Override
-	public void populate(World w, Extent c, Random r) {
-		if (!FlagManager.of(w).getChunk(c).getFlag())
-			this.delegate.populate(w, c, r);
+	public void setFlag(boolean value) {
+		set(0, value);
 	}
 
-	@Override
-	public void populate(World w, Extent c, Random r, ImmutableBiomeVolume biomes) {
-		if (!FlagManager.of(w).getChunk(c).getFlag())
-			this.delegate.populate(w, c, r, biomes);
+	private void set(int index, boolean value) {
+		if (value)
+			this.values |= (1L << index);
+		else
+			this.values &= ~(1L << index);
+	}
+
+	public boolean getFlag(int layer) {
+		return get(index(layer));
+	}
+
+	private int index(int layer) {
+		if (layer < 0 || layer > 6)
+			throw new IllegalArgumentException("layer");
+		return layer + 1;
+	}
+
+	public void setFlag(int layer, boolean value) {
+		set(index(layer), value);
+	}
+
+	public boolean getFlag(int layer, int room) {
+		return get(index(layer, room));
+	}
+
+	private int index(int layer, int room) {
+		if (layer < 0 || layer > 6)
+			throw new IllegalArgumentException("layer");
+		if (room < 0 || room > 3)
+			throw new IllegalArgumentException("room");
+		return layer * 4 + room + 8;
+	}
+
+	public void setFlag(int layer, int room, boolean value) {
+		set(index(layer, room), value);
 	}
 }

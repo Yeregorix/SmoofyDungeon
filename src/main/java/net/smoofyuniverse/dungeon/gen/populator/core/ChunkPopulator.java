@@ -20,9 +20,10 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator;
+package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityArchetype;
@@ -30,15 +31,12 @@ import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.util.weighted.WeightedSerializableObject;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.gen.Populator;
-import org.spongepowered.api.world.gen.PopulatorType;
-import org.spongepowered.api.world.gen.PopulatorTypes;
 
 import java.util.Random;
 
 import static net.smoofyuniverse.dungeon.util.MathUtil.isValidProbability;
 
-public abstract class ChunkPopulator implements Populator {
+public abstract class ChunkPopulator implements DungeonPopulator {
 	protected final String name;
 
 	private float chunkChance = 1f;
@@ -49,6 +47,7 @@ public abstract class ChunkPopulator implements Populator {
 		this.name = name;
 	}
 
+	@Override
 	public final String getName() {
 		return this.name;
 	}
@@ -69,11 +68,6 @@ public abstract class ChunkPopulator implements Populator {
 		this.chunkItMax = max;
 	}
 
-	@Override
-	public PopulatorType getType() {
-		return PopulatorTypes.GENERIC_OBJECT;
-	}
-
 	protected static void validateIterations(int attempts, int max) {
 		if (attempts <= 0)
 			throw new IllegalArgumentException("attempts");
@@ -87,8 +81,7 @@ public abstract class ChunkPopulator implements Populator {
 	}
 
 	@Override
-	public final void populate(World w, Extent c, Random r) {
-		ChunkInfo info = FlagManager.of(w).getChunk(c);
+	public final void populate(ChunkInfo info, World w, Extent c, Random r) {
 		if (info.getFlag())
 			return;
 

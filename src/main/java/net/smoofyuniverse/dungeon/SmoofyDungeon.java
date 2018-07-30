@@ -22,6 +22,7 @@
 
 package net.smoofyuniverse.dungeon;
 
+import com.flowpowered.math.vector.Vector3i;
 import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.bstats.MetricsLite;
 import net.smoofyuniverse.dungeon.command.ConfigCommand;
@@ -66,6 +67,8 @@ import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 @Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.1.0", authors = "Yeregorix", description = "An advanced dungeon generator")
 public final class SmoofyDungeon {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
+	public static final Vector3i CHUNK_SIZE = new Vector3i(16, 256, 16);
+
 	private static SmoofyDungeon instance;
 
 	@Inject

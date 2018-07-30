@@ -23,8 +23,8 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;

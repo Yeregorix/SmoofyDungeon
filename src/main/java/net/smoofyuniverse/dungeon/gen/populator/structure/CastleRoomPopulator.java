@@ -24,8 +24,8 @@ package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.loot.FurnaceContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.IntegerTraits;

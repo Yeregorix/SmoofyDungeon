@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;

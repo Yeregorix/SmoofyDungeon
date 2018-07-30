@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator;
+package net.smoofyuniverse.dungeon.gen.populator.core;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.FlagManager.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;

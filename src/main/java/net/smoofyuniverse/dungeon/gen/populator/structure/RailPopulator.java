@@ -23,7 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;

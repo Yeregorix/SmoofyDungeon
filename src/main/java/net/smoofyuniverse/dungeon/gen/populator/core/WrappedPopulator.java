@@ -20,50 +20,44 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.structure;
+package net.smoofyuniverse.dungeon.gen.populator.core;
 
 import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import org.spongepowered.api.block.BlockTypes;
+import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
+import org.spongepowered.api.world.gen.Populator;
 
 import java.util.Random;
 
-public class WaterPoolPopulator extends RoomPopulator {
+public class WrappedPopulator implements DungeonPopulator {
+	private final Populator delegate;
+	private final String name;
 
-	public WaterPoolPopulator() {
-		super("water_pool");
-		roomChance(0.003f, 0f);
+	public WrappedPopulator(String name, Populator delegate) {
+		this.name = name;
+		this.delegate = delegate;
+	}
+
+	public Populator getDelegate() {
+		return this.delegate;
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
+	public String getName() {
+		return this.name;
+	}
 
-		y += getFloorOffset(c, x, y, z) + 1;
+	@Override
+	public void populate(ChunkInfo info, World w, Extent c, Random r) {
+		if (!info.getFlag())
+			this.delegate.populate(w, c, r);
+	}
 
-		for (int dy = 0; dy < 4; dy++) {
-			for (int i = 0; i < 8; i++) {
-				if (c.getBlockType(x + i, y + dy, z) == BlockTypes.AIR)
-					c.setBlockType(x + i, y + dy, z, BlockTypes.BRICK_BLOCK);
-
-				if (c.getBlockType(x + i, y + dy, z + 7) == BlockTypes.AIR)
-					c.setBlockType(x + i, y + dy, z + 7, BlockTypes.BRICK_BLOCK);
-
-				if (c.getBlockType(x, y + dy, z + i) == BlockTypes.AIR)
-					c.setBlockType(x, y + dy, z + i, BlockTypes.BRICK_BLOCK);
-
-				if (c.getBlockType(x + 7, y + dy, z + i) == BlockTypes.AIR)
-					c.setBlockType(x + 7, y + dy, z + i, BlockTypes.BRICK_BLOCK);
-			}
-
-			for (int dx = 1; dx < 7; dx++) {
-				for (int dz = 1; dz < 7; dz++)
-					c.setBlockType(x + dx, y + dy, z + dz, BlockTypes.WATER);
-			}
-		}
-
-		return true;
+	@Override
+	public void populate(ChunkInfo info, World w, Extent c, Random r, ImmutableBiomeVolume biomes) {
+		if (!info.getFlag())
+			this.delegate.populate(w, c, r, biomes);
 	}
 }

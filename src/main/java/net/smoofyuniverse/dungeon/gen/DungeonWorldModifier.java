@@ -25,8 +25,9 @@ package net.smoofyuniverse.dungeon.gen;
 import com.google.common.collect.ImmutableList;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.config.world.WorldConfig;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.WrappedPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.DungeonParentPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
 import net.smoofyuniverse.dungeon.gen.populator.structure.*;
@@ -42,11 +43,12 @@ import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.gen.populator.Ore;
 import org.spongepowered.api.world.storage.WorldProperties;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class DungeonWorldModifier implements WorldGeneratorModifier {
-	public static final List<ChunkPopulator> POPULATORS;
+	public static final List<DungeonPopulator> POPULATORS;
 
 	private static Class<?> animalPopulatorClass;
 
@@ -76,22 +78,24 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator());
 		worldGen.getGenerationPopulators().clear();
 
+		DungeonParentPopulator parent = new DungeonParentPopulator();
+
+		boolean keepForest = set.contains("forest");
 		for (BiomeType type : Sponge.getRegistry().getAllOf(BiomeType.class)) {
 			BiomeGenerationSettings biome = worldGen.getBiomeSettings(type);
 
 			// We already generated the ground cover in our base generator
 			biome.getGroundCoverLayers().clear();
 
-			if (set.contains("forest")) {
-				// Prevent forest from generating in flagged chunks (like oasis)
-				List<Populator> bPops = biome.getPopulators();
-				for (int i = 0; i < bPops.size(); i++) {
-					Populator pop = bPops.get(i);
-					if (pop instanceof Forest)
-						bPops.set(i, new WrappedPopulator(pop));
+			// Prevent forest from generating in flagged chunks (like oasis)
+			Iterator<Populator> it = biome.getPopulators().iterator();
+			while (it.hasNext()) {
+				Populator pop = it.next();
+				if (pop instanceof Forest) {
+					it.remove();
+					if (keepForest)
+						parent.getBiomePopulators(type).add(new WrappedPopulator("forest", pop));
 				}
-			} else {
-				biome.getPopulators().removeIf(pop -> pop instanceof Forest);
 			}
 
 			for (Populator pop : biome.getPopulators()) {
@@ -114,16 +118,17 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 				}
 			}
 		}
-
 		pops.clear();
 
-		for (ChunkPopulator pop : POPULATORS) {
+		for (DungeonPopulator pop : POPULATORS) {
 			if (set.contains(pop.getName()))
-				pops.add(pop);
+				parent.getGlobalPopulators().add(pop);
 		}
 
 		if (animalPop != null)
-			pops.add(new WrappedPopulator(animalPop));
+			parent.getGlobalPopulators().add(new WrappedPopulator("animal", animalPop));
+
+		pops.add(parent);
 	}
 
 	static {
@@ -133,7 +138,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 			animalPopulatorClass = null;
 		}
 
-		ImmutableList.Builder<ChunkPopulator> b = ImmutableList.builder();
+		ImmutableList.Builder<DungeonPopulator> b = ImmutableList.builder();
 
 		// Structures
 		b.add(new OasisPopulator());
