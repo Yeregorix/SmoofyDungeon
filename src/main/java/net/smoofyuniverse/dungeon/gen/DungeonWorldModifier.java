@@ -80,29 +80,27 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		DungeonParentPopulator parent = new DungeonParentPopulator();
 
-		boolean keepForest = set.contains("forest");
+		boolean keepForests = set.contains("forest"), keepOres = set.contains("ore_vein");
 		for (BiomeType type : Sponge.getRegistry().getAllOf(BiomeType.class)) {
 			BiomeGenerationSettings biome = worldGen.getBiomeSettings(type);
 
 			// We already generated the ground cover in our base generator
 			biome.getGroundCoverLayers().clear();
 
-			// Prevent forest from generating in flagged chunks (like oasis)
 			Iterator<Populator> it = biome.getPopulators().iterator();
 			while (it.hasNext()) {
 				Populator pop = it.next();
-				if (pop instanceof Forest) {
-					it.remove();
-					if (keepForest)
-						parent.getBiomePopulators(type).add(new WrappedPopulator("forest", pop));
-				}
-			}
-
-			for (Populator pop : biome.getPopulators()) {
 				if (pop instanceof Ore) {
-					Ore ore = (Ore) pop;
-					ore.setHeight(new ModifiedAmount(ore.getHeight(), 4d, 0.5d));
-					ore.setDepositsPerChunk(new ModifiedAmount(ore.getDepositsPerChunk(), 0d, 0.5d));
+					if (keepOres) {
+						Ore ore = (Ore) pop; // Adapt the parameters
+						ore.setHeight(new ModifiedAmount(ore.getHeight(), 4d, 0.5d));
+						ore.setDepositsPerChunk(new ModifiedAmount(ore.getDepositsPerChunk(), 0d, 0.5d));
+					} else
+						it.remove();
+				} else if (pop instanceof Forest) {
+					it.remove();
+					if (keepForests) // Prevent forest from generating in flagged chunks (like oasis)
+						parent.getBiomePopulators(type).add(new WrappedPopulator("forest", pop));
 				}
 			}
 		}
