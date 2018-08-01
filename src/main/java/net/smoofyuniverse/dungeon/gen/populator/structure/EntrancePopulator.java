@@ -22,7 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -46,13 +48,18 @@ public class EntrancePopulator extends RoomPopulator {
 
 	public EntrancePopulator() {
 		super("entrance");
-		layers(6, 6);
-		roomChance(0.004f, 0f);
+		roomChance(0.004f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int ground = 100;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(layersCount - 1, layersCount - 1);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, y = info.minY, z = info.minZ;
+		int ground = info.layer.chunk.topY + 30;
 
 		switch (r.nextInt(4)) {
 			case 0:
@@ -81,17 +88,16 @@ public class EntrancePopulator extends RoomPopulator {
 						c.setBlock(x + 1, cy, z + 4, LADDER_EAST);
 				}
 
-				int floor = y - 6;
-				floor += getFloorOffset(c, x, floor, z);
+				int floorY = y - 6 + info.layer.getRelative(-1).getRoom(info.index).floorOffset;
 
-				if (c.getBlockType(x + 1, floor, z + 1) == BlockTypes.AIR) {
-					c.setBlockType(x + 1, floor, z + 1, BlockTypes.PLANKS);
-					c.setBlockType(x + 1, floor, z + 6, BlockTypes.PLANKS);
-					c.setBlockType(x + 6, floor, z + 1, BlockTypes.PLANKS);
-					c.setBlockType(x + 6, floor, z + 6, BlockTypes.PLANKS);
+				if (c.getBlockType(x + 1, floorY, z + 1) == BlockTypes.AIR) {
+					c.setBlockType(x + 1, floorY, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 1, floorY, z + 6, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, floorY, z + 1, BlockTypes.PLANKS);
+					c.setBlockType(x + 6, floorY, z + 6, BlockTypes.PLANKS);
 				}
 
-				for (int cy = floor + 1; cy < ground + 3; cy++) {
+				for (int cy = floorY + 1; cy < ground + 3; cy++) {
 					c.setBlockType(x + 1, cy, z + 1, BlockTypes.PLANKS);
 					c.setBlockType(x + 1, cy, z + 6, BlockTypes.PLANKS);
 					c.setBlockType(x + 6, cy, z + 1, BlockTypes.PLANKS);
@@ -136,8 +142,8 @@ public class EntrancePopulator extends RoomPopulator {
 				c.setBlockType(x, ground + 1, z + 4, BlockTypes.AIR);
 				for (int dz = 2; dz < 6; dz++)
 					c.setBlockType(x, ground + 2, z + dz, BlockTypes.PLANKS);
-				c.setBlock(x - 1, ground + 1, z + 1, TORCH_WEST);
-				c.setBlock(x - 1, ground + 1, z + 6, TORCH_WEST);
+				w.setBlock(x - 1, ground + 1, z + 1, TORCH_WEST);
+				w.setBlock(x - 1, ground + 1, z + 6, TORCH_WEST);
 
 				return true;
 			case 1:

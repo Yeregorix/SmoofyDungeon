@@ -24,6 +24,8 @@ package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
+import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.extent.Extent;
@@ -37,6 +39,18 @@ import java.util.*;
 public class DungeonParentPopulator implements Populator {
 	private final List<DungeonPopulator> globalPopulators = new ArrayList<>();
 	private final Map<BiomeType, List<DungeonPopulator>> biomePopulators = new HashMap<>();
+
+	public final int bottomY, layersCount;
+
+	public DungeonParentPopulator(int bottomY, int layersCount) {
+		if (bottomY <= 0 || bottomY > 30)
+			throw new IllegalArgumentException("bottomY");
+		if (layersCount <= 0 || layersCount > 30)
+			throw new IllegalArgumentException("layersCount");
+
+		this.bottomY = bottomY;
+		this.layersCount = layersCount;
+	}
 
 	public List<DungeonPopulator> getGlobalPopulators() {
 		return this.globalPopulators;
@@ -62,7 +76,8 @@ public class DungeonParentPopulator implements Populator {
 			throw new UnsupportedOperationException();
 
 		Vector3i min = volume.getBlockMin();
-		ChunkInfo info = new ChunkInfo(min.getX() >> 4, min.getZ() >> 4);
+		ChunkInfo info = new ChunkInfo(min.getX(), min.getZ(), this.bottomY, this.layersCount);
+		info.configureOffsets(volume);
 
 		for (DungeonPopulator p : this.globalPopulators) {
 			try {
@@ -91,7 +106,8 @@ public class DungeonParentPopulator implements Populator {
 			}
 		}
 
-		ChunkInfo info = new ChunkInfo(minX >> 4, minZ >> 4);
+		ChunkInfo info = new ChunkInfo(minX, minZ, this.bottomY, this.layersCount);
+		info.configureOffsets(volume);
 
 		for (DungeonPopulator p : this.globalPopulators) {
 			try {

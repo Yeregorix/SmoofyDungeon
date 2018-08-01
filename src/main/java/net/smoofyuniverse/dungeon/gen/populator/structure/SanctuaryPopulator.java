@@ -22,8 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -34,40 +35,49 @@ public class SanctuaryPopulator extends RoomPopulator {
 
 	public SanctuaryPopulator() {
 		super("sanctuary");
-		layers(0, 0);
-		roomChance(0.003f, 0f);
+		roomChance(0.003f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, 0);
+	}
 
-		y += getFloorOffset(c, x, y, z);
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.floorOffset;
 
 		for (int dx = 0; dx < 8; dx++) {
 			for (int dz = 0; dz < 8; dz++)
 				c.setBlockType(x + dx, y, z + dz, BlockTypes.OBSIDIAN);
 		}
 
-		c.setBlockType(x + 2, y + 1, z + 2, BlockTypes.GOLD_BLOCK);
-		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHERRACK);
-		c.setBlockType(x + 4, y + 1, z + 2, BlockTypes.NETHERRACK);
-		c.setBlockType(x + 5, y + 1, z + 2, BlockTypes.GOLD_BLOCK);
+		y++;
 
-		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHERRACK);
-		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.SOUL_SAND);
-		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.SOUL_SAND);
-		c.setBlockType(x + 5, y + 1, z + 3, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 2, y, z + 2, BlockTypes.GOLD_BLOCK);
+		c.setBlockType(x + 3, y, z + 2, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 4, y, z + 2, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 5, y, z + 2, BlockTypes.GOLD_BLOCK);
 
-		c.setBlockType(x + 2, y + 1, z + 4, BlockTypes.GOLD_BLOCK);
-		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHERRACK);
-		c.setBlockType(x + 4, y + 1, z + 4, BlockTypes.NETHERRACK);
-		c.setBlockType(x + 5, y + 1, z + 4, BlockTypes.GOLD_BLOCK);
+		c.setBlockType(x + 2, y, z + 3, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 3, y, z + 3, BlockTypes.SOUL_SAND);
+		c.setBlockType(x + 4, y, z + 3, BlockTypes.SOUL_SAND);
+		c.setBlockType(x + 5, y, z + 3, BlockTypes.NETHERRACK);
 
-		c.setBlockType(x + 2, y + 2, z + 2, BlockTypes.TORCH);
-		c.setBlockType(x + 5, y + 2, z + 2, BlockTypes.TORCH);
-		c.setBlockType(x + 2, y + 2, z + 4, BlockTypes.TORCH);
-		c.setBlockType(x + 5, y + 2, z + 4, BlockTypes.TORCH);
+		c.setBlockType(x + 2, y, z + 4, BlockTypes.GOLD_BLOCK);
+		c.setBlockType(x + 3, y, z + 4, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 4, y, z + 4, BlockTypes.NETHERRACK);
+		c.setBlockType(x + 5, y, z + 4, BlockTypes.GOLD_BLOCK);
+
+		y++;
+
+		c.setBlockType(x + 2, y, z + 2, BlockTypes.TORCH);
+		c.setBlockType(x + 5, y, z + 2, BlockTypes.TORCH);
+		c.setBlockType(x + 2, y, z + 4, BlockTypes.TORCH);
+		c.setBlockType(x + 5, y, z + 4, BlockTypes.TORCH);
 
 		return true;
 	}

@@ -20,63 +20,28 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator;
+package net.smoofyuniverse.dungeon.gen.populator.core.info;
 
-public final class ChunkInfo {
-	public final int x, z;
-	private long values;
+public final class RoomInfo {
+	public final LayerInfo layer;
+	public final int minX, minY, minZ;
+	public final int index;
 
-	public ChunkInfo(int x, int z) {
-		this.x = x;
-		this.z = z;
-	}
+	public int floorOffset, ceilingOffset;
+	public boolean flag;
 
-	public boolean getFlag() {
-		return get(0);
-	}
-
-	private boolean get(int index) {
-		return (this.values & (1L << index)) != 0;
-	}
-
-	public void setFlag(boolean value) {
-		set(0, value);
-	}
-
-	private void set(int index, boolean value) {
-		if (value)
-			this.values |= (1L << index);
-		else
-			this.values &= ~(1L << index);
-	}
-
-	public boolean getFlag(int layer) {
-		return get(index(layer));
-	}
-
-	private int index(int layer) {
-		if (layer < 0 || layer > 6)
+	public RoomInfo(LayerInfo layer, int index) {
+		if (layer == null)
 			throw new IllegalArgumentException("layer");
-		return layer + 1;
-	}
+		if (index < 0 || index > 3)
+			throw new IllegalArgumentException("index");
 
-	public void setFlag(int layer, boolean value) {
-		set(index(layer), value);
-	}
+		this.layer = layer;
 
-	public boolean getFlag(int layer, int room) {
-		return get(index(layer, room));
-	}
+		this.minX = layer.minX + (index / 2 == 0 ? 0 : 8);
+		this.minY = layer.minY;
+		this.minZ = layer.minZ + (index % 2 == 0 ? 0 : 8);
 
-	private int index(int layer, int room) {
-		if (layer < 0 || layer > 6)
-			throw new IllegalArgumentException("layer");
-		if (room < 0 || room > 3)
-			throw new IllegalArgumentException("room");
-		return layer * 4 + room + 8;
-	}
-
-	public void setFlag(int layer, int room, boolean value) {
-		set(index(layer, room), value);
+		this.index = index;
 	}
 }

@@ -22,8 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -34,15 +35,20 @@ public class HighRoomPopulator extends RoomPopulator {
 
 	public HighRoomPopulator() {
 		super("high_room");
-		layers(0, 5);
-		roomChance(0.006f, 0f);
+		roomChance(0.006f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer + 1, room, true);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, layersCount - 2);
+	}
 
-		y += getCeilingOffset(c, x, y, z) + 6;
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.layer.getRelative(1).getRoom(info.index).flag = true;
+
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.ceilingOffset + 6;
 
 		for (int dx = 0; dx < 8; dx++) {
 			for (int dz = 0; dz < 8; dz++) {

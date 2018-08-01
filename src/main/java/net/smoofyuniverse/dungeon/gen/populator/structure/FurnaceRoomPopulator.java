@@ -22,9 +22,10 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.FurnaceContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.util.Direction;
@@ -33,20 +34,26 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class FurnaceRoomPopulator extends RoomPopulator {
 	public static final FurnaceContentGenerator FURNACE_GENERATOR;
 
 	public FurnaceRoomPopulator() {
 		super("furnace_room");
-		layers(0, 4);
-		roomChance(0.001f, 0f);
+		roomChance(0.001f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.6));
+	}
 
-		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+		int x = info.minX, y = info.minY, z = info.minZ;
+		int ceilingY = y + info.floorOffset + 6;
 
 		for (int dx = 0; dx <= 8; dx++) {
 			for (int dz = 0; dz <= 8; dz++) {

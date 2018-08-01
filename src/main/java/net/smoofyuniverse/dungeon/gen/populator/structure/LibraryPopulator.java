@@ -22,9 +22,10 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.util.Direction;
@@ -33,28 +34,37 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class LibraryPopulator extends RoomPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR;
 
 	public LibraryPopulator() {
 		super("library");
-		layers(2, 5);
-		roomChance(0.001f, 0f);
+		roomChance(0.001f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
-		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.3), 1), layersCount - 2);
+	}
 
-		for (int cy = floorY; cy < ceilingY; cy++) {
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset + 1, ceilingY = info.minY + info.ceilingOffset + 6;
+
+		for (int y = floorY; y < ceilingY; y++) {
 			for (int dx = 1; dx < 7; dx++) {
-				c.setBlockType(x + dx, cy, z, BlockTypes.STONEBRICK);
-				c.setBlockType(x + dx, cy, z + 7, BlockTypes.STONEBRICK);
+				c.setBlockType(x + dx, y, z, BlockTypes.STONEBRICK);
+				c.setBlockType(x + dx, y, z + 7, BlockTypes.STONEBRICK);
 			}
 			for (int dz = 1; dz < 7; dz++) {
-				c.setBlockType(x, cy, z + dz, BlockTypes.STONEBRICK);
-				c.setBlockType(x + 7, cy, z + dz, BlockTypes.STONEBRICK);
+				c.setBlockType(x, y, z + dz, BlockTypes.STONEBRICK);
+				c.setBlockType(x + 7, y, z + dz, BlockTypes.STONEBRICK);
 			}
 		}
 

@@ -22,8 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.world.World;
@@ -31,26 +32,33 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class CreeperRoomPopulator extends RoomPopulator {
 
 	public CreeperRoomPopulator() {
 		super("creeper_room");
-		layers(0, 4);
-		roomChance(0.003f, -0.0003f);
+		roomChance(0.003f, 0.002f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
-		y += getFloorOffset(c, x, y, z);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.6));
+	}
 
-		c.setBlockType(x + 3, y + 1, z + 4, BlockTypes.NETHER_BRICK);
-		c.setBlockType(x + 4, y + 1, z + 3, BlockTypes.NETHER_BRICK);
-		c.setBlockType(x + 3, y + 1, z + 2, BlockTypes.NETHER_BRICK);
-		c.setBlockType(x + 2, y + 1, z + 3, BlockTypes.NETHER_BRICK);
-		c.setBlockType(x + 3, y + 2, z + 3, BlockTypes.NETHER_BRICK);
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.floorOffset + 1;
 
-		generateSpawner(c, x + 3, y + 1, z + 3, EntityTypes.CREEPER);
+		c.setBlockType(x + 3, y, z + 4, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 4, y, z + 3, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 3, y, z + 2, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 2, y, z + 3, BlockTypes.NETHER_BRICK);
+		c.setBlockType(x + 3, y + 1, z + 3, BlockTypes.NETHER_BRICK);
+
+		generateSpawner(c, x + 3, y, z + 3, EntityTypes.CREEPER);
 
 		return true;
 	}

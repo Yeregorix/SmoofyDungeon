@@ -20,42 +20,39 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.populator.core.info;
 
-import com.flowpowered.math.vector.Vector2i;
-import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
-import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
+public final class LayerInfo {
+	public final ChunkInfo chunk;
+	public final int minX, minZ;
+	public final int index, minY;
+	public boolean flag;
+	private RoomInfo[] rooms;
 
-import java.util.Random;
+	public LayerInfo(ChunkInfo chunk, int index) {
+		if (chunk == null)
+			throw new IllegalArgumentException("chunk");
+		if (index < 0)
+			throw new IllegalArgumentException("index");
 
-import static com.flowpowered.math.GenericMath.floor;
-import static java.lang.Math.max;
+		this.chunk = chunk;
 
-public class SoulSandPopulator extends RoomPopulator {
+		this.minX = chunk.minX;
+		this.minZ = chunk.minZ;
 
-	public SoulSandPopulator() {
-		super("soulsand");
-		roomIterations(8, 5);
-		roomIterationChance(0.2f, 0.1f);
+		this.index = index;
+		this.minY = chunk.bottomY + index * 6;
+
+		this.rooms = new RoomInfo[4];
+		for (int i = 0; i < 4; i++)
+			this.rooms[i] = new RoomInfo(this, i);
 	}
 
-	@Override
-	protected Vector2i getLayers(int layersCount) {
-		return new Vector2i(max(floor(layersCount * 0.3), 1), layersCount - 1);
+	public RoomInfo getRoom(int index) {
+		return this.rooms[index];
 	}
 
-	@Override
-	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
-		int x = info.minX + r.nextInt(8), z = info.minZ + r.nextInt(8);
-		int y = info.minY + info.floorOffset;
-
-		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE) {
-			c.setBlockType(x, y, z, BlockTypes.SOUL_SAND);
-			return true;
-		}
-		return false;
+	public LayerInfo getRelative(int rel) {
+		return this.chunk.getLayer(this.index + rel);
 	}
 }

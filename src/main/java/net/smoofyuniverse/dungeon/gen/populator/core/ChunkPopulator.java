@@ -22,8 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityArchetype;
@@ -82,7 +81,7 @@ public abstract class ChunkPopulator implements DungeonPopulator {
 
 	@Override
 	public final void populate(ChunkInfo info, World w, Extent c, Random r) {
-		if (info.getFlag())
+		if (info.flag)
 			return;
 
 		if (random(r, this.chunkChance)) {
@@ -113,11 +112,5 @@ public abstract class ChunkPopulator implements DungeonPopulator {
 		return r.nextFloat() < chance;
 	}
 
-	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
-		return populateChunk(w, c, r);
-	}
-
-	public boolean populateChunk(World w, Extent c, Random r) {
-		throw new UnsupportedOperationException();
-	}
+	public abstract boolean populateChunk(ChunkInfo info, World w, Extent c, Random r);
 }

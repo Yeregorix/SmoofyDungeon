@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableList;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.config.world.WorldConfig;
 import net.smoofyuniverse.dungeon.gen.populator.DungeonParentPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
@@ -75,10 +75,10 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 			set = WorldConfig.POPULATORS;
 		}
 
-		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator());
+		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator(30, 7));
 		worldGen.getGenerationPopulators().clear();
 
-		DungeonParentPopulator parent = new DungeonParentPopulator();
+		DungeonParentPopulator parent = new DungeonParentPopulator(30, 7);
 
 		boolean keepForests = set.contains("forest"), keepOres = set.contains("ore_vein");
 		for (BiomeType type : Sponge.getRegistry().getAllOf(BiomeType.class)) {

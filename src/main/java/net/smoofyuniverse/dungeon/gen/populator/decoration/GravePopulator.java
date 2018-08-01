@@ -22,7 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -35,21 +37,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class GravePopulator extends RoomPopulator {
 	public static final BlockState SIGN = BlockTypes.STANDING_SIGN.getDefaultState().with(Keys.DIRECTION, Direction.WEST).get();
 	public static final List<Text> LINES = Arrays.asList(Text.EMPTY, Text.of("R.I.P"), Text.EMPTY, Text.EMPTY);
 
 	public GravePopulator() {
 		super("grave");
-		layers(1, 5);
-		roomChance(0.006f, 0f);
+		roomChance(0.006f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(4) + 3;
-		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(1, floor(layersCount * 0.7));
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(4) + 3, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + info.floorOffset + 1;
 
 		int air = 0;
 		if (c.getBlockType(x, y - 1, z) == BlockTypes.AIR)

@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -34,16 +35,15 @@ public class WebPopulator extends RoomPopulator {
 	public WebPopulator() {
 		super("web");
 		roomIterations(4, 0);
-		roomIterationChance(0.25f, -0.03f);
+		roomIterationChance(0.25f, 0.05f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
-		z += r.nextInt(6) + 1;
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int floorY = info.minY + info.floorOffset, ceilingY = info.minY + info.ceilingOffset + 6;
 
-		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
-
+		int y;
 		if (r.nextFloat() < 0.4f) {
 			y = ceilingY;
 			while (c.getBlockType(x, y, z) != BlockTypes.AIR) {

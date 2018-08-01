@@ -24,6 +24,7 @@ package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -40,13 +41,11 @@ public class ExplosionPopulator extends ChunkPopulator {
 	}
 
 	@Override
-	public boolean populateChunk(World w, Extent c, Random r) {
-		Vector3i chunkMin = c.getBlockMin();
-		double x = chunkMin.getX(), z = chunkMin.getZ();
+	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
 
-		int count = 0;
-		while (count < 10) {
-			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, x + (r.nextDouble() * 16d), 30d + (r.nextDouble() * 42d), z + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
+		int count = 0, min = 3 + info.layersCount;
+		while (count < min) {
+			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, info.minX + (r.nextDouble() * 16d), info.bottomY + (r.nextDouble() * (info.topY - info.bottomY)), info.minZ + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
 			for (Vector3i b : blocks)
 				w.setBlockType(b, BlockTypes.AIR);
 

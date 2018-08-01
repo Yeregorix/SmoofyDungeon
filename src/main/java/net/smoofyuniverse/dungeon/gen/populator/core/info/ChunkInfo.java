@@ -20,42 +20,54 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.populator.core.info;
 
-import com.flowpowered.math.vector.Vector2i;
-import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
-import java.util.Random;
+public final class ChunkInfo {
+	public final int minX, minZ;
+	public final int bottomY, topY;
+	public final int layersCount;
+	public boolean flag;
+	private LayerInfo[] layers;
 
-import static com.flowpowered.math.GenericMath.floor;
-import static java.lang.Math.max;
+	public ChunkInfo(int minX, int minZ, int bottomY, int layersCount) {
+		if (bottomY <= 0)
+			throw new IllegalArgumentException("bottomY");
+		if (layersCount < 0)
+			throw new IllegalArgumentException("layersCount");
 
-public class SoulSandPopulator extends RoomPopulator {
+		this.minX = minX;
+		this.minZ = minZ;
 
-	public SoulSandPopulator() {
-		super("soulsand");
-		roomIterations(8, 5);
-		roomIterationChance(0.2f, 0.1f);
+		this.bottomY = bottomY;
+		this.topY = bottomY + layersCount * 6;
+
+		this.layersCount = layersCount;
+
+		this.layers = new LayerInfo[layersCount];
+		for (int i = 0; i < layersCount; i++)
+			this.layers[i] = new LayerInfo(this, i);
 	}
 
-	@Override
-	protected Vector2i getLayers(int layersCount) {
-		return new Vector2i(max(floor(layersCount * 0.3), 1), layersCount - 1);
+	public LayerInfo getLayer(int index) {
+		return this.layers[index];
 	}
 
-	@Override
-	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
-		int x = info.minX + r.nextInt(8), z = info.minZ + r.nextInt(8);
-		int y = info.minY + info.floorOffset;
+	public void configureOffsets(Extent volume) {
+		LayerInfo prev = null;
+		for (LayerInfo current : this.layers) {
+			for (int i = 0; i < 4; i++) {
+				RoomInfo room = current.getRoom(i);
+				if (volume.getBlockType(room.minX + 3, room.minY, room.minZ + 3) == BlockTypes.AIR) {
+					room.floorOffset = 1;
+					if (prev != null)
+						prev.getRoom(i).ceilingOffset = 1;
+				}
+			}
 
-		if (c.getBlockType(x, y, z) == BlockTypes.COBBLESTONE) {
-			c.setBlockType(x, y, z, BlockTypes.SOUL_SAND);
-			return true;
+			prev = current;
 		}
-		return false;
 	}
 }

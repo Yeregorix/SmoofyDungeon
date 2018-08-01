@@ -22,7 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -36,6 +38,9 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class SilverfishBlockPopulator extends RoomPopulator {
 	public static final BlockState STONEBRICK_EGG = BlockTypes.MONSTER_EGG.getDefaultState().withTrait(EnumTraits.MONSTER_EGG_VARIANT, DisguisedBlockTypes.STONEBRICK).get(),
 			MOSSY_STONEBRICK_EGG = BlockTypes.MONSTER_EGG.getDefaultState().withTrait(EnumTraits.MONSTER_EGG_VARIANT, DisguisedBlockTypes.MOSSY_STONEBRICK).get(),
@@ -45,19 +50,20 @@ public class SilverfishBlockPopulator extends RoomPopulator {
 
 	public SilverfishBlockPopulator() {
 		super("silverfish_block");
-		layers(2, 6);
-		roomChance(0.33f, 0f);
+		roomChance(0.33f);
 		roomIterations(10, 0);
-		roomIterationChance(0.8f, -0.04f);
+		roomIterationChance(0.8f, 0.5f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int floorOffset = getFloorOffset(c, x, y, z);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.3), 1), layersCount - 1);
+	}
 
-		x += r.nextInt(8);
-		y += r.nextInt(4 - floorOffset) + 1 + floorOffset;
-		z += r.nextInt(8);
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(8), z = info.minZ + r.nextInt(8);
+		int y = info.minY + r.nextInt(4 - info.floorOffset) + 1 + info.floorOffset;
 
 		BlockState state = c.getBlock(x, y, z);
 		BlockType type = state.getType();

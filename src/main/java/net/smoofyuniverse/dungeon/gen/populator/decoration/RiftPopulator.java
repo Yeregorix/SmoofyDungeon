@@ -25,6 +25,7 @@ package net.smoofyuniverse.dungeon.gen.populator.decoration;
 import com.flowpowered.math.vector.Vector3f;
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -35,6 +36,7 @@ import java.util.Set;
 
 import static com.flowpowered.math.GenericMath.floor;
 import static com.flowpowered.math.TrigMath.*;
+import static java.lang.Math.max;
 
 public class RiftPopulator extends ChunkPopulator {
 
@@ -44,12 +46,9 @@ public class RiftPopulator extends ChunkPopulator {
 	}
 
 	@Override
-	public boolean populateChunk(World w, Extent c, Random r) {
-		Vector3i chunkMin = c.getBlockMin();
-		int minX = chunkMin.getX(), minZ = chunkMin.getZ();
-
-		Vector3f min = new Vector3f(r.nextFloat() * 16f, 20f + r.nextFloat() * 20f, r.nextFloat() * 16f),
-				max = new Vector3f(r.nextFloat() * 16f, 50f + r.nextFloat() * 30f, r.nextFloat() * 16f),
+	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+		Vector3f min = new Vector3f(r.nextFloat() * 16f, max(info.bottomY - 10 + r.nextFloat() * 20f, 0), r.nextFloat() * 16f),
+				max = new Vector3f(r.nextFloat() * 16f, info.topY - 10 + r.nextFloat() * 30f, r.nextFloat() * 16f),
 				axis = max.sub(min);
 		int points = (int) (axis.length() * 1.5f);
 
@@ -74,7 +73,7 @@ public class RiftPopulator extends ChunkPopulator {
 		}
 
 		for (Vector3i pos : set) {
-			int x = minX + pos.getX(), y = pos.getY(), z = minZ + pos.getZ();
+			int x = info.minX + pos.getX(), y = pos.getY(), z = info.minZ + pos.getZ();
 			if (r.nextBoolean())
 				w.setBlock(x, y - 1, z, w.getBlock(x, y, z));
 			w.setBlockType(x, y, z, BlockTypes.AIR);

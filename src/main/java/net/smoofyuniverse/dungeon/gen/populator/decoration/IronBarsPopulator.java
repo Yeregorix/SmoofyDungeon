@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -34,15 +35,15 @@ public class IronBarsPopulator extends RoomPopulator {
 
 	public IronBarsPopulator() {
 		super("iron_bars");
-		roomChance(0.1f, 0f);
+		roomChance(0.1f);
 		roomIterations(10, 6);
-		roomIterationChance(0.6f, 0f);
+		roomIterationChance(0.6f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int floorOffset = getFloorOffset(c, x, y, z);
-		y += r.nextInt(5 - floorOffset) + floorOffset + 1;
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + r.nextInt(5 - info.floorOffset) + info.floorOffset + 1;
 
 		switch (r.nextInt(4)) {
 			case 0:

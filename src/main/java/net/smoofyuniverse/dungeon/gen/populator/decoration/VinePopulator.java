@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.BooleanTraits;
@@ -42,11 +43,13 @@ public class VinePopulator extends RoomPopulator {
 	public VinePopulator() {
 		super("vine");
 		roomIterations(10, 0);
-		roomIterationChance(0.3f, -0.03f);
+		roomIterationChance(0.3f, 0.1f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, y = info.minY, z = info.minZ;
+
 		if (r.nextBoolean()) {
 			y += r.nextInt(4) + 2;
 			switch (r.nextInt(4)) {
@@ -89,7 +92,7 @@ public class VinePopulator extends RoomPopulator {
 			}
 		} else {
 			x += r.nextInt(6) + 1;
-			y += getCeilingOffset(c, x, y, z) + 5;
+			y += info.floorOffset + 5;
 			z += r.nextInt(6) + 1;
 
 			if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + 1, z) != BlockTypes.AIR) {

@@ -22,33 +22,43 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class StrutPopulator extends RoomPopulator {
 
 	public StrutPopulator() {
 		super("strut");
-		layers(1, 6);
-		roomChance(0.03f, 0.003f);
+		roomChance(0.03f, 0.05f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 5;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.1), 1), layersCount - 1);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset + 1, ceilingY = info.minY + info.ceilingOffset + 5;
 
 		if (r.nextBoolean()) {
 			if (c.getBlockType(x + 2, ceilingY, z) == BlockTypes.AIR) {
 				for (int dx = 1; dx < 7; dx++)
 					c.setBlockType(x + dx, ceilingY, z, BlockTypes.PLANKS);
 
-				for (int cy = floorY; cy < ceilingY; cy++) {
-					c.setBlockType(x + 1, cy, z, BlockTypes.FENCE);
-					c.setBlockType(x + 6, cy, z, BlockTypes.FENCE);
+				for (int y = floorY; y < ceilingY; y++) {
+					c.setBlockType(x + 1, y, z, BlockTypes.FENCE);
+					c.setBlockType(x + 6, y, z, BlockTypes.FENCE);
 				}
 
 				return true;
@@ -58,9 +68,9 @@ public class StrutPopulator extends RoomPopulator {
 				for (int dz = 1; dz < 7; dz++)
 					c.setBlockType(x, ceilingY, z + dz, BlockTypes.PLANKS);
 
-				for (int cy = floorY; cy < ceilingY; cy++) {
-					c.setBlockType(x, cy, z + 1, BlockTypes.FENCE);
-					c.setBlockType(x, cy, z + 6, BlockTypes.FENCE);
+				for (int y = floorY; y < ceilingY; y++) {
+					c.setBlockType(x, y, z + 1, BlockTypes.FENCE);
+					c.setBlockType(x, y, z + 6, BlockTypes.FENCE);
 				}
 
 				return true;

@@ -22,26 +22,36 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class GravelPopulator extends RoomPopulator {
 	private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 	public GravelPopulator() {
 		super("gravel");
-		layers(1, 6);
 		roomIterations(3, 2);
-		roomIterationChance(0.05f, 0f);
+		roomIterationChance(0.05f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		y += getFloorOffset(c, x, y, z) + 1;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.1), 1), layersCount - 1);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.floorOffset + 1;
 
 		int ox = r.nextInt(6) + 1;
 		int oz = r.nextInt(6) + 1;

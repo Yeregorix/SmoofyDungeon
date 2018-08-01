@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.EnumTraits;
@@ -44,15 +45,14 @@ public class SlabPopulator extends RoomPopulator {
 	public SlabPopulator() {
 		super("slab");
 		roomIterations(8, 5);
-		roomIterationChance(0.25f, 0f);
+		roomIterationChance(0.25f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
 		boolean ceiling = r.nextBoolean();
-		x += r.nextInt(6) + 1;
-		y += ceiling ? (getCeilingOffset(c, x, y, z) + 5) : (getFloorOffset(c, x, y, z) + 1);
-		z += r.nextInt(6) + 1;
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + (ceiling ? (info.ceilingOffset + 5) : (info.floorOffset + 1));
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y + (ceiling ? 1 : -1), z) != BlockTypes.AIR) {
 			c.setBlock(x, y, z, ceiling ? TOP_SLAB : BOTTOM_SLAB);

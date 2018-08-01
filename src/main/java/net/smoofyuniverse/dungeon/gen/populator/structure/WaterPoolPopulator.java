@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -34,14 +34,15 @@ public class WaterPoolPopulator extends RoomPopulator {
 
 	public WaterPoolPopulator() {
 		super("water_pool");
-		roomChance(0.003f, 0f);
+		roomChance(0.003f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
 
-		y += getFloorOffset(c, x, y, z) + 1;
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.floorOffset + 1;
 
 		for (int dy = 0; dy < 4; dy++) {
 			for (int i = 0; i < 8; i++) {

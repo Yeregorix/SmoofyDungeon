@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
@@ -33,12 +34,13 @@ public class BrokenWallPopulator extends RoomPopulator {
 
 	public BrokenWallPopulator() {
 		super("broken_wall");
-		roomChance(0.33f, 0f);
+		roomChance(0.33f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		y += getFloorOffset(c, x, y, z) + r.nextInt(2) + 1;
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + info.floorOffset + r.nextInt(2) + 1;
 
 		switch (r.nextInt(4)) {
 			case 0:

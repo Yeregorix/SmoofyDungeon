@@ -22,10 +22,11 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.loot.FurnaceContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.IntegerTraits;
@@ -35,27 +36,35 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class CastleRoomPopulator extends RoomPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR = ChestPopulator.CHEST_GENERATOR;
 	public static final FurnaceContentGenerator FURNACE_GENERATOR = FurnaceRoomPopulator.FURNACE_GENERATOR;
 
 	public CastleRoomPopulator() {
 		super("castle_room");
-		layers(1, 5);
-		roomChance(0.001f, 0f);
+		roomChance(0.001f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
-		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.1), 1), layersCount - 2);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset + 1, ceilingY = info.minY + info.ceilingOffset + 6;
 
 		for (int i = 1; i < 7; i++) {
-			for (int cy = floorY; cy < ceilingY; cy++) {
-				c.setBlockType(x + i, cy, z, BlockTypes.AIR);
-				c.setBlockType(x + i, cy, z + 7, BlockTypes.AIR);
-				c.setBlockType(x, cy, z + i, BlockTypes.AIR);
-				c.setBlockType(x + 7, cy, z + i, BlockTypes.AIR);
+			for (int y = floorY; y < ceilingY; y++) {
+				c.setBlockType(x + i, y, z, BlockTypes.AIR);
+				c.setBlockType(x + i, y, z + 7, BlockTypes.AIR);
+				c.setBlockType(x, y, z + i, BlockTypes.AIR);
+				c.setBlockType(x + 7, y, z + i, BlockTypes.AIR);
 			}
 
 			c.setBlockType(x + i, floorY, z + 1, BlockTypes.STONEBRICK);

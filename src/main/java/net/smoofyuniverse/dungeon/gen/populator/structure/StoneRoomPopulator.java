@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -37,27 +37,28 @@ public class StoneRoomPopulator extends RoomPopulator {
 
 	public StoneRoomPopulator() {
 		super("stone_room");
-		roomChance(0.005f, 0f);
+		roomChance(0.005f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
 
-		y += getFloorOffset(c, x, y, z) + 1;
-		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset + 1, ceilingY = info.minY + info.ceilingOffset + 6;
 
-		for (int cy = y; cy < ceilingY; cy++) {
+		for (int y = floorY; y < ceilingY; y++) {
 			for (int i = 0; i < 8; i++) {
-				c.setBlockType(x + i, cy, z, BlockTypes.STONEBRICK);
-				c.setBlockType(x + i, cy, z + 7, BlockTypes.STONEBRICK);
+				c.setBlockType(x + i, y, z, BlockTypes.STONEBRICK);
+				c.setBlockType(x + i, y, z + 7, BlockTypes.STONEBRICK);
 
-				c.setBlockType(x, cy, z + i, BlockTypes.STONEBRICK);
-				c.setBlockType(x + 7, cy, z + i, BlockTypes.STONEBRICK);
+				c.setBlockType(x, y, z + i, BlockTypes.STONEBRICK);
+				c.setBlockType(x + 7, y, z + i, BlockTypes.STONEBRICK);
 			}
+
 			for (int dx = 1; dx < 7; dx++) {
 				for (int dz = 1; dz < 7; dz++)
-					c.setBlockType(x + dx, cy, z + dz, randomType(r));
+					c.setBlockType(x + dx, y, z + dz, randomType(r));
 			}
 		}
 

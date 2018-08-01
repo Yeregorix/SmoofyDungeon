@@ -22,7 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -32,21 +34,26 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class SkullPopulator extends RoomPopulator {
 	public static final BlockState SKULL = BlockTypes.SKULL.getDefaultState().with(Keys.DIRECTION, Direction.UP).get();
 
 	public SkullPopulator() {
 		super("skull");
-		layers(0, 3);
 		roomIterations(5, 3);
-		roomIterationChance(0.002f, 0f);
+		roomIterationChance(0.002f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
-		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.5));
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + info.floorOffset + 1;
 
 		if (c.getBlockType(x, y - 1, z) == BlockTypes.AIR)
 			return false;

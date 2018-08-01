@@ -22,26 +22,34 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
+
 public class TorchPopulator extends RoomPopulator {
 
 	public TorchPopulator() {
 		super("torch");
-		layers(1, 6);
-		roomChance(0.1f, 0.04f);
+		roomChance(0.1f, 0.25f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
-		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.1), 1), layersCount - 1);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + info.floorOffset;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			c.setBlockType(x, y, z, BlockTypes.TORCH);

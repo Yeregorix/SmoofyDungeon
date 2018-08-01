@@ -22,8 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
@@ -36,6 +37,8 @@ import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
+
+import static com.flowpowered.math.GenericMath.floor;
 
 public class CeilingSpawnerPopulator extends RoomPopulator {
 	public static final WeightedList<EntityType> ENTITIES = SimpleSpawnerPopulator.ENTITIES;
@@ -51,13 +54,18 @@ public class CeilingSpawnerPopulator extends RoomPopulator {
 
 	public CeilingSpawnerPopulator() {
 		super("ceiling_spawner");
-		layers(0, 4);
-		roomChance(0.002f, -0.0002f);
+		roomChance(0.002f, 0.001f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.6));
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int ceilingY = info.minY + info.ceilingOffset + 6;
 
 		c.setBlockType(x + 3, ceilingY - 2, z + 3, BlockTypes.COBBLESTONE);
 		c.setBlockType(x + 3, ceilingY - 2, z + 4, BlockTypes.COBBLESTONE);

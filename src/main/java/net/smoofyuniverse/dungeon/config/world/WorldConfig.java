@@ -29,7 +29,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
-import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
 import net.smoofyuniverse.dungeon.util.IOUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;

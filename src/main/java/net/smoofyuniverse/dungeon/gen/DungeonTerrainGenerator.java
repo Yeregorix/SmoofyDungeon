@@ -35,6 +35,17 @@ import org.spongepowered.api.world.gen.GenerationPopulator;
 import java.util.Random;
 
 public class DungeonTerrainGenerator implements GenerationPopulator {
+	public final int bottomY, layersCount;
+
+	public DungeonTerrainGenerator(int bottomY, int layersCount) {
+		if (bottomY <= 0 || bottomY > 30)
+			throw new IllegalArgumentException("bottomY");
+		if (layersCount <= 0 || layersCount > 30)
+			throw new IllegalArgumentException("layersCount");
+
+		this.bottomY = bottomY;
+		this.layersCount = layersCount;
+	}
 
 	@Override
 	public void populate(World w, MutableBlockVolume volume, ImmutableBiomeVolume biomes) {
@@ -44,20 +55,45 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 
 		// Load random from seed and chunk coords
 		Random r = new Random(seed);
-		long i1 = r.nextLong() / 2L * 2L + 1L;
-		long j1 = r.nextLong() / 2L * 2L + 1L;
-		r.setSeed((minX >> 4) * i1 + (minZ >> 4) * j1 ^ seed);
+		long a = r.nextLong() / 2L * 2L + 1L, b = r.nextLong() / 2L * 2L + 1L;
+		r.setSeed((minX >> 4) * a + (minZ >> 4) * b ^ seed);
 
 		// Fill the floor with bedrock and stone
-		for (int x = minX; x <= maxX; x++)
+		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
 				int bedrockLevel = r.nextInt(5);
-				for (int y = 0; y <= 30; y++)
+				for (int y = 0; y <= this.bottomY; y++)
 					volume.setBlockType(x, y, z, y <= bedrockLevel ? BlockTypes.BEDROCK : BlockTypes.STONE);
 			}
+		}
 
 		// Iterate over each layer
-		for (int y = 30; y < 72; y += 6) {
+		for (int l = 0; l < this.layersCount; l++) {
+			int y = this.bottomY + l * 6;
+			// Iterate over each room
+			for (int x = 0; x < 16; x += 8) {
+				for (int z = 0; z < 16; z += 8) {
+					int floorOffset = r.nextBoolean() ? 0 : 1;
+					int randX = (r.nextInt(3) - 1) * (x + 7), randZ = (r.nextInt(3) - 1) * (z + 7);
+
+					for (int dx = 0; dx < 8; dx++) {
+						for (int dz = 0; dz < 8; dz++) {
+							// Fill the floor
+							volume.setBlockType(minX + x + dx, y + floorOffset, minZ + z + dz, BlockTypes.COBBLESTONE);
+
+							if (((dx == 0 || dx == 7) && (dz == 0 || dz == 7)) || randX == x + dx || randZ == z + dz) {
+								// Fill the walls
+								for (int dy = floorOffset; dy < 7; dy++)
+									volume.setBlockType(minX + x + dx, y + dy, minZ + z + dz, BlockTypes.STONEBRICK);
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+	/*	for (int y = 30; y < 72; y += 6) {
 			// Iterate over each room
 			for (int x = 0; x < 16; x += 8)
 				for (int z = 0; z < 16; z += 8) {
@@ -79,7 +115,9 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 							}
 						}
 				}
-		}
+		} */
+
+		int topY = this.bottomY + this.layersCount * 6;
 
 		// Create the noise generator which generates wave forms to use for the surface
 		SimplexOctaveGenerator octave = new SimplexOctaveGenerator(seed, 8);
@@ -89,12 +127,12 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 		for (int x = minX; x <= maxX; x++)
 			for (int z = minZ; z <= maxZ; z++) {
 				double noise = octave.noise(x, z, 0.5d, 0.5d);
-				int stoneLevel = (int) (noise * 3d) + 76;
-				int groundLevel = (int) (noise * 4d) + 80;
+				int stoneLevel = (int) (noise * 3d) + topY + 4;
+				int groundLevel = (int) (noise * 4d) + topY + 8;
 
-				volume.setBlockType(x, 72, z, BlockTypes.COBBLESTONE);
+				volume.setBlockType(x, topY, z, BlockTypes.COBBLESTONE);
 
-				for (int y = 73; y < stoneLevel; y++)
+				for (int y = topY + 1; y < stoneLevel; y++)
 					volume.setBlockType(x, y, z, BlockTypes.STONE);
 
 				BiomeType biome = biomes.getBiome(x, 0, z);

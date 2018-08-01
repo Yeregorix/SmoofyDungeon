@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
-import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.gen.populator.core.LayerPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.EnumTraits;
@@ -39,14 +39,13 @@ public class CrackedStonePopulator extends LayerPopulator {
 	public CrackedStonePopulator() {
 		super("cracked_stone");
 		layerIterations(240, 0);
-		layerIterationChance(0.7f, 0f);
+		layerIterationChance(0.7f);
 	}
 
 	@Override
-	public boolean populateLayer(World w, Extent c, Random r, int layer, int y) {
-		Vector3i min = c.getBlockMin();
-		int x = min.getX() + r.nextInt(16), z = min.getZ() + r.nextInt(16);
-		y += r.nextInt(7);
+	public boolean populateLayer(LayerInfo info, World w, Extent c, Random r, float layerFactor) {
+		int x = info.minX + r.nextInt(16), z = info.minZ + r.nextInt(16);
+		int y = info.minY + r.nextInt(7);
 
 		if (c.getBlockType(x, y, z) == BlockTypes.STONEBRICK) {
 			c.setBlock(x, y, z, CRACKED_STONEBRICK);

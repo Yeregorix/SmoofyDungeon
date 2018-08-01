@@ -22,7 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
@@ -30,18 +32,24 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class WaterInWallPopulator extends RoomPopulator {
 
 	public WaterInWallPopulator() {
 		super("water_in_wall");
-		layers(4, 6);
-		roomChance(0.05f, -0.004f);
+		roomChance(0.05f, 0.03f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		int floorOffset = getFloorOffset(c, x, y, z);
-		y += r.nextInt(5 - floorOffset) + floorOffset + 1;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(floor(layersCount * 0.5), layersCount - 1);
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX, z = info.minZ;
+		int y = info.minY + r.nextInt(5 - info.floorOffset) + info.floorOffset + 1;
 
 		switch (r.nextInt(4)) {
 			case 0:

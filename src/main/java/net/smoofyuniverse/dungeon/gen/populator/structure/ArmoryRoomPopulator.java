@@ -22,11 +22,12 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
 import net.smoofyuniverse.dungeon.gen.loot.EntityEquipmentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.BlockTrait;
@@ -45,6 +46,9 @@ import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
+
+import static com.flowpowered.math.GenericMath.floor;
+import static java.lang.Math.max;
 
 public class ArmoryRoomPopulator extends RoomPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR = LibraryPopulator.CHEST_GENERATOR;
@@ -66,26 +70,31 @@ public class ArmoryRoomPopulator extends RoomPopulator {
 
 	public ArmoryRoomPopulator() {
 		super("armory_room");
-		layers(2, 5);
-		roomChance(0.001f, 0f);
+		roomChance(0.001f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
-		int floorY = y + getFloorOffset(c, x, y, z) + 1, ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(max(floor(layersCount * 0.4), 1), layersCount - 2);
+	}
 
-		for (int cy = floorY; cy < ceilingY; cy++) {
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset + 1, ceilingY = info.minY + info.ceilingOffset + 6;
+
+		for (int y = floorY; y < ceilingY; y++) {
 			for (int dx = 1; dx < 7; dx++) {
-				c.setBlock(x + dx, cy, z + 1, BLACK_CONCRETE);
-				c.setBlock(x + dx, cy, z + 6, BLACK_CONCRETE);
-				c.setBlockType(x + dx, cy, z + 7, BlockTypes.COBBLESTONE);
+				c.setBlock(x + dx, y, z + 1, BLACK_CONCRETE);
+				c.setBlock(x + dx, y, z + 6, BLACK_CONCRETE);
+				c.setBlockType(x + dx, y, z + 7, BlockTypes.COBBLESTONE);
 			}
 			for (int dz = 1; dz < 7; dz++) {
-				c.setBlockType(x, cy, z + dz, BlockTypes.COBBLESTONE);
-				c.setBlock(x + 1, cy, z + dz, BLACK_CONCRETE);
-				c.setBlock(x + 6, cy, z + dz, BLACK_CONCRETE);
-				c.setBlockType(x + 7, cy, z + dz, BlockTypes.COBBLESTONE);
+				c.setBlockType(x, y, z + dz, BlockTypes.COBBLESTONE);
+				c.setBlock(x + 1, y, z + dz, BLACK_CONCRETE);
+				c.setBlock(x + 6, y, z + dz, BLACK_CONCRETE);
+				c.setBlockType(x + 7, y, z + dz, BlockTypes.COBBLESTONE);
 			}
 		}
 
@@ -120,20 +129,20 @@ public class ArmoryRoomPopulator extends RoomPopulator {
 		c.setBlock(x + 4, floorY, z + 1, IRON_DOOR_BOTTOM.with(Keys.HINGE_POSITION, Hinges.LEFT).get());
 		c.setBlock(x + 4, floorY + 1, z + 1, IRON_DOOR_TOP.with(Keys.HINGE_POSITION, Hinges.LEFT).get());
 
-		if (c.getBlockType(x + 3, floorY - 1, z - 1) == BlockTypes.AIR && c.getBlockType(x + 3, floorY - 2, z - 1) == BlockTypes.AIR)
-			c.setBlockType(x + 3, floorY - 1, z - 1, BlockTypes.COBBLESTONE);
-		if (c.getBlockType(x + 4, floorY - 1, z - 1) == BlockTypes.AIR && c.getBlockType(x + 4, floorY - 2, z - 1) == BlockTypes.AIR)
-			c.setBlockType(x + 4, floorY - 1, z - 1, BlockTypes.COBBLESTONE);
+		if (w.getBlockType(x + 3, floorY - 1, z - 1) == BlockTypes.AIR && w.getBlockType(x + 3, floorY - 2, z - 1) == BlockTypes.AIR)
+			w.setBlockType(x + 3, floorY - 1, z - 1, BlockTypes.COBBLESTONE);
+		if (w.getBlockType(x + 4, floorY - 1, z - 1) == BlockTypes.AIR && w.getBlockType(x + 4, floorY - 2, z - 1) == BlockTypes.AIR)
+			w.setBlockType(x + 4, floorY - 1, z - 1, BlockTypes.COBBLESTONE);
 
 		c.setBlockType(x + 3, floorY, z, BlockTypes.AIR);
 		c.setBlockType(x + 4, floorY, z, BlockTypes.AIR);
 		c.setBlockType(x + 3, floorY + 1, z, BlockTypes.AIR);
 		c.setBlockType(x + 4, floorY + 1, z, BlockTypes.AIR);
 
-		c.setBlockType(x + 3, floorY, z - 1, BlockTypes.AIR);
-		c.setBlockType(x + 4, floorY, z - 1, BlockTypes.AIR);
-		c.setBlockType(x + 3, floorY + 1, z - 1, BlockTypes.AIR);
-		c.setBlockType(x + 4, floorY + 1, z - 1, BlockTypes.AIR);
+		w.setBlockType(x + 3, floorY, z - 1, BlockTypes.AIR);
+		w.setBlockType(x + 4, floorY, z - 1, BlockTypes.AIR);
+		w.setBlockType(x + 3, floorY + 1, z - 1, BlockTypes.AIR);
+		w.setBlockType(x + 4, floorY + 1, z - 1, BlockTypes.AIR);
 
 		return true;
 	}

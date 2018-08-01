@@ -22,84 +22,91 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
-import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
 public abstract class RoomPopulator extends LayerPopulator {
-	private float roomChance = 1f, roomChanceAPL = 0f;
 	private int roomItAttempts = 1, roomItMax = 0;
-	private float roomItChance = 1, roomItChanceAPL = 0f;
+	private float roomChanceBase = 1, roomChanceAddition = 0;
+	private float roomItChanceBase = 1, roomItChanceAddition = 0;
 
 	protected RoomPopulator(String name) {
 		super(name);
 	}
 
-	protected final void roomChance(float chance, float APL) {
-		validateProbability(chance, APL);
-		this.roomChance = chance;
-		this.roomChanceAPL = APL;
-	}
-
 	protected final void roomIterations(int attempts, int max) {
 		validateIterations(attempts, max);
+
 		this.roomItAttempts = attempts;
 		this.roomItMax = max;
 	}
 
-	protected final void roomIterationChance(float chance, float APL) {
-		validateProbability(chance, APL);
-		this.roomItChance = chance;
-		this.roomItChanceAPL = APL;
+	protected final void roomChance(float value) {
+		validateProbability(value);
+
+		this.roomChanceBase = value;
+		this.roomChanceAddition = 0;
+	}
+
+	protected final void roomChance(float from, float to) {
+		validateProbability(from);
+		validateProbability(to);
+
+		this.roomChanceBase = from;
+		this.roomChanceAddition = to - from;
+	}
+
+	protected final void roomIterationChance(float value) {
+		validateProbability(value);
+
+		this.roomItChanceBase = value;
+		this.roomItChanceAddition = 0;
+	}
+
+	protected final void roomIterationChance(float from, float to) {
+		validateProbability(from);
+		validateProbability(to);
+
+		this.roomItChanceBase = from;
+		this.roomItChanceAddition = to - from;
 	}
 
 	@Override
-	public final boolean populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
-		Vector3i min = c.getBlockMin();
-		float chance = this.roomChance + layer * this.roomChanceAPL, itChance = this.roomItChance + layer * this.roomItChanceAPL;
+	public final boolean populateLayer(LayerInfo info, World w, Extent c, Random r, float layerFactor) {
+		float chance = this.roomChanceBase + this.roomChanceAddition * layerFactor, itChance = this.roomItChanceBase + this.roomItChanceAddition * layerFactor;
 		boolean success = false;
 
-		int room = -1;
-		for (int x = 0; x < 16; x += 8) {
-			for (int z = 0; z < 16; z += 8) {
-				room++;
-				if (info.getFlag(layer, room))
-					continue;
+		for (int i = 0; i < 4; i++) {
+			RoomInfo room = info.getRoom(i);
+			if (room.flag)
+				continue;
 
-				if (random(r, chance)) {
-					int itCount = 0;
+			if (random(r, chance)) {
+				int itCount = 0;
 
-					for (int it = 0; it < this.roomItAttempts; it++) {
-						if (this.roomItMax != 0 && itCount >= this.roomItMax)
-							break;
+				for (int it = 0; it < this.roomItAttempts; it++) {
+					if (this.roomItMax != 0 && itCount >= this.roomItMax)
+						break;
 
-						if (random(r, itChance) && populateRoom(info, w, c, r, layer, room, min.getX() + x, y, min.getZ() + z))
-							itCount++;
-					}
-
-					if (itCount != 0)
-						success = true;
+					if (random(r, itChance) && populateRoom(room, w, c, r))
+						itCount++;
 				}
+
+				if (itCount != 0)
+					success = true;
 			}
 		}
 
 		return success;
 	}
 
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		return populateRoom(w, c, r, layer, room, x, y, z);
-	}
+	public abstract boolean populateRoom(RoomInfo info, World w, Extent c, Random r);
 
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		throw new UnsupportedOperationException();
-	}
-
-	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
+/*	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
 		BlockType type = chunk.getBlockType(x + 3, y, z + 3);
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.NETHERRACK || type == BlockTypes.SOUL_SAND)
 			return 0;
@@ -111,5 +118,5 @@ public abstract class RoomPopulator extends LayerPopulator {
 		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.NETHERRACK || type == BlockTypes.SOUL_SAND)
 			return 0;
 		return 1;
-	}
+	} */
 }

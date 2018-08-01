@@ -22,8 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
@@ -50,14 +49,14 @@ public class WrappedPopulator implements DungeonPopulator {
 	}
 
 	@Override
-	public void populate(ChunkInfo info, World w, Extent c, Random r) {
-		if (!info.getFlag())
-			this.delegate.populate(w, c, r);
+	public void populate(ChunkInfo info, World w, Extent c, Random r, ImmutableBiomeVolume biomes) {
+		if (!info.flag)
+			this.delegate.populate(w, c, r, biomes);
 	}
 
 	@Override
-	public void populate(ChunkInfo info, World w, Extent c, Random r, ImmutableBiomeVolume biomes) {
-		if (!info.getFlag())
-			this.delegate.populate(w, c, r, biomes);
+	public void populate(ChunkInfo info, World w, Extent c, Random r) {
+		if (!info.flag)
+			this.delegate.populate(w, c, r);
 	}
 }

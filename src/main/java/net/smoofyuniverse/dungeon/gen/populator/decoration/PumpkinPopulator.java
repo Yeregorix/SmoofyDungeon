@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -35,16 +36,15 @@ public class PumpkinPopulator extends RoomPopulator {
 
 	public PumpkinPopulator() {
 		super("pumpkin");
-		roomChance(0.025f, 0f);
+		roomChance(0.025f);
 		roomIterations(7, 5);
-		roomIterationChance(0.5f, 0f);
+		roomIterationChance(0.5f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
-		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + info.floorOffset + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			c.setBlock(x, y, z, (r.nextFloat() < 0.33f ? BlockTypes.LIT_PUMPKIN : BlockTypes.PUMPKIN).getDefaultState().with(Keys.DIRECTION, ResourceUtil.randomCardinal(r)).get());

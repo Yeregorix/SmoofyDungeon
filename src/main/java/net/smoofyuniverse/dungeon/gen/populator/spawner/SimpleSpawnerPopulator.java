@@ -23,6 +23,7 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityType;
@@ -37,14 +38,13 @@ public class SimpleSpawnerPopulator extends RoomPopulator {
 
 	public SimpleSpawnerPopulator() {
 		super("simple_spawner");
-		roomChance(0.1f, -0.003f);
+		roomChance(0.1f, 0.08f);
 	}
 
 	@Override
-	public boolean populateRoom(World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		x += r.nextInt(6) + 1;
-		y += getFloorOffset(c, x, y, z) + 1;
-		z += r.nextInt(6) + 1;
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
+		int y = info.minY + info.floorOffset + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			generateSpawner(c, x, y, z, ENTITIES.get(r));

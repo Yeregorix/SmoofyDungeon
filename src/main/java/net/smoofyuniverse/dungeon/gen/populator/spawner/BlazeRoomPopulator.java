@@ -22,9 +22,10 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.ChestPopulator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
@@ -36,6 +37,8 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class BlazeRoomPopulator extends RoomPopulator {
 	public static final BlockState NORTH_STAIRS = BlockTypes.NETHER_BRICK_STAIRS.getDefaultState().with(Keys.DIRECTION, Direction.NORTH).get(),
 			SOUTH_STAIRS = BlockTypes.NETHER_BRICK_STAIRS.getDefaultState().with(Keys.DIRECTION, Direction.SOUTH).get(),
@@ -46,14 +49,19 @@ public class BlazeRoomPopulator extends RoomPopulator {
 
 	public BlazeRoomPopulator() {
 		super("blaze_room");
-		layers(0, 3);
-		roomChance(0.002f, -0.0002f);
+		roomChance(0.002f, 0.0015f);
 	}
 
 	@Override
-	public boolean populateRoom(ChunkInfo info, World w, Extent c, Random r, int layer, int room, int x, int y, int z) {
-		info.setFlag(layer, room, true);
-		int floorY = y + getFloorOffset(c, x, y, z), ceilingY = y + getCeilingOffset(c, x, y, z) + 6;
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.5));
+	}
+
+	@Override
+	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
+		info.flag = true;
+		int x = info.minX, z = info.minZ;
+		int floorY = info.minY + info.floorOffset, ceilingY = info.minY + info.ceilingOffset + 6;
 
 		for (int dx = 0; dx < 8; dx++)
 			for (int dz = 0; dz < 8; dz++) {
@@ -63,20 +71,20 @@ public class BlazeRoomPopulator extends RoomPopulator {
 					c.setBlockType(x + dx, y2, z + dz, BlockTypes.AIR);
 			}
 
-		for (int y2 = floorY + 1; y2 < ceilingY; y2++) {
-			c.setBlockType(x, y2, z, BlockTypes.NETHER_BRICK);
-			c.setBlockType(x + 7, y2, z, BlockTypes.NETHER_BRICK);
-			c.setBlockType(x, y2, z + 7, BlockTypes.NETHER_BRICK);
-			c.setBlockType(x + 7, y2, z + 7, BlockTypes.NETHER_BRICK);
+		for (int y = floorY + 1; y < ceilingY; y++) {
+			c.setBlockType(x, y, z, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x + 7, y, z, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x, y, z + 7, BlockTypes.NETHER_BRICK);
+			c.setBlockType(x + 7, y, z + 7, BlockTypes.NETHER_BRICK);
 
-			c.setBlockType(x + 1, y2, z, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x + 6, y2, z, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x + 7, y2, z + 1, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x + 1, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x + 7, y2, z + 6, BlockTypes.NETHER_BRICK_FENCE);
-			c.setBlockType(x + 6, y2, z + 7, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 1, y, z, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x, y, z + 1, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 6, y, z, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x, y, z + 6, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 7, y, z + 1, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 1, y, z + 7, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 7, y, z + 6, BlockTypes.NETHER_BRICK_FENCE);
+			c.setBlockType(x + 6, y, z + 7, BlockTypes.NETHER_BRICK_FENCE);
 		}
 
 		for (int dx = 2; dx < 6; dx++)

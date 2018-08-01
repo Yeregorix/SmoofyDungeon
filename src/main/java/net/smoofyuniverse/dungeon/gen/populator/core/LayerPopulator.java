@@ -22,77 +22,100 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
+import com.flowpowered.math.vector.Vector2i;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
-import static net.smoofyuniverse.dungeon.util.MathUtil.isValidProbability;
-
 public abstract class LayerPopulator extends ChunkPopulator {
-	private int minLayer = 0, maxLayer = 6;
-	private float layerChance = 1f, layerChanceAPL = 0f;
+	//	private float minLayer = 0, maxLayer = 1;
 	private int layerItAttempts = 1, layerItMax = 0;
-	private float layerItChance = 1, layerItChanceAPL = 0f;
+	private float layerChanceBase = 1, layerChanceAddition = 0;
+	private float layerItChanceBase = 1, layerItChanceAddition = 0;
 
 	protected LayerPopulator(String name) {
 		super(name);
 	}
 
-	protected final void layers(int min, int max) {
+/*	protected final void layers(float min, float max) {
 		if (min > max)
 			throw new IllegalArgumentException();
 		if (min < 0)
 			throw new IllegalArgumentException("min");
-		if (max > 6)
+		if (max > 1)
 			throw new IllegalArgumentException("max");
+
 		this.minLayer = min;
 		this.maxLayer = max;
-	}
-
-	protected final void layerChance(float chance, float APL) {
-		validateProbability(chance, APL);
-		this.layerChance = chance;
-		this.layerChanceAPL = APL;
-	}
-
-	protected static void validateProbability(float value, float APL) {
-		if (!isValidProbability(value))
-			throw new IllegalArgumentException("Invalid probability");
-		if (!isValidProbability(value + 6 * APL))
-			throw new IllegalArgumentException("Invalid probability");
-	}
+	} */
 
 	protected final void layerIterations(int attempts, int max) {
 		validateIterations(attempts, max);
+
 		this.layerItAttempts = attempts;
 		this.layerItMax = max;
 	}
 
-	protected final void layerIterationChance(float chance, float APL) {
-		validateProbability(chance, APL);
-		this.layerItChance = chance;
-		this.layerItChanceAPL = APL;
+	protected final void layerChance(float value) {
+		validateProbability(value);
+
+		this.layerChanceBase = value;
+		this.layerChanceAddition = 0;
+	}
+
+	protected final void layerChance(float from, float to) {
+		validateProbability(from);
+		validateProbability(to);
+
+		this.layerChanceBase = from;
+		this.layerChanceAddition = to - from;
+	}
+
+	protected final void layerIterationChance(float value) {
+		validateProbability(value);
+
+		this.layerItChanceBase = value;
+		this.layerItChanceAddition = 0;
+	}
+
+	protected final void layerIterationChance(float from, float to) {
+		validateProbability(from);
+		validateProbability(to);
+
+		this.layerItChanceBase = from;
+		this.layerItChanceAddition = to - from;
 	}
 
 	@Override
 	public final boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+		Vector2i layers = getLayers(info.layersCount);
+		int minL = layers.getX(), maxL = layers.getY();
+		if (minL > maxL || minL >= info.layersCount || maxL < 0)
+			return false;
+
 		boolean success = false;
 
-		for (int l = this.minLayer; l <= this.maxLayer; l++) {
-			if (info.getFlag(l))
+		int count = maxL - minL;
+
+		for (int l = minL; l <= maxL; l++) {
+			LayerInfo layer = info.getLayer(l);
+			if (layer.flag)
 				continue;
 
-			if (random(r, this.layerChance + l * this.layerChanceAPL)) {
-				float itChance = this.layerItChance + l * this.layerItChanceAPL;
+			float layerFactor = count == 0 ? 0 : (l - minL) / (float) count;
+
+			if (random(r, this.layerChanceBase + this.layerChanceAddition * layerFactor)) {
+				float itChance = this.layerItChanceBase + this.layerItChanceAddition * layerFactor;
 				int itCount = 0;
 
 				for (int it = 0; it < this.layerItAttempts; it++) {
 					if (this.layerItMax != 0 && itCount >= this.layerItMax)
 						break;
 
-					if (random(r, itChance) && populateLayer(info, w, c, r, l, l * 6 + 30))
+					if (random(r, itChance) && populateLayer(layer, w, c, r, layerFactor))
 						itCount++;
 				}
 
@@ -104,11 +127,9 @@ public abstract class LayerPopulator extends ChunkPopulator {
 		return success;
 	}
 
-	public boolean populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
-		return populateLayer(w, c, r, layer, y);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, layersCount - 1); // inclusive
 	}
 
-	public boolean populateLayer(World w, Extent c, Random r, int layer, int y) {
-		throw new UnsupportedOperationException();
-	}
+	public abstract boolean populateLayer(LayerInfo info, World w, Extent c, Random r, float layerFactor);
 }

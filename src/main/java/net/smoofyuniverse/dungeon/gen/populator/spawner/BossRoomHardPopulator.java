@@ -22,10 +22,10 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
-import com.flowpowered.math.vector.Vector3i;
+import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
-import net.smoofyuniverse.dungeon.gen.populator.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.LayerPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.item.ItemTypes;
@@ -34,23 +34,28 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
+import static com.flowpowered.math.GenericMath.floor;
+
 public class BossRoomHardPopulator extends LayerPopulator {
 	public static final ChestContentGenerator CHEST_GENERATOR;
 
 	public BossRoomHardPopulator() {
 		super("boss_room_hard");
-		layers(0, 3);
-		layerChance(0.001f, 0f);
+		layerChance(0.001f);
 	}
 
 	@Override
-	public boolean populateLayer(ChunkInfo info, World w, Extent c, Random r, int layer, int y) {
-		info.setFlag(layer, true);
-		info.setFlag(layer + 1, true);
-		info.setFlag(layer + 2, true);
+	protected Vector2i getLayers(int layersCount) {
+		return new Vector2i(0, floor(layersCount * 0.5));
+	}
 
-		Vector3i min = c.getBlockMin();
-		int x = min.getX(), z = min.getZ();
+	@Override
+	public boolean populateLayer(LayerInfo info, World w, Extent c, Random r, float layerFactor) {
+		info.flag = true;
+		info.getRelative(1).flag = true;
+		info.getRelative(2).flag = true;
+
+		int x = info.minX, y = info.minY, z = info.minZ;
 
 		for (int dx = 0; dx < 15; dx++)
 			for (int dz = 0; dz < 15; dz++) {
