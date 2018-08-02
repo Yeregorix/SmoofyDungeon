@@ -90,7 +90,10 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		// 3: GenerationPopulators
 		List<GenerationPopulator> genPops = worldGen.getGenerationPopulators();
-		genPopulatorAdapter.getPopulators().addAll(genPops);
+		for (GenerationPopulator pop : genPops) {
+			if (!isBlacklisted(pop.getClass().getSimpleName()))
+				genPopulatorAdapter.getPopulators().add(pop);
+		}
 		genPops.clear();
 		genPops.add(genPopulatorAdapter);
 
@@ -130,13 +133,8 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		Iterator<Populator> it = pops.iterator();
 		while (it.hasNext()) {
-			String className = it.next().getClass().getSimpleName();
-			for (String seq : classesBlacklist) {
-				if (className.contains(seq)) {
-					it.remove();
-					break;
-				}
-			}
+			if (isBlacklisted(it.next().getClass().getSimpleName()))
+				it.remove();
 		}
 
 		for (DungeonPopulator pop : POPULATORS) {
@@ -145,6 +143,14 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		}
 
 		pops.add(0, dungeonPopulator);
+	}
+
+	private static boolean isBlacklisted(String className) {
+		for (String seq : classesBlacklist) {
+			if (className.contains(seq))
+				return true;
+		}
+		return false;
 	}
 
 	static {
