@@ -40,15 +40,12 @@ public class DungeonParentPopulator implements Populator {
 	private final List<DungeonPopulator> globalPopulators = new ArrayList<>();
 	private final Map<BiomeType, List<DungeonPopulator>> biomePopulators = new HashMap<>();
 
-	public final int bottomY, layersCount;
+	public final int layersCount;
 
-	public DungeonParentPopulator(int bottomY, int layersCount) {
-		if (bottomY <= 0 || bottomY > 30)
-			throw new IllegalArgumentException("bottomY");
+	public DungeonParentPopulator(int layersCount) {
 		if (layersCount <= 0 || layersCount > 30)
 			throw new IllegalArgumentException("layersCount");
 
-		this.bottomY = bottomY;
 		this.layersCount = layersCount;
 	}
 
@@ -72,11 +69,10 @@ public class DungeonParentPopulator implements Populator {
 
 	@Override
 	public void populate(World world, Extent volume, Random random) {
-		if (!volume.getBlockSize().equals(SmoofyDungeon.CHUNK_SIZE))
-			throw new UnsupportedOperationException();
+		SmoofyDungeon.validateChunkSize(volume);
 
 		Vector3i min = volume.getBlockMin();
-		ChunkInfo info = new ChunkInfo(min.getX(), min.getZ(), this.bottomY, this.layersCount);
+		ChunkInfo info = new ChunkInfo(min.getX(), min.getZ(), this.layersCount);
 		info.configureOffsets(volume);
 
 		for (DungeonPopulator p : this.globalPopulators) {
@@ -90,8 +86,7 @@ public class DungeonParentPopulator implements Populator {
 
 	@Override
 	public void populate(World world, Extent volume, Random random, ImmutableBiomeVolume biomes) {
-		if (!volume.getBlockSize().equals(SmoofyDungeon.CHUNK_SIZE))
-			throw new UnsupportedOperationException();
+		SmoofyDungeon.validateChunkSize(volume);
 
 		Vector3i min = volume.getBlockMin(), max = volume.getBlockMax();
 		int minX = min.getX(), minZ = min.getZ();
@@ -106,7 +101,7 @@ public class DungeonParentPopulator implements Populator {
 			}
 		}
 
-		ChunkInfo info = new ChunkInfo(minX, minZ, this.bottomY, this.layersCount);
+		ChunkInfo info = new ChunkInfo(minX, minZ, this.layersCount);
 		info.configureOffsets(volume);
 
 		for (DungeonPopulator p : this.globalPopulators) {

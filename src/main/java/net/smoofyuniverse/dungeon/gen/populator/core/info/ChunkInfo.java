@@ -26,25 +26,18 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.extent.Extent;
 
 public final class ChunkInfo {
-	public final int minX, minZ;
-	public final int bottomY, topY;
-	public final int layersCount;
+	public final int minX, minZ, layersCount, topY;
 	public boolean flag;
 	private LayerInfo[] layers;
 
-	public ChunkInfo(int minX, int minZ, int bottomY, int layersCount) {
-		if (bottomY <= 0)
-			throw new IllegalArgumentException("bottomY");
+	public ChunkInfo(int minX, int minZ, int layersCount) {
 		if (layersCount < 0)
 			throw new IllegalArgumentException("layersCount");
 
 		this.minX = minX;
 		this.minZ = minZ;
-
-		this.bottomY = bottomY;
-		this.topY = bottomY + layersCount * 6;
-
 		this.layersCount = layersCount;
+		this.topY = 4 + layersCount * 6;
 
 		this.layers = new LayerInfo[layersCount];
 		for (int i = 0; i < layersCount; i++)

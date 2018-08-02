@@ -25,17 +25,20 @@ package net.smoofyuniverse.dungeon.gen;
 import com.google.common.collect.ImmutableList;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import net.smoofyuniverse.dungeon.config.world.WorldConfig;
+import net.smoofyuniverse.dungeon.gen.offset.GenerationPopulatorAdapter;
+import net.smoofyuniverse.dungeon.gen.offset.VariableAmountAdapter;
 import net.smoofyuniverse.dungeon.gen.populator.DungeonParentPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
 import net.smoofyuniverse.dungeon.gen.populator.structure.*;
-import net.smoofyuniverse.dungeon.util.random.ModifiedAmount;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
 import org.spongepowered.api.world.biome.BiomeType;
+import org.spongepowered.api.world.biome.GroundCoverLayer;
+import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.WorldGenerator;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
@@ -43,14 +46,14 @@ import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.gen.populator.Ore;
 import org.spongepowered.api.world.storage.WorldProperties;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class DungeonWorldModifier implements WorldGeneratorModifier {
 	public static final List<DungeonPopulator> POPULATORS;
-
-	private static Class<?> animalPopulatorClass;
+	private static final List<String> classesBlacklist = new ArrayList<>();
 
 	@Override
 	public String getId() {
@@ -75,66 +78,80 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 			set = WorldConfig.POPULATORS;
 		}
 
-		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator(worldGen.getBaseGenerationPopulator(), 30, 7, 52));
-		worldGen.getGenerationPopulators().clear();
+		DungeonTerrainGenerator dungeonGenerator = new DungeonTerrainGenerator(worldGen.getBaseGenerationPopulator(), 40, 8);
+		GroundCoverLayerPopulator groundCoverPopulator = new GroundCoverLayerPopulator();
+		GenerationPopulatorAdapter genPopulatorAdapter = new GenerationPopulatorAdapter(dungeonGenerator.surfaceOffsetY, dungeonGenerator.surfaceMinY);
+		DungeonParentPopulator dungeonPopulator = new DungeonParentPopulator(dungeonGenerator.layersCount);
 
-		DungeonParentPopulator parent = new DungeonParentPopulator(30, 7);
+		// 1: BaseGenerationPopulator
+		worldGen.setBaseGenerationPopulator(dungeonGenerator);
 
-		boolean keepForests = set.contains("forest"), keepOres = set.contains("ore_vein");
-		for (BiomeType type : Sponge.getRegistry().getAllOf(BiomeType.class)) {
-			BiomeGenerationSettings biome = worldGen.getBiomeSettings(type);
+		genPopulatorAdapter.getPopulators().add(groundCoverPopulator);
 
-			// We already generated the ground cover in our base generator
-			//biome.getGroundCoverLayers().clear();
+		// 3: GenerationPopulators
+		List<GenerationPopulator> genPops = worldGen.getGenerationPopulators();
+		genPopulatorAdapter.getPopulators().addAll(genPops);
+		genPops.clear();
+		genPops.add(genPopulatorAdapter);
 
-			Iterator<Populator> it = biome.getPopulators().iterator();
+		for (BiomeType biomeType : Sponge.getRegistry().getAllOf(BiomeType.class)) {
+			BiomeGenerationSettings biomeSettings = worldGen.getBiomeSettings(biomeType);
+
+			// 2: GroundCoverLayers (per biome)
+			List<GroundCoverLayer> biomeLayers = biomeSettings.getGroundCoverLayers();
+			groundCoverPopulator.getBiomeLayers(biomeType).addAll(biomeLayers);
+			biomeLayers.clear();
+
+			// 4: GenerationPopulators (per biome)
+			List<GenerationPopulator> biomeGenPops = biomeSettings.getGenerationPopulators();
+			if (!biomeGenPops.isEmpty()) {
+				GenerationPopulatorAdapter biomeGenPopulatorAdapter = new GenerationPopulatorAdapter(dungeonGenerator.surfaceOffsetY, dungeonGenerator.surfaceMinY);
+				biomeGenPopulatorAdapter.getPopulators().addAll(biomeGenPops);
+				biomeGenPops.clear();
+				biomeGenPops.add(biomeGenPopulatorAdapter);
+			}
+
+			// 6: Populators (per biome)
+			Iterator<Populator> it = biomeSettings.getPopulators().iterator();
 			while (it.hasNext()) {
 				Populator pop = it.next();
 				if (pop instanceof Ore) {
-					if (keepOres) {
-						Ore ore = (Ore) pop; // Adapt the parameters
-						ore.setHeight(new ModifiedAmount(ore.getHeight(), 4d, 0.5d));
-						ore.setDepositsPerChunk(new ModifiedAmount(ore.getDepositsPerChunk(), 0d, 0.5d));
-					} else
-						it.remove();
+					Ore ore = (Ore) pop;
+					ore.setHeight(new VariableAmountAdapter(ore.getHeight(), dungeonGenerator.surfaceOffsetY));
 				} else if (pop instanceof Forest) {
 					it.remove();
-					if (keepForests) // Prevent forest from generating in flagged chunks (like oasis)
-						parent.getBiomePopulators(type).add(new WrappedPopulator("forest", pop));
+					dungeonPopulator.getBiomePopulators(biomeType).add(new WrappedPopulator("forest", pop));
 				}
 			}
 		}
 
+		// 5: Populators
 		List<Populator> pops = worldGen.getPopulators();
 
-		Populator animalPop = null;
-		if (set.contains("animal") && animalPopulatorClass != null) {
-			for (Populator pop : pops) {
-				if (animalPopulatorClass.isInstance(pop)) {
-					animalPop = pop;
+		Iterator<Populator> it = pops.iterator();
+		while (it.hasNext()) {
+			String className = it.next().getClass().getSimpleName();
+			for (String seq : classesBlacklist) {
+				if (className.contains(seq)) {
+					it.remove();
 					break;
 				}
 			}
 		}
-		pops.clear();
 
 		for (DungeonPopulator pop : POPULATORS) {
 			if (set.contains(pop.getName()))
-				parent.getGlobalPopulators().add(pop);
+				dungeonPopulator.getGlobalPopulators().add(pop);
 		}
 
-		if (animalPop != null)
-			parent.getGlobalPopulators().add(new WrappedPopulator("animal", animalPop));
-
-		pops.add(parent);
+		pops.add(0, dungeonPopulator);
 	}
 
 	static {
-		try {
-			animalPopulatorClass = Class.forName("org.spongepowered.common.world.gen.populators.AnimalPopulator");
-		} catch (Exception e) {
-			animalPopulatorClass = null;
-		}
+		classesBlacklist.add("Stronghold");
+		classesBlacklist.add("OceanMonument");
+		classesBlacklist.add("Mineshaft");
+		classesBlacklist.add("Dungeons");
 
 		ImmutableList.Builder<DungeonPopulator> b = ImmutableList.builder();
 

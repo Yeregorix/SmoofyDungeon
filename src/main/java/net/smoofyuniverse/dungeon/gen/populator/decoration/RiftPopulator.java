@@ -36,7 +36,6 @@ import java.util.Set;
 
 import static com.flowpowered.math.GenericMath.floor;
 import static com.flowpowered.math.TrigMath.*;
-import static java.lang.Math.max;
 
 public class RiftPopulator extends ChunkPopulator {
 
@@ -47,7 +46,7 @@ public class RiftPopulator extends ChunkPopulator {
 
 	@Override
 	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
-		Vector3f min = new Vector3f(r.nextFloat() * 16f, max(info.bottomY - 10 + r.nextFloat() * 20f, 0), r.nextFloat() * 16f),
+		Vector3f min = new Vector3f(r.nextFloat() * 16f, 10 + r.nextFloat() * 10f, r.nextFloat() * 16f),
 				max = new Vector3f(r.nextFloat() * 16f, info.topY - 10 + r.nextFloat() * 30f, r.nextFloat() * 16f),
 				axis = max.sub(min);
 		int points = (int) (axis.length() * 1.5f);

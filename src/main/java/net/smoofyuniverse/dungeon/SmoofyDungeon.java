@@ -54,6 +54,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.world.extent.BlockVolume;
 import org.spongepowered.api.world.gen.WorldGeneratorModifier;
 
 import java.io.IOException;
@@ -228,5 +229,10 @@ public final class SmoofyDungeon {
 		if (instance == null)
 			throw new IllegalStateException("Instance not available");
 		return instance;
+	}
+
+	public static void validateChunkSize(BlockVolume volume) {
+		if (!volume.getBlockSize().equals(SmoofyDungeon.CHUNK_SIZE))
+			throw new UnsupportedOperationException();
 	}
 }

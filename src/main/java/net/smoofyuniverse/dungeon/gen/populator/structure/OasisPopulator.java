@@ -50,18 +50,18 @@ public class OasisPopulator extends ChunkPopulator {
 		info.flag = true;
 
 		int x = info.minX, z = info.minZ;
-		int bottomY = info.bottomY, topY = info.topY;
+		int topY = info.topY;
 
-		BiomeType biome = w.getBiome(x + 3, 0, z + 3);
+		BiomeType biome = w.getBiome(x + 8, 0, z + 8);
 		boolean useGlass = biome == BiomeTypes.OCEAN || biome == BiomeTypes.DEEP_OCEAN || biome == BiomeTypes.FROZEN_OCEAN;
 
 		for (int dx = 0; dx < 16; dx++) {
 			for (int dz = 0; dz < 16; dz++) {
-				c.setBlockType(x + dx, bottomY - 1, z + dz, r.nextFloat() < 0.1f ? BlockTypes.CLAY : BlockTypes.DIRT);
-				c.setBlockType(x + dx, bottomY, z + dz, BlockTypes.GRASS);
-				c.setBlockType(x + dx, bottomY + 1, z + dz, r.nextFloat() < 0.1f ? BlockTypes.TALLGRASS : BlockTypes.AIR);
+				c.setBlockType(x + dx, 3, z + dz, r.nextFloat() < 0.1f ? BlockTypes.CLAY : BlockTypes.DIRT);
+				c.setBlockType(x + dx, 4, z + dz, BlockTypes.GRASS);
+				c.setBlockType(x + dx, 5, z + dz, r.nextFloat() < 0.1f ? BlockTypes.TALLGRASS : BlockTypes.AIR);
 
-				for (int y = bottomY + 2; y <= topY; y++)
+				for (int y = 6; y <= topY; y++)
 					c.setBlockType(x + dx, y, z + dz, BlockTypes.AIR);
 
 				if (useGlass)
@@ -93,19 +93,19 @@ public class OasisPopulator extends ChunkPopulator {
 		}
 
 		for (int i = 4; i <= 11; i++) {
-			c.setBlockType(x + i, bottomY, z + 4, BlockTypes.WATER);
-			c.setBlockType(x + i, bottomY, z + 11, BlockTypes.WATER);
+			c.setBlockType(x + i, 4, z + 4, BlockTypes.WATER);
+			c.setBlockType(x + i, 4, z + 11, BlockTypes.WATER);
 
-			c.setBlockType(x + 4, bottomY, z + i, BlockTypes.WATER);
-			c.setBlockType(x + 11, bottomY, z + i, BlockTypes.WATER);
+			c.setBlockType(x + 4, 4, z + i, BlockTypes.WATER);
+			c.setBlockType(x + 11, 4, z + i, BlockTypes.WATER);
 		}
 
-		c.setBlockType(x + 5, bottomY + 1, z + 5, BlockTypes.REEDS);
-		c.setBlockType(x + 5, bottomY + 1, z + 10, BlockTypes.REEDS);
-		c.setBlockType(x + 10, bottomY + 1, z + 5, BlockTypes.REEDS);
-		c.setBlockType(x + 10, bottomY + 1, z + 10, BlockTypes.REEDS);
+		c.setBlockType(x + 5, 5, z + 5, BlockTypes.REEDS);
+		c.setBlockType(x + 5, 5, z + 10, BlockTypes.REEDS);
+		c.setBlockType(x + 10, 5, z + 5, BlockTypes.REEDS);
+		c.setBlockType(x + 10, 5, z + 10, BlockTypes.REEDS);
 
-		TREES[r.nextInt(TREES.length)].placeObject(w, r, x + 7, bottomY + 1, z + 7);
+		TREES[r.nextInt(TREES.length)].placeObject(w, r, x + 7, 5, z + 7);
 
 		return true;
 	}

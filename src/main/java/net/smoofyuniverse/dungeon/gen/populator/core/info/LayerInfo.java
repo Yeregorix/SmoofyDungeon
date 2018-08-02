@@ -41,7 +41,7 @@ public final class LayerInfo {
 		this.minZ = chunk.minZ;
 
 		this.index = index;
-		this.minY = chunk.bottomY + index * 6;
+		this.minY = 4 + index * 6;
 
 		this.rooms = new RoomInfo[4];
 		for (int i = 0; i < 4; i++)

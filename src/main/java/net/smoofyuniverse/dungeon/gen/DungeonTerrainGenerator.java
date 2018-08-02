@@ -23,42 +23,41 @@
 package net.smoofyuniverse.dungeon.gen;
 
 import com.flowpowered.math.vector.Vector3i;
-import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
+import net.smoofyuniverse.dungeon.SmoofyDungeon;
+import net.smoofyuniverse.dungeon.gen.offset.MutableBlockVolumeAdapter;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.*;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
+import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
+import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 
 import java.util.Random;
 
 public class DungeonTerrainGenerator implements GenerationPopulator {
-	public final int bottomY, layersCount, generatorMinY;
-	private final GenerationPopulator baseGenerator;
+	public final GenerationPopulator surfaceGenerator;
+	public final int surfaceOffsetY, surfaceMinY, layersCount;
 
-	public DungeonTerrainGenerator(GenerationPopulator baseGenerator, int bottomY, int layersCount, int generatorMinY) {
-		if (baseGenerator == null)
-			throw new IllegalArgumentException("baseGenerator");
-		if (bottomY <= 0 || bottomY > 30)
-			throw new IllegalArgumentException("bottomY");
+	public DungeonTerrainGenerator(GenerationPopulator surfaceGenerator, int surfaceMinY, int layersCount) {
+		if (surfaceGenerator == null)
+			throw new IllegalArgumentException("surfaceGenerator");
+		if (surfaceMinY < 0)
+			throw new IllegalArgumentException("surfaceMinY");
 		if (layersCount <= 0 || layersCount > 30)
 			throw new IllegalArgumentException("layersCount");
-		if (generatorMinY < 0)
-			throw new IllegalArgumentException("generatorMinY");
 
-		this.baseGenerator = baseGenerator;
-		this.bottomY = bottomY;
+		this.surfaceGenerator = surfaceGenerator;
+		this.surfaceOffsetY = layersCount * 6 - surfaceMinY + 5;
+		this.surfaceMinY = surfaceMinY;
 		this.layersCount = layersCount;
-		this.generatorMinY = generatorMinY;
 	}
 
 	@Override
-	public void populate(World w, MutableBlockVolume volume, ImmutableBiomeVolume biomes) {
+	public void populate(World world, MutableBlockVolume volume, ImmutableBiomeVolume biomes) {
+		SmoofyDungeon.validateChunkSize(volume);
+
 		Vector3i min = volume.getBlockMin(), max = volume.getBlockMax();
 		int minX = min.getX(), minZ = min.getZ(), maxX = max.getX(), maxZ = max.getZ();
-		long seed = w.getProperties().getSeed();
+		long seed = world.getProperties().getSeed();
 
 		// Load random from seed and chunk coords
 		Random r = new Random(seed);
@@ -72,15 +71,15 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 		// Fill the floor with bedrock and stone
 		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
-				int bedrockLevel = r.nextInt(5);
-				for (int y = 0; y <= this.bottomY; y++)
+				int bedrockLevel = r.nextInt(3);
+				for (int y = 0; y <= 4; y++)
 					volume.setBlockType(x, y, z, y <= bedrockLevel ? BlockTypes.BEDROCK : BlockTypes.STONE);
 			}
 		}
 
 		// Iterate over each layer
 		for (int l = 0; l < this.layersCount; l++) {
-			int y = this.bottomY + l * 6;
+			int y = 4 + l * 6;
 			// Iterate over each room
 			for (int x = 0; x < 16; x += 8) {
 				for (int z = 0; z < 16; z += 8) {
@@ -103,9 +102,8 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 			}
 		}
 
-		int topY = this.bottomY + this.layersCount * 6;
-
 		// Close the roof
+		int topY = 4 + this.layersCount * 6;
 		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
 				volume.setBlockType(x, topY, z, BlockTypes.COBBLESTONE);
@@ -114,89 +112,6 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 		}
 
 		// Generate the surface
-		this.baseGenerator.populate(w, new BlockVolumeAdapter(volume, topY + 2 - this.generatorMinY, this.generatorMinY), biomes);
-	}
-
-	private static class BlockVolumeAdapter implements MutableBlockVolume {
-		private final MutableBlockVolume delegate;
-		private final int offsetY, minY, maxY;
-
-		public BlockVolumeAdapter(MutableBlockVolume delegate, int offsetY, int minY) {
-			this.delegate = delegate;
-			this.offsetY = offsetY;
-			this.minY = minY;
-			this.maxY = this.delegate.getBlockMax().getY() - offsetY;
-		}
-
-		@Override
-		public boolean setBlock(int x, int y, int z, BlockState block) {
-			if (y < this.minY || y > this.maxY)
-				return false;
-			return this.delegate.setBlock(x, y + this.offsetY, z, block);
-		}
-
-		@Override
-		public MutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public MutableBlockVolumeWorker<? extends MutableBlockVolume> getBlockWorker() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public Vector3i getBlockMin() {
-			return this.delegate.getBlockMin();
-		}
-
-		@Override
-		public Vector3i getBlockMax() {
-			return this.delegate.getBlockMax();
-		}
-
-		@Override
-		public Vector3i getBlockSize() {
-			return this.delegate.getBlockSize();
-		}
-
-		@Override
-		public boolean containsBlock(int x, int y, int z) {
-			return this.delegate.containsBlock(x, y, z);
-		}
-
-		@Override
-		public BlockState getBlock(int x, int y, int z) {
-			if (y < this.minY || y > this.maxY)
-				return BlockTypes.AIR.getDefaultState();
-			return this.delegate.getBlock(x, y + this.offsetY, z);
-		}
-
-		@Override
-		public BlockType getBlockType(int x, int y, int z) {
-			if (y < this.minY || y > this.maxY)
-				return BlockTypes.AIR;
-			return this.delegate.getBlockType(x, y + this.offsetY, z);
-		}
-
-		@Override
-		public UnmodifiableBlockVolume getUnmodifiableBlockView() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public MutableBlockVolume getBlockCopy(StorageType type) {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public ImmutableBlockVolume getImmutableBlockCopy() {
-			throw new UnsupportedOperationException();
-		}
+		this.surfaceGenerator.populate(world, new MutableBlockVolumeAdapter(volume, this.surfaceOffsetY, this.surfaceMinY + 1), biomes);
 	}
 }

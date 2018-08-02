@@ -20,38 +20,40 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.decoration;
+package net.smoofyuniverse.dungeon.gen.offset;
 
-import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
-import org.spongepowered.api.block.BlockTypes;
+import net.smoofyuniverse.dungeon.SmoofyDungeon;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
+import org.spongepowered.api.world.extent.MutableBlockVolume;
+import org.spongepowered.api.world.gen.GenerationPopulator;
 
-import java.util.Random;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ExplosionPopulator extends ChunkPopulator {
+public class GenerationPopulatorAdapter implements GenerationPopulator {
+	public final int offsetY, minY;
+	private final List<GenerationPopulator> populators = new ArrayList<>();
 
-	public ExplosionPopulator() {
-		super("explosion");
-		chunkChance(0.8f);
+	public GenerationPopulatorAdapter(int offsetY, int minY) {
+		this.offsetY = offsetY;
+		this.minY = minY;
+	}
+
+	public List<GenerationPopulator> getPopulators() {
+		return this.populators;
 	}
 
 	@Override
-	public boolean populateChunk(ChunkInfo info, World w, Extent c, Random r) {
+	public void populate(World world, MutableBlockVolume volume, ImmutableBiomeVolume biomes) {
+		MutableBlockVolumeAdapter adapter = new MutableBlockVolumeAdapter(volume, this.offsetY, this.minY);
 
-		int count = 0, min = 3 + info.layersCount;
-		while (count < min) {
-			Set<Vector3i> blocks = ResourceUtil.simulateExplosion(w, r, info.minX + (r.nextDouble() * 16d), 4 + (r.nextDouble() * (info.topY - 4)), info.minZ + (r.nextDouble() * 16d), 2f + (r.nextFloat() * 2f));
-			for (Vector3i b : blocks)
-				w.setBlockType(b, BlockTypes.AIR);
-
-			count += blocks.size();
+		for (GenerationPopulator p : this.populators) {
+			try {
+				p.populate(world, adapter, biomes);
+			} catch (Exception e) {
+				SmoofyDungeon.LOGGER.error("Generation populator '" + p.getClass().getName() + "' has thrown an exception", e);
+			}
 		}
-
-		return true;
 	}
 }

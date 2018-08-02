@@ -147,10 +147,6 @@ public final class WorldConfig {
 		for (DungeonPopulator pop : DungeonWorldModifier.POPULATORS)
 			b.add(pop.getName());
 
-		b.add("ore_vein");
-		b.add("forest");
-		b.add("animal");
-
 		POPULATORS = b.build();
 
 		setUpdater(2, ImmutableMap.of("random_spawner", "simple_spawner"));

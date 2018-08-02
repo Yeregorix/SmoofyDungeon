@@ -20,36 +20,23 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.util.random;
+package net.smoofyuniverse.dungeon.gen.offset;
 
 import org.spongepowered.api.util.weighted.VariableAmount;
 
 import java.util.Random;
 
-public final class ModifiedAmount implements VariableAmount {
+public final class VariableAmountAdapter implements VariableAmount {
 	public final VariableAmount amount;
-	public final double offset, factor;
+	public final double offset;
 
-	public ModifiedAmount(VariableAmount amount, double offset, double factor) {
+	public VariableAmountAdapter(VariableAmount amount, double offset) {
 		this.amount = amount;
 		this.offset = offset;
-		this.factor = factor;
 	}
 
 	@Override
 	public double getAmount(Random rand) {
-		return this.amount.getAmount(rand) * this.factor + this.offset;
-	}
-
-	@Override
-	public int getFlooredAmount(Random rand) {
-		double valueD = getAmount(rand);
-		int valueI = (int) valueD;
-
-		double dif = valueD - (double) valueI;
-		if (dif != 0f && rand.nextDouble() < dif)
-			valueI++;
-
-		return valueI;
+		return this.amount.getAmount(rand) + this.offset;
 	}
 }
