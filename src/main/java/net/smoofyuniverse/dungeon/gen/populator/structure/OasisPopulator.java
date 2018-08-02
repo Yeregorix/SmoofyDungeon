@@ -24,11 +24,10 @@ package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.biome.BiomeTypes;
 import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.gen.PopulatorObject;
 import org.spongepowered.api.world.gen.type.BiomeTreeType;
@@ -52,8 +51,7 @@ public class OasisPopulator extends ChunkPopulator {
 		int x = info.minX, z = info.minZ;
 		int topY = info.topY;
 
-		BiomeType biome = w.getBiome(x + 8, 0, z + 8);
-		boolean useGlass = biome == BiomeTypes.OCEAN || biome == BiomeTypes.DEEP_OCEAN || biome == BiomeTypes.FROZEN_OCEAN;
+		boolean useGlass = ResourceUtil.WATER_BIOMES.contains(w.getBiome(x + 8, 0, z + 8));
 
 		for (int dx = 0; dx < 16; dx++) {
 			for (int dz = 0; dz < 16; dz++) {

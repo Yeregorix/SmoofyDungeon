@@ -24,6 +24,7 @@ package net.smoofyuniverse.dungeon.util;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
+import com.google.common.collect.ImmutableList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.property.PropertyHolder;
@@ -31,12 +32,15 @@ import org.spongepowered.api.data.property.block.BlastResistanceProperty;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.Direction;
+import org.spongepowered.api.world.biome.BiomeType;
+import org.spongepowered.api.world.biome.BiomeTypes;
 import org.spongepowered.api.world.extent.BlockVolume;
 
 import java.util.*;
 
 public class ResourceUtil {
 	private static final Direction[] CARDINALS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+	public static final List<BiomeType> WATER_BIOMES = ImmutableList.of(BiomeTypes.OCEAN, BiomeTypes.DEEP_OCEAN, BiomeTypes.FROZEN_OCEAN, BiomeTypes.RIVER, BiomeTypes.FROZEN_RIVER);
 
 	public static Direction randomCardinal(Random r) {
 		return CARDINALS[r.nextInt(4)];
