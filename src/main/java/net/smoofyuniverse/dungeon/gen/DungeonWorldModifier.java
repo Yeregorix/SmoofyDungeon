@@ -75,7 +75,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 			set = WorldConfig.POPULATORS;
 		}
 
-		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator(30, 7));
+		worldGen.setBaseGenerationPopulator(new DungeonTerrainGenerator(worldGen.getBaseGenerationPopulator(), 30, 7, 52));
 		worldGen.getGenerationPopulators().clear();
 
 		DungeonParentPopulator parent = new DungeonParentPopulator(30, 7);
@@ -85,7 +85,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 			BiomeGenerationSettings biome = worldGen.getBiomeSettings(type);
 
 			// We already generated the ground cover in our base generator
-			biome.getGroundCoverLayers().clear();
+			//biome.getGroundCoverLayers().clear();
 
 			Iterator<Populator> it = biome.getPopulators().iterator();
 			while (it.hasNext()) {

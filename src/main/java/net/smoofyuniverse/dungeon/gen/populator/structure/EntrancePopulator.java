@@ -34,6 +34,8 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SlabTypes;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.biome.BiomeType;
+import org.spongepowered.api.world.biome.BiomeTypes;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
@@ -59,16 +61,15 @@ public class EntrancePopulator extends RoomPopulator {
 	@Override
 	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
 		int x = info.minX, y = info.minY, z = info.minZ;
-		int ground = info.layer.chunk.topY + 30;
 
+		BiomeType biome = w.getBiome(x + 3, 0, z + 3);
+		if (biome == BiomeTypes.OCEAN || biome == BiomeTypes.DEEP_OCEAN)
+			return false;
+
+		int ground;
 		switch (r.nextInt(4)) {
 			case 0:
-				while (!isGround(c.getBlockType(x, ground, z + 3))) {
-					ground--;
-					if (ground <= y)
-						return false;
-				}
-				ground++;
+				ground = c.getHighestYAt(x, z + 3);
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
@@ -147,12 +148,7 @@ public class EntrancePopulator extends RoomPopulator {
 
 				return true;
 			case 1:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 7))) {
-					ground--;
-					if (ground <= y)
-						return false;
-				}
-				ground++;
+				ground = c.getHighestYAt(x + 3, z + 7);
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
@@ -209,12 +205,7 @@ public class EntrancePopulator extends RoomPopulator {
 
 				return true;
 			case 2:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 3))) {
-					ground--;
-					if (ground <= y)
-						return false;
-				}
-				ground++;
+				ground = c.getHighestYAt(x + 3, z + 3);
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
@@ -257,12 +248,7 @@ public class EntrancePopulator extends RoomPopulator {
 
 				return true;
 			case 3:
-				while (!isGround(c.getBlockType(x + 3, ground, z + 3))) {
-					ground--;
-					if (ground <= y)
-						return false;
-				}
-				ground++;
+				ground = c.getHighestYAt(x + 3, z + 3);
 
 				for (int dx = 0; dx < 8; dx++) {
 					for (int dz = 0; dz < 8; dz++) {
@@ -300,9 +286,5 @@ public class EntrancePopulator extends RoomPopulator {
 			default:
 				return false;
 		}
-	}
-
-	private static boolean isGround(BlockType type) {
-		return type != BlockTypes.AIR && (type == BlockTypes.GRASS || type == BlockTypes.MYCELIUM || type == BlockTypes.SAND || type == BlockTypes.DIRT);
 	}
 }

@@ -23,28 +23,35 @@
 package net.smoofyuniverse.dungeon.gen;
 
 import com.flowpowered.math.vector.Vector3i;
-import net.smoofyuniverse.dungeon.noise.SimplexOctaveGenerator;
+import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.biome.BiomeTypes;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
+import org.spongepowered.api.world.extent.*;
+import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 
 import java.util.Random;
 
 public class DungeonTerrainGenerator implements GenerationPopulator {
-	public final int bottomY, layersCount;
+	public final int bottomY, layersCount, generatorMinY;
+	private final GenerationPopulator baseGenerator;
 
-	public DungeonTerrainGenerator(int bottomY, int layersCount) {
+	public DungeonTerrainGenerator(GenerationPopulator baseGenerator, int bottomY, int layersCount, int generatorMinY) {
+		if (baseGenerator == null)
+			throw new IllegalArgumentException("baseGenerator");
 		if (bottomY <= 0 || bottomY > 30)
 			throw new IllegalArgumentException("bottomY");
 		if (layersCount <= 0 || layersCount > 30)
 			throw new IllegalArgumentException("layersCount");
+		if (generatorMinY < 0)
+			throw new IllegalArgumentException("generatorMinY");
 
+		this.baseGenerator = baseGenerator;
 		this.bottomY = bottomY;
 		this.layersCount = layersCount;
+		this.generatorMinY = generatorMinY;
 	}
 
 	@Override
@@ -55,7 +62,11 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 
 		// Load random from seed and chunk coords
 		Random r = new Random(seed);
-		long a = r.nextLong() / 2L * 2L + 1L, b = r.nextLong() / 2L * 2L + 1L;
+		long a = r.nextLong(), b = r.nextLong();
+		if (a % 2 == 0)
+			a++;
+		if (b % 2 == 0)
+			b++;
 		r.setSeed((minX >> 4) * a + (minZ >> 4) * b ^ seed);
 
 		// Fill the floor with bedrock and stone
@@ -92,62 +103,100 @@ public class DungeonTerrainGenerator implements GenerationPopulator {
 			}
 		}
 
-
-	/*	for (int y = 30; y < 72; y += 6) {
-			// Iterate over each room
-			for (int x = 0; x < 16; x += 8)
-				for (int z = 0; z < 16; z += 8) {
-					int randX = (r.nextInt(3) - 1) * (x + 7);
-					int randZ = (r.nextInt(3) - 1) * (z + 7);
-					int floorY = r.nextInt(2) + y;
-
-					for (int x2 = x; x2 < x + 8; x2++)
-						for (int z2 = z; z2 < z + 8; z2++) {
-							// Fill the floor
-							volume.setBlockType(minX + x2, floorY, minZ + z2, BlockTypes.COBBLESTONE);
-
-							for (int y2 = floorY; y2 < y + 8; y2++) {
-								// Fill the walls
-								if (((x2 == x || x2 == x + 7) && (z2 == z || z2 == z + 7)) || randX == x2 || randZ == z2)
-									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.STONEBRICK);
-								else if (y2 != floorY)
-									volume.setBlockType(minX + x2, y2, minZ + z2, BlockTypes.AIR);
-							}
-						}
-				}
-		} */
-
 		int topY = this.bottomY + this.layersCount * 6;
 
-		// Create the noise generator which generates wave forms to use for the surface
-		SimplexOctaveGenerator octave = new SimplexOctaveGenerator(seed, 8);
-		octave.setScale(1d / 48d);
-
-		// Generate the ceiling and the grass land
-		for (int x = minX; x <= maxX; x++)
+		// Close the roof
+		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
-				double noise = octave.noise(x, z, 0.5d, 0.5d);
-				int stoneLevel = (int) (noise * 3d) + topY + 4;
-				int groundLevel = (int) (noise * 4d) + topY + 8;
-
 				volume.setBlockType(x, topY, z, BlockTypes.COBBLESTONE);
-
-				for (int y = topY + 1; y < stoneLevel; y++)
-					volume.setBlockType(x, y, z, BlockTypes.STONE);
-
-				BiomeType biome = biomes.getBiome(x, 0, z);
-				if (biome == BiomeTypes.DESERT || biome == BiomeTypes.DESERT_HILLS || biome == BiomeTypes.DESERT_MOUNTAINS) {
-					for (int y = stoneLevel; y <= groundLevel; y++)
-						volume.setBlockType(x, y, z, BlockTypes.SAND);
-				} else if (biome == BiomeTypes.MUSHROOM_ISLAND) {
-					for (int y = stoneLevel; y < groundLevel; y++)
-						volume.setBlockType(x, y, z, BlockTypes.DIRT);
-					volume.setBlockType(x, groundLevel, z, BlockTypes.MYCELIUM);
-				} else {
-					for (int y = stoneLevel; y < groundLevel; y++)
-						volume.setBlockType(x, y, z, BlockTypes.DIRT);
-					volume.setBlockType(x, groundLevel, z, BlockTypes.GRASS);
-				}
+				volume.setBlockType(x, topY + 1, z, BlockTypes.STONE);
 			}
+		}
+
+		// Generate the surface
+		this.baseGenerator.populate(w, new BlockVolumeAdapter(volume, topY + 2 - this.generatorMinY, this.generatorMinY), biomes);
+	}
+
+	private static class BlockVolumeAdapter implements MutableBlockVolume {
+		private final MutableBlockVolume delegate;
+		private final int offsetY, minY, maxY;
+
+		public BlockVolumeAdapter(MutableBlockVolume delegate, int offsetY, int minY) {
+			this.delegate = delegate;
+			this.offsetY = offsetY;
+			this.minY = minY;
+			this.maxY = this.delegate.getBlockMax().getY() - offsetY;
+		}
+
+		@Override
+		public boolean setBlock(int x, int y, int z, BlockState block) {
+			if (y < this.minY || y > this.maxY)
+				return false;
+			return this.delegate.setBlock(x, y + this.offsetY, z, block);
+		}
+
+		@Override
+		public MutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public MutableBlockVolumeWorker<? extends MutableBlockVolume> getBlockWorker() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Vector3i getBlockMin() {
+			return this.delegate.getBlockMin();
+		}
+
+		@Override
+		public Vector3i getBlockMax() {
+			return this.delegate.getBlockMax();
+		}
+
+		@Override
+		public Vector3i getBlockSize() {
+			return this.delegate.getBlockSize();
+		}
+
+		@Override
+		public boolean containsBlock(int x, int y, int z) {
+			return this.delegate.containsBlock(x, y, z);
+		}
+
+		@Override
+		public BlockState getBlock(int x, int y, int z) {
+			if (y < this.minY || y > this.maxY)
+				return BlockTypes.AIR.getDefaultState();
+			return this.delegate.getBlock(x, y + this.offsetY, z);
+		}
+
+		@Override
+		public BlockType getBlockType(int x, int y, int z) {
+			if (y < this.minY || y > this.maxY)
+				return BlockTypes.AIR;
+			return this.delegate.getBlockType(x, y + this.offsetY, z);
+		}
+
+		@Override
+		public UnmodifiableBlockVolume getUnmodifiableBlockView() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public MutableBlockVolume getBlockCopy(StorageType type) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public ImmutableBlockVolume getImmutableBlockCopy() {
+			throw new UnsupportedOperationException();
+		}
 	}
 }
