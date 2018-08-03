@@ -25,6 +25,7 @@ package net.smoofyuniverse.dungeon.gen.populator.structure;
 import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
+import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -34,8 +35,6 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SlabTypes;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.biome.BiomeTypes;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
@@ -61,10 +60,10 @@ public class EntrancePopulator extends RoomPopulator {
 	@Override
 	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
 		int x = info.minX, y = info.minY, z = info.minZ;
-
-		BiomeType biome = w.getBiome(x + 3, 0, z + 3);
-		if (biome == BiomeTypes.OCEAN || biome == BiomeTypes.DEEP_OCEAN)
+		if (ResourceUtil.WATER_BIOMES.contains(w.getBiome(x + 3, 0, z + 3)))
 			return false;
+
+		info.flag = true;
 
 		int ground;
 		switch (r.nextInt(4)) {
