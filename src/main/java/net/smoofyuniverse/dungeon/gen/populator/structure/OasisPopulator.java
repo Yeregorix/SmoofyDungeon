@@ -22,12 +22,13 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
+import com.google.common.collect.ImmutableSet;
 import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.gen.PopulatorObject;
 import org.spongepowered.api.world.gen.type.BiomeTreeType;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Random;
 
 public class OasisPopulator extends ChunkPopulator {
+	public static final ImmutableSet BIOME_BLACKLIST;
 	public static final PopulatorObject[] TREES;
 
 	public OasisPopulator() {
@@ -51,7 +53,7 @@ public class OasisPopulator extends ChunkPopulator {
 		int x = info.minX, z = info.minZ;
 		int topY = info.topY;
 
-		boolean useGlass = ResourceUtil.WATER_BIOMES.contains(w.getBiome(x + 8, 0, z + 8));
+		boolean useGlass = BIOME_BLACKLIST.contains(w.getBiome(x + 8, 0, z + 8));
 
 		for (int dx = 0; dx < 16; dx++) {
 			for (int dz = 0; dz < 16; dz++) {
@@ -109,11 +111,21 @@ public class OasisPopulator extends ChunkPopulator {
 	}
 
 	static {
+		ImmutableSet.Builder<BiomeType> b = ImmutableSet.builder();
+		for (BiomeType type : Sponge.getRegistry().getAllOf(BiomeType.class)) {
+			String id = type.getId();
+			if (id.contains("ocean") || id.contains("river") || id.contains("beach"))
+				b.add(type);
+		}
+
+		BIOME_BLACKLIST = b.build();
+
 		List<PopulatorObject> trees = new ArrayList<>();
 		for (BiomeTreeType type : Sponge.getRegistry().getAllOf(BiomeTreeType.class)) {
 			trees.add(type.getPopulatorObject());
 			type.getLargePopulatorObject().ifPresent(trees::add);
 		}
+
 		TREES = trees.toArray(new PopulatorObject[0]);
 	}
 }

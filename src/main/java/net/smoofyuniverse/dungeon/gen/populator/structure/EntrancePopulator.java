@@ -23,9 +23,9 @@
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import com.flowpowered.math.vector.Vector2i;
+import com.google.common.collect.ImmutableSet;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
-import net.smoofyuniverse.dungeon.util.ResourceUtil;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -40,6 +40,8 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public class EntrancePopulator extends RoomPopulator {
+	public static final ImmutableSet BIOME_BLACKLIST = OasisPopulator.BIOME_BLACKLIST;
+
 	public static final BlockState VINE_NORTH = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_NORTH, true).get(),
 			LADDER_EAST = BlockTypes.LADDER.getDefaultState().with(Keys.DIRECTION, Direction.EAST).get(),
 			LADDER_NORTH = BlockTypes.LADDER.getDefaultState().with(Keys.DIRECTION, Direction.NORTH).get(),
@@ -60,7 +62,7 @@ public class EntrancePopulator extends RoomPopulator {
 	@Override
 	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
 		int x = info.minX, y = info.minY, z = info.minZ;
-		if (ResourceUtil.WATER_BIOMES.contains(w.getBiome(x + 3, 0, z + 3)))
+		if (BIOME_BLACKLIST.contains(w.getBiome(x + 3, 0, z + 3)))
 			return false;
 
 		info.flag = true;
