@@ -33,15 +33,13 @@ import net.smoofyuniverse.dungeon.gen.populator.core.WrappedPopulator;
 import net.smoofyuniverse.dungeon.gen.populator.decoration.*;
 import net.smoofyuniverse.dungeon.gen.populator.spawner.*;
 import net.smoofyuniverse.dungeon.gen.populator.structure.*;
+import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.biome.GroundCoverLayer;
-import org.spongepowered.api.world.gen.GenerationPopulator;
-import org.spongepowered.api.world.gen.Populator;
-import org.spongepowered.api.world.gen.WorldGenerator;
-import org.spongepowered.api.world.gen.WorldGeneratorModifier;
+import org.spongepowered.api.world.gen.*;
 import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.gen.populator.Ore;
 import org.spongepowered.api.world.storage.WorldProperties;
@@ -53,7 +51,7 @@ import java.util.Set;
 
 public class DungeonWorldModifier implements WorldGeneratorModifier {
 	public static final List<DungeonPopulator> POPULATORS;
-	private static final List<String> classesBlacklist = new ArrayList<>();
+	private static final List<PopulatorType> blacklist = new ArrayList<>();
 
 	@Override
 	public String getId() {
@@ -91,7 +89,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		// 3: GenerationPopulators
 		List<GenerationPopulator> genPops = worldGen.getGenerationPopulators();
 		for (GenerationPopulator pop : genPops) {
-			if (!isBlacklisted(pop.getClass().getSimpleName()))
+			if (!isBlacklisted(pop))
 				genPopulatorAdapter.getPopulators().add(pop);
 		}
 		genPops.clear();
@@ -133,7 +131,7 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 
 		Iterator<Populator> it = pops.iterator();
 		while (it.hasNext()) {
-			if (isBlacklisted(it.next().getClass().getSimpleName()))
+			if (isBlacklisted(it.next()))
 				it.remove();
 		}
 
@@ -145,19 +143,14 @@ public class DungeonWorldModifier implements WorldGeneratorModifier {
 		pops.add(0, dungeonPopulator);
 	}
 
-	private static boolean isBlacklisted(String className) {
-		for (String seq : classesBlacklist) {
-			if (className.contains(seq))
-				return true;
-		}
-		return false;
+	public static boolean isBlacklisted(Object obj) {
+		return obj instanceof Populator && blacklist.contains(((Populator) obj).getType());
 	}
 
 	static {
-		classesBlacklist.add("Stronghold");
-		classesBlacklist.add("OceanMonument");
-		classesBlacklist.add("Mineshaft");
-		classesBlacklist.add("Dungeons");
+		GameRegistry registry = Sponge.getRegistry();
+		registry.getType(PopulatorType.class, "minecraft:structure").ifPresent(blacklist::add);
+		registry.getType(PopulatorType.class, "minecraft:dungeon").ifPresent(blacklist::add);
 
 		ImmutableList.Builder<DungeonPopulator> b = ImmutableList.builder();
 
