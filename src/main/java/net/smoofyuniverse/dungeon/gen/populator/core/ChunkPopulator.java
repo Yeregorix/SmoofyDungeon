@@ -22,7 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityArchetype;

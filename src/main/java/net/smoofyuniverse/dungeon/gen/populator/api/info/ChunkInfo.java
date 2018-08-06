@@ -20,28 +20,47 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.core.info;
+package net.smoofyuniverse.dungeon.gen.populator.api.info;
 
-public final class RoomInfo {
-	public final LayerInfo layer;
-	public final int minX, minY, minZ;
-	public final int index;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.world.extent.Extent;
 
-	public int floorOffset, ceilingOffset;
+public final class ChunkInfo {
+	public final int minX, minZ, layersCount, topY;
 	public boolean flag;
+	private LayerInfo[] layers;
 
-	public RoomInfo(LayerInfo layer, int index) {
-		if (layer == null)
-			throw new IllegalArgumentException("layer");
-		if (index < 0 || index > 3)
-			throw new IllegalArgumentException("index");
+	public ChunkInfo(int minX, int minZ, int layersCount) {
+		if (layersCount < 0)
+			throw new IllegalArgumentException("layersCount");
 
-		this.layer = layer;
+		this.minX = minX;
+		this.minZ = minZ;
+		this.layersCount = layersCount;
+		this.topY = 4 + layersCount * 6;
 
-		this.minX = layer.minX + (index / 2 == 0 ? 0 : 8);
-		this.minY = layer.minY;
-		this.minZ = layer.minZ + (index % 2 == 0 ? 0 : 8);
+		this.layers = new LayerInfo[layersCount];
+		for (int i = 0; i < layersCount; i++)
+			this.layers[i] = new LayerInfo(this, i);
+	}
 
-		this.index = index;
+	public LayerInfo getLayer(int index) {
+		return this.layers[index];
+	}
+
+	public void configureOffsets(Extent volume) {
+		LayerInfo prev = null;
+		for (LayerInfo current : this.layers) {
+			for (int i = 0; i < 4; i++) {
+				RoomInfo room = current.getRoom(i);
+				if (volume.getBlockType(room.minX + 3, room.minY, room.minZ + 3) == BlockTypes.AIR) {
+					room.floorOffset = 1;
+					if (prev != null)
+						prev.getRoom(i).ceilingOffset = 1;
+				}
+			}
+
+			prev = current;
+		}
 	}
 }

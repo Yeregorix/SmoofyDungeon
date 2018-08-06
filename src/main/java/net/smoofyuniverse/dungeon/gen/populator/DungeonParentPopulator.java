@@ -24,8 +24,8 @@ package net.smoofyuniverse.dungeon.gen.populator;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
-import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.extent.Extent;

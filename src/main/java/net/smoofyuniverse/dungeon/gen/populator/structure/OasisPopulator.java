@@ -23,8 +23,8 @@
 package net.smoofyuniverse.dungeon.gen.populator.structure;
 
 import com.google.common.collect.ImmutableSet;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.ChunkPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.world.World;

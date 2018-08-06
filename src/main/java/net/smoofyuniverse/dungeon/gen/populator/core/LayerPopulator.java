@@ -23,8 +23,8 @@
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
 import com.flowpowered.math.vector.Vector2i;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.LayerInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 

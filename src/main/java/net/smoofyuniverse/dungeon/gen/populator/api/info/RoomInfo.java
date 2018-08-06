@@ -20,22 +20,28 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.core;
+package net.smoofyuniverse.dungeon.gen.populator.api.info;
 
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
+public final class RoomInfo {
+	public final LayerInfo layer;
+	public final int minX, minY, minZ;
+	public final int index;
 
-import java.util.Random;
+	public int floorOffset, ceilingOffset;
+	public boolean flag;
 
-public interface DungeonPopulator {
+	public RoomInfo(LayerInfo layer, int index) {
+		if (layer == null)
+			throw new IllegalArgumentException("layer");
+		if (index < 0 || index > 3)
+			throw new IllegalArgumentException("index");
 
-	String getName();
+		this.layer = layer;
 
-	default void populate(ChunkInfo info, World world, Extent volume, Random random, ImmutableBiomeVolume virtualBiomes) {
-		populate(info, world, volume, random);
+		this.minX = layer.minX + (index / 2 == 0 ? 0 : 8);
+		this.minY = layer.minY;
+		this.minZ = layer.minZ + (index % 2 == 0 ? 0 : 8);
+
+		this.index = index;
 	}
-
-	void populate(ChunkInfo info, World world, Extent volume, Random random);
 }

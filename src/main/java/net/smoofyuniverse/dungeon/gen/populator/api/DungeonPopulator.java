@@ -20,47 +20,22 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.core.info;
+package net.smoofyuniverse.dungeon.gen.populator.api;
 
-import org.spongepowered.api.block.BlockTypes;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
+import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
 
-public final class ChunkInfo {
-	public final int minX, minZ, layersCount, topY;
-	public boolean flag;
-	private LayerInfo[] layers;
+import java.util.Random;
 
-	public ChunkInfo(int minX, int minZ, int layersCount) {
-		if (layersCount < 0)
-			throw new IllegalArgumentException("layersCount");
+public interface DungeonPopulator {
 
-		this.minX = minX;
-		this.minZ = minZ;
-		this.layersCount = layersCount;
-		this.topY = 4 + layersCount * 6;
+	String getName();
 
-		this.layers = new LayerInfo[layersCount];
-		for (int i = 0; i < layersCount; i++)
-			this.layers[i] = new LayerInfo(this, i);
+	default void populate(ChunkInfo info, World world, Extent volume, Random random, ImmutableBiomeVolume virtualBiomes) {
+		populate(info, world, volume, random);
 	}
 
-	public LayerInfo getLayer(int index) {
-		return this.layers[index];
-	}
-
-	public void configureOffsets(Extent volume) {
-		LayerInfo prev = null;
-		for (LayerInfo current : this.layers) {
-			for (int i = 0; i < 4; i++) {
-				RoomInfo room = current.getRoom(i);
-				if (volume.getBlockType(room.minX + 3, room.minY, room.minZ + 3) == BlockTypes.AIR) {
-					room.floorOffset = 1;
-					if (prev != null)
-						prev.getRoom(i).ceilingOffset = 1;
-				}
-			}
-
-			prev = current;
-		}
-	}
+	void populate(ChunkInfo info, World world, Extent volume, Random random);
 }

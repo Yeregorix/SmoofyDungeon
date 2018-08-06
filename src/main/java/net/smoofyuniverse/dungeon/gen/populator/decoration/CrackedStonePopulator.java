@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.decoration;
 
+import net.smoofyuniverse.dungeon.gen.populator.api.info.LayerInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.LayerPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.EnumTraits;

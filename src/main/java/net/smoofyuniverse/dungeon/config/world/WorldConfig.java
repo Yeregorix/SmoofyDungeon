@@ -22,15 +22,13 @@
 
 package net.smoofyuniverse.dungeon.config.world;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.smoofyuniverse.dungeon.SmoofyDungeon;
-import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
-import net.smoofyuniverse.dungeon.gen.populator.core.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulators;
 import net.smoofyuniverse.dungeon.util.IOUtil;
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -38,117 +36,93 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
 import java.util.function.UnaryOperator;
+
+import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 
 public final class WorldConfig {
 	public static final int CURRENT_VERSION = 2, MINIMUM_VERSION = 1;
-	public static final Set<String> POPULATORS;
+	public static final WorldConfig DEFAULT_CONFIG = new WorldConfig(DungeonPopulators.all(), 8);
 
-	private static final Int2ObjectMap<UnaryOperator<String>> updaters = new Int2ObjectOpenHashMap<>();
-	private static final Map<String, WorldConfig> worlds = new HashMap<>();
+	public final Set<DungeonPopulator> populators;
+	public final int layersCount;
 
-	private final String worldName;
-	private final Path file;
-	private final ConfigurationLoader<CommentedConfigurationNode> loader;
+	public WorldConfig(Collection<DungeonPopulator> populators, int layersCount) {
+		if (populators == null)
+			throw new IllegalArgumentException("populators");
+		if (layersCount < 6 || layersCount > 30)
+			throw new IllegalArgumentException("layersCount");
 
-	private WorldConfig(String worldName) {
-		this.worldName = worldName;
-		this.file = SmoofyDungeon.get().getWorldConfigsDirectory().resolve(worldName + ".conf");
-		this.loader = SmoofyDungeon.get().createConfigLoader(this.file);
+		this.populators = ImmutableSet.copyOf(populators);
+		this.layersCount = layersCount;
 	}
 
-	public String getWorldName() {
-		return this.worldName;
+	public void save(String worldName) throws IOException {
+		save(SmoofyDungeon.get().createConfigLoader(getConfigFile(worldName)));
 	}
 
-	public boolean exists() {
-		return Files.exists(this.file);
+	private void save(ConfigurationLoader<CommentedConfigurationNode> loader) throws IOException {
+		ConfigurationNode node = loader.createEmptyNode();
+
+		node.getNode("Version").setValue(CURRENT_VERSION);
+		node.getNode("Populators").setValue(DungeonPopulators.toStringList(this.populators));
+		node.getNode("Layers").setValue(this.layersCount);
+
+		loader.save(node);
 	}
 
-	public boolean delete() throws IOException {
-		return Files.deleteIfExists(this.file);
+	private static Path getConfigFile(String worldName) {
+		return SmoofyDungeon.get().getWorldConfigsDirectory().resolve(worldName.toLowerCase() + ".conf");
 	}
 
-	public Set<String> getPopulators() throws IOException {
-		CommentedConfigurationNode root = this.loader.load();
+	public static boolean exists(String worldName) {
+		return Files.exists(getConfigFile(worldName));
+	}
 
-		int version = root.getNode("Version").getInt();
-		if ((version > CURRENT_VERSION || version < MINIMUM_VERSION) && IOUtil.backupFile(this.file)) {
+	public static boolean delete(String worldName) throws IOException {
+		return Files.deleteIfExists(getConfigFile(worldName));
+	}
+
+	public static WorldConfig load(String worldName) throws IOException, ObjectMappingException {
+		Path file = getConfigFile(worldName);
+		ConfigurationLoader<CommentedConfigurationNode> loader = SmoofyDungeon.get().createConfigLoader(file);
+		CommentedConfigurationNode node = loader.load();
+
+		int version = node.getNode("Version").getInt();
+		if ((version > CURRENT_VERSION || version < MINIMUM_VERSION) && IOUtil.backupFile(file)) {
 			SmoofyDungeon.LOGGER.info("Your config version is not supported. A new one will be generated.");
-			setPopulators(POPULATORS);
-			return new LinkedHashSet<>(POPULATORS);
+			DEFAULT_CONFIG.save(loader);
+			return DEFAULT_CONFIG;
 		}
 
-		List<String> list;
-		try {
-			list = root.getNode("Populators").getList(TypeToken.of(String.class));
-		} catch (ObjectMappingException e) {
-			throw new IOException(e);
+		List<String> list = node.getNode("Populators").getList(TypeToken.of(String.class));
+
+		if (version == 1)
+			update(list, n -> n.equals("random_spawner") ? "simple_spawner" : null);
+
+		Collection<DungeonPopulator> pops;
+		if (list.isEmpty())
+			pops = DungeonPopulators.all();
+		else
+			pops = DungeonPopulators.fromStringList(list);
+
+		int layersCount = clamp(node.getNode("Layers").getInt(8), 6, 30);
+
+		WorldConfig config = new WorldConfig(pops, layersCount);
+		config.save(loader);
+		return config;
+	}
+
+	private static void update(List<String> list, UnaryOperator<String> operator) {
+		ListIterator<String> it = list.listIterator();
+		while (it.hasNext()) {
+			String r = operator.apply(it.next());
+			if (r != null)
+				it.set(r);
 		}
-
-		if (list.isEmpty()) {
-			setPopulators(POPULATORS);
-			return new LinkedHashSet<>(POPULATORS);
-		}
-
-		int step = version;
-		while (step != CURRENT_VERSION) {
-			UnaryOperator<String> operator = updaters.get(++step);
-			if (operator != null) {
-				ListIterator<String> it = list.listIterator();
-				while (it.hasNext()) {
-					String r = operator.apply(it.next());
-					if (r != null)
-						it.set(r);
-				}
-			}
-		}
-
-		Set<String> set = new LinkedHashSet<>(list);
-		set.retainAll(POPULATORS);
-
-		if (set.size() != list.size() || version != CURRENT_VERSION)
-			setPopulators(set);
-
-		return set;
-	}
-
-	public void setPopulators(Set<String> set) throws IOException {
-		CommentedConfigurationNode root = this.loader.createEmptyNode();
-
-		root.getNode("Version").setValue(CURRENT_VERSION);
-		root.getNode("Populators").setValue(set);
-
-		this.loader.save(root);
-	}
-
-	public static WorldConfig of(String worldName) {
-		worldName = worldName.toLowerCase();
-		WorldConfig cfg = worlds.get(worldName);
-		if (cfg == null) {
-			cfg = new WorldConfig(worldName);
-			worlds.put(worldName, cfg);
-		}
-		return cfg;
-	}
-
-	private static void setUpdater(int toVersion, Map<String, String> map) {
-		setUpdater(toVersion, map::get);
-	}
-
-	private static void setUpdater(int toVersion, UnaryOperator<String> operator) {
-		updaters.put(toVersion, operator);
-	}
-
-	static {
-		ImmutableSet.Builder<String> b = ImmutableSet.builder();
-
-		for (DungeonPopulator pop : DungeonWorldModifier.POPULATORS)
-			b.add(pop.getName());
-
-		POPULATORS = b.build();
-
-		setUpdater(2, ImmutableMap.of("random_spawner", "simple_spawner"));
 	}
 }

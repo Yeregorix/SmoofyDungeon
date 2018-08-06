@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package net.smoofyuniverse.dungeon.gen.populator.core.info;
+package net.smoofyuniverse.dungeon.gen.populator.api.info;
 
 public final class LayerInfo {
 	public final ChunkInfo chunk;

@@ -22,7 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.core.info.ChunkInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.ChunkInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.extent.ImmutableBiomeVolume;

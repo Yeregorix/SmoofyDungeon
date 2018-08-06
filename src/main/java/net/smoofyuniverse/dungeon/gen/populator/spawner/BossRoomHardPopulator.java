@@ -24,8 +24,8 @@ package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import com.flowpowered.math.vector.Vector2i;
 import net.smoofyuniverse.dungeon.gen.loot.ChestContentGenerator;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.LayerInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.LayerPopulator;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.item.ItemTypes;

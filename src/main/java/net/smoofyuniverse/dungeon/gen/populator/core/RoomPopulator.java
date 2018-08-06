@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.core;
 
-import net.smoofyuniverse.dungeon.gen.populator.core.info.LayerInfo;
-import net.smoofyuniverse.dungeon.gen.populator.core.info.RoomInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.LayerInfo;
+import net.smoofyuniverse.dungeon.gen.populator.api.info.RoomInfo;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 

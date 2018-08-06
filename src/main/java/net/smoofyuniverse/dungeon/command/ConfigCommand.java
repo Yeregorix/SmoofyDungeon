@@ -23,20 +23,27 @@
 package net.smoofyuniverse.dungeon.command;
 
 import net.smoofyuniverse.dungeon.config.world.WorldConfig;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulator;
+import net.smoofyuniverse.dungeon.gen.populator.api.DungeonPopulators;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.world.World;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static net.smoofyuniverse.dungeon.util.Texts.*;
 
 public class ConfigCommand {
-	private static final Text world = Text.of("world"), populator = Text.of("populator");
-	private static final Map<String, String> choices = new HashMap<>();
+	private static final Text world = Text.of("world"), populator = Text.of("populator"), layers = Text.of("layers");
+	private static final Map<String, DungeonPopulator> choices = new HashMap<>();
 
 	public static CommandSpec createMainSpec(String perm) {
 		return CommandSpec.builder()
@@ -45,6 +52,7 @@ public class ConfigCommand {
 				.child(createInfoSpec(), "info")
 				.child(createEnableSpec(), "enable")
 				.child(createDisableSpec(), "disable")
+				.child(createLayersSpec(), "layers")
 				.child(createResetSpec(), "reset")
 				.build();
 	}
@@ -53,17 +61,21 @@ public class ConfigCommand {
 		return CommandSpec.builder()
 				.arguments(GenericArguments.remainingJoinedStrings(world))
 				.executor((cs, args) -> {
-					WorldConfig cfg = WorldConfig.of(args.<String>getOne(world).get());
-					cs.sendMessage(Text.join(gold("World"), Text.of(": " + cfg.getWorldName())));
+					String worldName = args.<String>getOne(world).get();
 
-					if (cfg.exists()) {
+					if (WorldConfig.exists(worldName)) {
+						WorldConfig config = load(worldName);
+
 						List<Text> texts = new ArrayList<>();
-						for (String pop : getPopulators(cfg))
-							texts.add(aqua(pop));
+						for (DungeonPopulator pop : config.populators)
+							texts.add(aqua(pop.getName()));
 
+						cs.sendMessage(Text.join(gold("World"), Text.of(": " + worldName)));
+						cs.sendMessage(Text.join(gold("Loaded"), Text.of(": "), isWorldLoaded(worldName) ? green("Yes") : red("No")));
+						cs.sendMessage(Text.join(gold("Layers"), Text.of(": " + config.layersCount)));
 						cs.sendMessage(Text.join(gold("Populators"), Text.of(" ("), gray(Integer.toString(texts.size())), Text.of("): ["), Text.joinWith(Text.of(", "), texts), Text.of("]")));
 					} else {
-						cs.sendMessage(Text.join(gold("Populators"), Text.of(": "), gray("[Configuration not initialized]")));
+						cs.sendMessage(red("The configuration for world '" + worldName + "' is not initialized."));
 					}
 
 					return CommandResult.empty();
@@ -74,17 +86,20 @@ public class ConfigCommand {
 		return CommandSpec.builder()
 				.arguments(GenericArguments.choices(populator, choices), GenericArguments.remainingJoinedStrings(world))
 				.executor((cs, args) -> {
-					WorldConfig cfg = WorldConfig.of(args.<String>getOne(world).get());
+					String worldName = args.<String>getOne(world).get();
 
-					if (cfg.exists()) {
-						Set<String> pops = getPopulators(cfg);
-						String pop = args.<String>getOne(populator).get();
+					if (WorldConfig.exists(worldName)) {
+						WorldConfig config = load(worldName);
+						List<DungeonPopulator> pops = new ArrayList<>(config.populators);
+						DungeonPopulator pop = args.<DungeonPopulator>getOne(populator).get();
 
-						if (pops.add(pop)) {
-							setPopulators(cfg, pops);
-							cs.sendMessage(green("Populator '" + pop + "' has been enabled."));
+						if (pops.contains(pop)) {
+							cs.sendMessage(red("Populator '" + pop.getName() + "' is already enabled."));
 						} else {
-							cs.sendMessage(red("Populator '" + pop + "' is already enabled."));
+							pops.add(pop);
+							save(new WorldConfig(pops, config.layersCount), worldName);
+							cs.sendMessage(green("Populator '" + pop.getName() + "' has been enabled."));
+							warnIfWorldLoaded(cs, worldName);
 						}
 					} else {
 						cs.sendMessage(red("All populators are already enabled because the configuration is not initialized."));
@@ -98,18 +113,52 @@ public class ConfigCommand {
 		return CommandSpec.builder()
 				.arguments(GenericArguments.choices(populator, choices), GenericArguments.remainingJoinedStrings(world))
 				.executor((cs, args) -> {
-					WorldConfig cfg = WorldConfig.of(args.<String>getOne(world).get());
+					String worldName = args.<String>getOne(world).get();
+					boolean exists = WorldConfig.exists(worldName);
 
-					Set<String> pops = cfg.exists() ? new LinkedHashSet<>(WorldConfig.POPULATORS) : getPopulators(cfg);
-					String pop = args.<String>getOne(populator).get();
+					WorldConfig config = exists ? load(worldName) : WorldConfig.DEFAULT_CONFIG;
+					List<DungeonPopulator> pops = new ArrayList<>(config.populators);
+					DungeonPopulator pop = args.<DungeonPopulator>getOne(populator).get();
 
 					if (pops.remove(pop)) {
-						if (!cfg.exists())
-							cs.sendMessage(green("Initializing a new configuration for world '" + cfg.getWorldName() + "' .."));
-						setPopulators(cfg, pops);
-						cs.sendMessage(green("Populator '" + pop + "' has been disabled."));
+						if (!exists)
+							cs.sendMessage(green("Initializing a new configuration for world '" + worldName + "' .."));
+
+						save(new WorldConfig(pops, config.layersCount), worldName);
+						cs.sendMessage(green("Populator '" + pop.getName() + "' has been disabled."));
+						warnIfWorldLoaded(cs, worldName);
 					} else {
-						cs.sendMessage(red("Populator '" + pop + "' is already disabled."));
+						cs.sendMessage(red("Populator '" + pop.getName() + "' is already disabled."));
+					}
+
+					return CommandResult.empty();
+				}).build();
+	}
+
+	public static CommandSpec createLayersSpec() {
+		return CommandSpec.builder()
+				.arguments(GenericArguments.integer(layers), GenericArguments.remainingJoinedStrings(world))
+				.executor((cs, args) -> {
+					String worldName = args.<String>getOne(world).get();
+					boolean exists = WorldConfig.exists(worldName);
+
+					WorldConfig config = exists ? load(worldName) : WorldConfig.DEFAULT_CONFIG;
+					int layersCount = args.<Integer>getOne(layers).get();
+
+					if (layersCount < 6)
+						throw new CommandException(red("A dungeon world must contains at least 6 layers."));
+					if (layersCount > 30)
+						throw new CommandException(red("A dungeon world can contains up to 30 layers."));
+
+					if (config.layersCount == layersCount) {
+						cs.sendMessage(red("This world already has " + layersCount + " layers."));
+					} else {
+						if (!exists)
+							cs.sendMessage(green("Initializing a new configuration for world '" + worldName + "' .."));
+
+						save(new WorldConfig(config.populators, layersCount), worldName);
+						cs.sendMessage(green("This world now has " + layersCount + " layers."));
+						warnIfWorldLoaded(cs, worldName);
 					}
 
 					return CommandResult.empty();
@@ -120,44 +169,60 @@ public class ConfigCommand {
 		return CommandSpec.builder()
 				.arguments(GenericArguments.remainingJoinedStrings(world))
 				.executor((cs, args) -> {
-					WorldConfig cfg = WorldConfig.of(args.<String>getOne(world).get());
+					String worldName = args.<String>getOne(world).get();
 
-					if (delete(cfg)) {
-						cs.sendMessage(green("Configuration for world '" + cfg.getWorldName() + "' has been deleted."));
+					if (delete(worldName)) {
+						cs.sendMessage(green("Configuration for world '" + worldName + "' has been deleted."));
+						warnIfWorldLoaded(cs, worldName);
 					} else {
-						cs.sendMessage(red("Configuration for world '" + cfg.getWorldName() + "' is not initialized."));
+						cs.sendMessage(red("Configuration for world '" + worldName + "' is not initialized."));
 					}
 
 					return CommandResult.empty();
 				}).build();
 	}
 
-	private static Set<String> getPopulators(WorldConfig cfg) throws CommandException {
+	private static WorldConfig load(String worldName) throws CommandException {
 		try {
-			return cfg.getPopulators();
-		} catch (IOException e) {
-			throw new CommandException(red("Failed to load configuration for world '" + cfg.getWorldName() + "'"), e);
+			return WorldConfig.load(worldName);
+		} catch (Exception e) {
+			throw new CommandException(red("Failed to load configuration for world '" + worldName + "'"), e);
 		}
 	}
 
-	private static void setPopulators(WorldConfig cfg, Set<String> pops) throws CommandException {
+	private static void save(WorldConfig config, String worldName) throws CommandException {
 		try {
-			cfg.setPopulators(pops);
-		} catch (IOException e) {
-			throw new CommandException(red("Failed to save configuration for world '" + cfg.getWorldName() + "'"), e);
+			config.save(worldName);
+		} catch (Exception e) {
+			throw new CommandException(red("Failed to save configuration for world '" + worldName + "'"), e);
 		}
 	}
 
-	private static boolean delete(WorldConfig cfg) throws CommandException {
+	private static boolean delete(String worldName) throws CommandException {
 		try {
-			return cfg.delete();
-		} catch (IOException e) {
-			throw new CommandException(red("Failed to delete configuration for world '" + cfg.getWorldName() + "'"), e);
+			return WorldConfig.delete(worldName);
+		} catch (Exception e) {
+			throw new CommandException(red("Failed to delete configuration for world '" + worldName + "'"), e);
 		}
+	}
+
+	private static void warnIfWorldLoaded(CommandSource cs, String worldName) {
+		if (isWorldLoaded(worldName))
+			cs.sendMessage(red("This world is already loaded. You must reload it to apply the changes."));
+	}
+
+	// case-insensitive
+	private static boolean isWorldLoaded(String worldName) {
+		worldName = worldName.toLowerCase();
+		for (World w : Sponge.getServer().getWorlds()) {
+			if (w.getName().toLowerCase().equals(worldName))
+				return true;
+		}
+		return false;
 	}
 
 	static {
-		for (String pop : WorldConfig.POPULATORS)
-			choices.put(pop, pop);
+		for (DungeonPopulator pop : DungeonPopulators.all())
+			choices.put(pop.getName().toLowerCase(), pop);
 	}
 }
