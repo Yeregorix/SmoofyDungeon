@@ -62,7 +62,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.max;
 import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 
 @Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.1.0", authors = "Yeregorix", description = "An advanced dungeon generator")
@@ -132,6 +134,7 @@ public final class SmoofyDungeon {
 		ConfigurationNode cfgNode = root.getNode("Config");
 		GlobalConfig cfg = cfgNode.getValue(GlobalConfig.TOKEN, new GlobalConfig());
 
+		cfg.updateCheck.repetitionInterval = max(cfg.updateCheck.repetitionInterval, 0);
 		cfg.updateCheck.consoleDelay = clamp(cfg.updateCheck.consoleDelay, -1, 100);
 		cfg.updateCheck.playerDelay = clamp(cfg.updateCheck.playerDelay, -1, 100);
 
@@ -160,7 +163,7 @@ public final class SmoofyDungeon {
 		LOGGER.info("SmoofyDungeon " + this.container.getVersion().orElse("?") + " was loaded successfully.");
 
 		if (this.globalConfig.updateCheck.enabled)
-			Task.builder().async().execute(this::checkForUpdate).submit(this);
+			Task.builder().async().interval(this.globalConfig.updateCheck.repetitionInterval, TimeUnit.HOURS).execute(this::checkForUpdate).submit(this);
 	}
 
 	@Listener
@@ -172,6 +175,8 @@ public final class SmoofyDungeon {
 		String version = this.container.getVersion().orElse(null);
 		if (version == null)
 			return;
+
+		LOGGER.debug("Checking for update ..");
 
 		String latestVersion = null;
 		try {
