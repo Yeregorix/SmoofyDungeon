@@ -31,7 +31,6 @@ import org.spongepowered.api.world.extent.Extent;
 import java.util.Random;
 
 public abstract class LayerPopulator extends ChunkPopulator {
-	//	private float minLayer = 0, maxLayer = 1;
 	private int layerItAttempts = 1, layerItMax = 0;
 	private float layerChanceBase = 1, layerChanceAddition = 0;
 	private float layerItChanceBase = 1, layerItChanceAddition = 0;
@@ -39,18 +38,6 @@ public abstract class LayerPopulator extends ChunkPopulator {
 	protected LayerPopulator(String name) {
 		super(name);
 	}
-
-/*	protected final void layers(float min, float max) {
-		if (min > max)
-			throw new IllegalArgumentException();
-		if (min < 0)
-			throw new IllegalArgumentException("min");
-		if (max > 1)
-			throw new IllegalArgumentException("max");
-
-		this.minLayer = min;
-		this.maxLayer = max;
-	} */
 
 	protected final void layerIterations(int attempts, int max) {
 		validateIterations(attempts, max);

@@ -105,18 +105,4 @@ public abstract class RoomPopulator extends LayerPopulator {
 	}
 
 	public abstract boolean populateRoom(RoomInfo info, World w, Extent c, Random r);
-
-/*	public static int getFloorOffset(Extent chunk, int x, int y, int z) {
-		BlockType type = chunk.getBlockType(x + 3, y, z + 3);
-		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.NETHERRACK || type == BlockTypes.SOUL_SAND)
-			return 0;
-		return 1;
-	}
-
-	public static int getCeilingOffset(Extent chunk, int x, int y, int z) {
-		BlockType type = chunk.getBlockType(x + 3, y + 6, z + 3);
-		if (type == BlockTypes.COBBLESTONE || type == BlockTypes.MOSSY_COBBLESTONE || type == BlockTypes.NETHERRACK || type == BlockTypes.SOUL_SAND)
-			return 0;
-		return 1;
-	} */
 }
