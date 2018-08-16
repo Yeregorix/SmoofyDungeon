@@ -49,7 +49,7 @@ public class TorchPopulator extends RoomPopulator {
 	@Override
 	public boolean populateRoom(RoomInfo info, World w, Extent c, Random r) {
 		int x = info.minX + r.nextInt(6) + 1, z = info.minZ + r.nextInt(6) + 1;
-		int y = info.minY + info.floorOffset;
+		int y = info.minY + info.floorOffset + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
 			c.setBlockType(x, y, z, BlockTypes.TORCH);
