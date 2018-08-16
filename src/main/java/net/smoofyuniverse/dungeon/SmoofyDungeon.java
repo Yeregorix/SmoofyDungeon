@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.Math.max;
 import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 
-@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.2.0", authors = "Yeregorix", description = "An advanced dungeon generator")
+@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.2.1", authors = "Yeregorix", description = "An advanced dungeon generator")
 public final class SmoofyDungeon {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
 	public static final Vector3i CHUNK_SIZE = new Vector3i(16, 256, 16);
