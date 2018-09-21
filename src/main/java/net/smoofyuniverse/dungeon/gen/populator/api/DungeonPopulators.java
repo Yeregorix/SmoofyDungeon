@@ -83,6 +83,7 @@ public class DungeonPopulators {
 		add(new FurnaceRoomPopulator());
 		add(new ArmoryRoomPopulator());
 		add(new CastleRoomPopulator());
+		add(new EndRoomPopulator());
 		add(new SanctuaryPopulator());
 		add(new LavaPoolPopulator());
 		add(new WaterPoolPopulator());
@@ -108,6 +109,7 @@ public class DungeonPopulators {
 
 		// Decorators
 		add(new RedstonePopulator());
+		add(new PressurePlateTrapPopulator());
 		add(new WaterWellPopulator());
 		add(new BrokenWallPopulator());
 		add(new NetherrackPopulator());

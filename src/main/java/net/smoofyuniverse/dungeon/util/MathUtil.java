@@ -24,6 +24,18 @@ package net.smoofyuniverse.dungeon.util;
 
 public class MathUtil {
 
+	public static double squared(double x) {
+		return x * x;
+	}
+
+	public static double lengthSquared(double a, double b) {
+		return a * a + b * b;
+	}
+
+	public static double lengthSquared(double a, double b, double c) {
+		return a * a + b * b + c * c;
+	}
+
 	public static int clamp(int value, int min, int max) {
 		if (value < min)
 			return min;
