@@ -53,7 +53,7 @@ public final class ChunkInfo {
 		for (LayerInfo current : this.layers) {
 			for (int i = 0; i < 4; i++) {
 				RoomInfo room = current.getRoom(i);
-				if (volume.getBlockType(room.minX + 3, room.minY, room.minZ + 3) == BlockTypes.AIR) {
+				if (volume.getBlockType(room.minX + 3, room.minY + 1, room.minZ + 3) == BlockTypes.COBBLESTONE) {
 					room.floorOffset = 1;
 					if (prev != null)
 						prev.getRoom(i).ceilingOffset = 1;
