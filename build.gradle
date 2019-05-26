@@ -22,17 +22,10 @@
 
 plugins {
     id 'java'
-    id 'com.qixalite.spongestart' version '1.6.2'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-spongestart {
-    eula true
-    minecraft '1.12.2'
-    type 'stable'
-}
 
 repositories {
     mavenCentral()
@@ -67,11 +60,11 @@ jar {
 task updatePlugin <<{
     copy {
         from 'build/libs/SmoofyDungeon.jar'
-        into spongestart.forgeServerFolder + "/mods"
+        into 'run/forge/mods'
     }
     copy {
         from 'build/libs/SmoofyDungeon.jar'
-        into spongestart.vanillaServerFolder + "/mods"
+        into 'run/vanilla/mods'
     }
 }
 updatePlugin.dependsOn build
