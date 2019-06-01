@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2018 Hugo Dupanloup (Yeregorix)
+ * Copyright (c) 2017-2019 Hugo Dupanloup (Yeregorix)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,6 @@ public final class WeightedList<T> {
 		return new Builder<>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> WeightedList<T> of(Iterable<Entry<T>> it) {
 		List<Entry<T>> list = ImmutableList.sortedCopyOf(it);
 		if (list.isEmpty())

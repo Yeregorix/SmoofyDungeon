@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2018 Hugo Dupanloup (Yeregorix)
+ * Copyright (c) 2017-2019 Hugo Dupanloup (Yeregorix)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,6 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import org.bstats.sponge.MetricsLite2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -82,8 +81,6 @@ public final class SmoofyDungeon {
 	private PluginContainer container;
 	@Inject
 	private GuiceObjectMapperFactory factory;
-	@Inject
-	private MetricsLite2 metrics;
 
 	private ConfigurationOptions configOptions;
 	private Path worldConfigsDir;
