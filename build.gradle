@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
+    compile 'org.spongepowered:spongeapi:7.1.0'
 }
 
 task updatePlugin <<{
