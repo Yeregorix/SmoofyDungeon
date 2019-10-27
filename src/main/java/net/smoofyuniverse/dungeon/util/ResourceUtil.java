@@ -75,9 +75,9 @@ public class ResourceUtil {
 			for (int b = 0; b < 16; b++) {
 				for (int c = 0; c < 16; c++) {
 					if (a == 0 || a == 15 || b == 0 || b == 15 || c == 0 || c == 15) {
-						double dx = (double) ((float) a / 15f * 2f - 1f);
-						double dy = (double) ((float) b / 15f * 2f - 1f);
-						double dz = (double) ((float) c / 15f * 2f - 1f);
+						double dx = (float) a / 15f * 2f - 1f;
+						double dy = (float) b / 15f * 2f - 1f;
+						double dz = (float) c / 15f * 2f - 1f;
 
 						double l = Math.sqrt(dx * dx + dy * dy + dz * dz);
 						dx /= l;
