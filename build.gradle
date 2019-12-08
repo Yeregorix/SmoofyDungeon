@@ -22,6 +22,7 @@
 
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 sourceCompatibility = 1.8
@@ -30,23 +31,33 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven {
-        name = 'sponge'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
         url = 'https://repo.spongepowered.org/maven'
     }
 }
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.1.0'
+    compile 'net.smoofyuniverse:smoofyoreapi:1.0.0-SNAPSHOT'
+}
+
+shadowJar {
+    dependencies {
+        include dependency('net.smoofyuniverse:smoofyoreapi')
+    }
+    relocate 'net.smoofyuniverse.ore', 'net.smoofyuniverse.dungeon.ore'
 }
 
 task updatePlugin <<{
     copy {
-        from 'build/libs/SmoofyDungeon.jar'
+        from 'build/libs/SmoofyDungeon-all.jar'
         into 'run/forge/mods'
     }
     copy {
-        from 'build/libs/SmoofyDungeon.jar'
+        from 'build/libs/SmoofyDungeon-all.jar'
         into 'run/vanilla/mods'
     }
 }
-updatePlugin.dependsOn build
+updatePlugin.dependsOn shadowJar

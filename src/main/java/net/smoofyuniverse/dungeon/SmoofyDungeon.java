@@ -28,8 +28,10 @@ import net.smoofyuniverse.dungeon.command.ConfigCommand;
 import net.smoofyuniverse.dungeon.config.global.GlobalConfig;
 import net.smoofyuniverse.dungeon.event.PlayerEventListener;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
-import net.smoofyuniverse.dungeon.ore.OreAPI;
 import net.smoofyuniverse.dungeon.util.IOUtil;
+import net.smoofyuniverse.ore.OreAPI;
+import net.smoofyuniverse.ore.project.OreProject;
+import net.smoofyuniverse.ore.project.OreVersion;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -65,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.Math.max;
 import static net.smoofyuniverse.dungeon.util.MathUtil.clamp;
 
-@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.2.4", authors = "Yeregorix", description = "An advanced dungeon generator")
+@Plugin(id = "smoofydungeon", name = "SmoofyDungeon", version = "1.2.5", authors = "Yeregorix", description = "An advanced dungeon generator")
 public final class SmoofyDungeon {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SmoofyDungeon");
 	public static final Vector3i CHUNK_SIZE = new Vector3i(16, 256, 16);
@@ -86,6 +88,9 @@ public final class SmoofyDungeon {
 	private Path worldConfigsDir;
 
 	private GlobalConfig.Immutable globalConfig;
+
+	private OreAPI oreAPI;
+	private OreProject oreProject;
 	private Text[] updateMessages = new Text[0];
 
 	public SmoofyDungeon() {
@@ -158,8 +163,12 @@ public final class SmoofyDungeon {
 	public void onServerStarted(GameStartedServerEvent e) {
 		LOGGER.info("SmoofyDungeon " + this.container.getVersion().orElse("?") + " was loaded successfully.");
 
-		if (this.globalConfig.updateCheck.enabled)
+		if (this.globalConfig.updateCheck.enabled) {
+			this.oreAPI = new OreAPI();
+			this.oreProject = new OreProject("smoofydungeon");
+			this.oreProject.setNamespace("Yeregorix", "SmoofyDungeon");
 			Task.builder().async().interval(this.globalConfig.updateCheck.repetitionInterval, TimeUnit.HOURS).execute(this::checkForUpdate).submit(this);
+		}
 	}
 
 	@Listener
@@ -174,18 +183,16 @@ public final class SmoofyDungeon {
 
 		LOGGER.debug("Checking for update ..");
 
-		String latestVersion = null;
+		OreVersion latestVersion = null;
 		try {
-			latestVersion = OreAPI.getLatestVersion(OreAPI.getProjectVersions("smoofydungeon"), (major, minor) -> major == 7).orElse(null);
+			latestVersion = OreVersion.getLatest(this.oreProject.getVersions(this.oreAPI), v -> v.apiVersion.charAt(0) == '7').orElse(null);
 		} catch (Exception e) {
 			LOGGER.info("Failed to check for update", e);
 		}
 
 		if (latestVersion != null && !latestVersion.equals(version)) {
-			String downloadUrl = "https://ore.spongepowered.org/Yeregorix/SmoofyDungeon/versions/" + latestVersion;
-
 			Text msg1 = Text.join(Text.of("A new version of SmoofyDungeon is available: "),
-					Text.builder(latestVersion).color(TextColors.AQUA).build(),
+					Text.builder(latestVersion.name).color(TextColors.AQUA).build(),
 					Text.of(". You're currently using version: "),
 					Text.builder(version).color(TextColors.AQUA).build(),
 					Text.of("."));
@@ -193,7 +200,7 @@ public final class SmoofyDungeon {
 			Text msg2;
 			try {
 				msg2 = Text.builder("Click here to open the download page.").color(TextColors.GOLD)
-						.onClick(TextActions.openUrl(new URL(downloadUrl))).build();
+						.onClick(TextActions.openUrl(new URL(latestVersion.getPage()))).build();
 			} catch (MalformedURLException e) {
 				msg2 = null;
 			}
