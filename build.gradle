@@ -43,20 +43,27 @@ dependencies {
     compile 'net.smoofyuniverse:smoofyoreapi:1.0.0-SNAPSHOT'
 }
 
+jar {
+    classifier 'base'
+}
+
 shadowJar {
+    classifier ''
+
     dependencies {
         include dependency('net.smoofyuniverse:smoofyoreapi')
     }
+
     relocate 'net.smoofyuniverse.ore', 'net.smoofyuniverse.dungeon.ore'
 }
 
 task updatePlugin <<{
     copy {
-        from 'build/libs/SmoofyDungeon-all.jar'
+        from 'build/libs/SmoofyDungeon.jar'
         into 'run/forge/mods'
     }
     copy {
-        from 'build/libs/SmoofyDungeon-all.jar'
+        from 'build/libs/SmoofyDungeon.jar'
         into 'run/vanilla/mods'
     }
 }
