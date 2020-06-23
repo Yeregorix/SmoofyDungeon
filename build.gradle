@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.1.0'
+    compile 'org.spongepowered:spongeapi:7.2.0'
     compile 'net.smoofyuniverse:smoofyoreapi:1.0.0-SNAPSHOT'
 }
 
