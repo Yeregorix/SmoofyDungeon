@@ -34,12 +34,13 @@ repositories {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
     maven {
-        url = 'https://repo.spongepowered.org/maven'
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
     }
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.2.0'
+    compile 'org.spongepowered:spongeapi:7.3.0'
     compile 'net.smoofyuniverse:smoofyoreapi:1.0.0-SNAPSHOT'
 }
 
