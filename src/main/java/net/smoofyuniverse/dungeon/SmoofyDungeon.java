@@ -106,7 +106,7 @@ public final class SmoofyDungeon {
 			Files.createDirectories(this.worldConfigsDir);
 		} catch (IOException ignored) {
 		}
-		this.configOptions = ConfigurationOptions.defaults().setObjectMapperFactory(this.factory);
+		this.configOptions = ConfigurationOptions.defaults().withObjectMapperFactory(this.factory);
 
 		LOGGER.info("Loading global configuration ..");
 		try {

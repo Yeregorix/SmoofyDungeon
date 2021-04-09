@@ -28,7 +28,7 @@ import org.spongepowered.api.world.extent.Extent;
 public final class ChunkInfo {
 	public final int minX, minZ, layersCount, topY;
 	public boolean flag;
-	private LayerInfo[] layers;
+	private final LayerInfo[] layers;
 
 	public ChunkInfo(int minX, int minZ, int layersCount) {
 		if (layersCount < 0)

@@ -77,7 +77,7 @@ public class FurnaceContentGenerator {
 	}
 
 	public static class Builder {
-		private WeightedList.Builder<ItemStackSnapshot> items = WeightedList.builder();
+		private final WeightedList.Builder<ItemStackSnapshot> items = WeightedList.builder();
 
 		private Builder() {}
 

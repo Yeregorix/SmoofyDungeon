@@ -62,7 +62,7 @@ public class EntityEquipmentGenerator {
 	}
 
 	public static class Builder {
-		private Map<EquipmentType, WeightedList.Builder<ItemStackSnapshot>> map = new HashMap<>();
+		private final Map<EquipmentType, WeightedList.Builder<ItemStackSnapshot>> map = new HashMap<>();
 
 		private Builder() {}
 

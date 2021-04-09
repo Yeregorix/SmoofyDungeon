@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Random;
 
 public class OasisPopulator extends ChunkPopulator {
-	public static final ImmutableSet BIOME_BLACKLIST;
+	public static final ImmutableSet<BiomeType> BIOME_BLACKLIST;
 	public static final PopulatorObject[] TREES;
 
 	public OasisPopulator() {

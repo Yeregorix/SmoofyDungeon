@@ -35,12 +35,13 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SlabTypes;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Random;
 
 public class EntrancePopulator extends RoomPopulator {
-	public static final ImmutableSet BIOME_BLACKLIST = OasisPopulator.BIOME_BLACKLIST;
+	public static final ImmutableSet<BiomeType> BIOME_BLACKLIST = OasisPopulator.BIOME_BLACKLIST;
 
 	public static final BlockState VINE_NORTH = BlockTypes.VINE.getDefaultState().withTrait(BooleanTraits.VINE_NORTH, true).get(),
 			LADDER_EAST = BlockTypes.LADDER.getDefaultState().with(Keys.DIRECTION, Direction.EAST).get(),

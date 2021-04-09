@@ -27,7 +27,7 @@ public final class LayerInfo {
 	public final int minX, minZ;
 	public final int index, minY;
 	public boolean flag;
-	private RoomInfo[] rooms;
+	private final RoomInfo[] rooms;
 
 	public LayerInfo(ChunkInfo chunk, int index) {
 		if (chunk == null)

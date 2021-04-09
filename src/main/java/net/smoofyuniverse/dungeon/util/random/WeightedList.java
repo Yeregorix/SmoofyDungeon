@@ -80,7 +80,7 @@ public final class WeightedList<T> {
 	}
 
 	public static class Builder<T> {
-		private List<Entry<T>> list = new ArrayList<>();
+		private final List<Entry<T>> list = new ArrayList<>();
 
 		private Builder() {}
 
