@@ -31,9 +31,6 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
-    maven {
         name = 'sponge'
         url = 'https://repo.spongepowered.org/repository/maven-public/'
     }
@@ -41,7 +38,7 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.3.0'
-    compile 'net.smoofyuniverse:smoofyoreapi:1.0.0-SNAPSHOT'
+    compile 'net.smoofyuniverse:oreupdater:1.0.1'
 }
 
 jar {
@@ -52,7 +49,8 @@ shadowJar {
     classifier ''
 
     dependencies {
-        include dependency('net.smoofyuniverse:smoofyoreapi')
+        include dependency('net.smoofyuniverse:oreapi')
+        include dependency('net.smoofyuniverse:oreupdater')
     }
 
     relocate 'net.smoofyuniverse.ore', 'net.smoofyuniverse.dungeon.ore'
