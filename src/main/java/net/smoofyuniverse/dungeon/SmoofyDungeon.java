@@ -27,11 +27,9 @@ import com.google.inject.Inject;
 import net.smoofyuniverse.dungeon.command.ConfigCommand;
 import net.smoofyuniverse.dungeon.gen.DungeonWorldModifier;
 import net.smoofyuniverse.ore.update.UpdateChecker;
-import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.GuiceObjectMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -64,10 +62,7 @@ public final class SmoofyDungeon {
 	private Path configDir;
 	@Inject
 	private PluginContainer container;
-	@Inject
-	private GuiceObjectMapperFactory factory;
 
-	private ConfigurationOptions configOptions;
 	private Path worldConfigsDir;
 
 	public SmoofyDungeon() {
@@ -83,7 +78,6 @@ public final class SmoofyDungeon {
 			Files.createDirectories(this.worldConfigsDir);
 		} catch (IOException ignored) {
 		}
-		this.configOptions = ConfigurationOptions.defaults().withObjectMapperFactory(this.factory);
 
 		this.game.getEventManager().registerListeners(this, new UpdateChecker(LOGGER, this.container,
 				createConfigLoader(this.configDir.resolve("update.conf")), "Yeregorix", "SmoofyDungeon"));
@@ -95,7 +89,7 @@ public final class SmoofyDungeon {
 	}
 
 	public ConfigurationLoader<CommentedConfigurationNode> createConfigLoader(Path file) {
-		return HoconConfigurationLoader.builder().setPath(file).setDefaultOptions(this.configOptions).build();
+		return HoconConfigurationLoader.builder().setPath(file).build();
 	}
 
 	@Listener
