@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
+import net.smoofyuniverse.bingo.WeightedList;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
-import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -68,7 +68,7 @@ public class FurnaceContentGenerator {
 	}
 
 	public Optional<ItemStack> generateItem(Random r) {
-		ItemStackSnapshot item = this.items.get(r);
+		ItemStackSnapshot item = this.items.get(r).value;
 		return item.isEmpty() ? Optional.empty() : Optional.of(item.createStack());
 	}
 

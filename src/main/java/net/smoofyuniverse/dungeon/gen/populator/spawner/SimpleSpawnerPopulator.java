@@ -22,9 +22,9 @@
 
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
+import net.smoofyuniverse.bingo.WeightedList;
 import net.smoofyuniverse.dungeon.gen.populator.api.info.RoomInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
@@ -47,7 +47,7 @@ public class SimpleSpawnerPopulator extends RoomPopulator {
 		int y = info.minY + info.floorOffset + 1;
 
 		if (c.getBlockType(x, y, z) == BlockTypes.AIR && c.getBlockType(x, y - 1, z) != BlockTypes.AIR) {
-			generateSpawner(c, x, y, z, ENTITIES.get(r));
+			generateSpawner(c, x, y, z, ENTITIES.get(r).value);
 			return true;
 		}
 		return false;

@@ -22,7 +22,7 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
-import net.smoofyuniverse.dungeon.util.random.WeightedList;
+import net.smoofyuniverse.bingo.WeightedList;
 import org.spongepowered.api.entity.Equipable;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -49,7 +49,7 @@ public class EntityEquipmentGenerator {
 		Map<EquipmentType, ItemStack> items = new HashMap<>();
 
 		for (Entry<EquipmentType, WeightedList<ItemStackSnapshot>> e : this.map.entrySet()) {
-			ItemStackSnapshot item = e.getValue().get(r);
+			ItemStackSnapshot item = e.getValue().get(r).value;
 			if (!item.isEmpty())
 				items.put(e.getKey(), item.createStack());
 		}

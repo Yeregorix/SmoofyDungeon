@@ -23,9 +23,9 @@
 package net.smoofyuniverse.dungeon.gen.populator.spawner;
 
 import com.flowpowered.math.vector.Vector2i;
+import net.smoofyuniverse.bingo.WeightedList;
 import net.smoofyuniverse.dungeon.gen.populator.api.info.RoomInfo;
 import net.smoofyuniverse.dungeon.gen.populator.core.RoomPopulator;
-import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -94,8 +94,8 @@ public class CeilingSpawnerPopulator extends RoomPopulator {
 
 		c.setBlockType(x + 3, ceilingY - 1, z + 3, ORES[r.nextInt(ORES.length)]);
 		c.setBlockType(x + 4, ceilingY - 1, z + 4, ORES[r.nextInt(ORES.length)]);
-		generateSpawner(c, x + 3, ceilingY - 1, z + 4, ENTITIES.get(r));
-		generateSpawner(c, x + 4, ceilingY - 1, z + 3, ENTITIES.get(r));
+		generateSpawner(c, x + 3, ceilingY - 1, z + 4, ENTITIES.get(r).value);
+		generateSpawner(c, x + 4, ceilingY - 1, z + 3, ENTITIES.get(r).value);
 
 		return true;
 	}

@@ -22,8 +22,8 @@
 
 package net.smoofyuniverse.dungeon.gen.loot;
 
+import net.smoofyuniverse.bingo.WeightedList;
 import net.smoofyuniverse.dungeon.util.ResourceUtil;
-import net.smoofyuniverse.dungeon.util.random.WeightedList;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -73,7 +73,7 @@ public class ChestContentGenerator {
 
 		ItemStack[] items = new ItemStack[count];
 		for (int i = 0; i < count; i++)
-			items[i] = this.items.get(r).createStack();
+			items[i] = this.items.get(r).value.createStack();
 
 		return items;
 	}

@@ -39,6 +39,7 @@ repositories {
 dependencies {
     compile 'org.spongepowered:spongeapi:7.3.0'
     compile 'net.smoofyuniverse:oreupdater:1.0.1'
+    compile 'net.smoofyuniverse:bingo:1.0.1'
 }
 
 jar {
@@ -51,9 +52,11 @@ shadowJar {
     dependencies {
         include dependency('net.smoofyuniverse:oreapi')
         include dependency('net.smoofyuniverse:oreupdater')
+        include dependency('net.smoofyuniverse:bingo')
     }
 
     relocate 'net.smoofyuniverse.ore', 'net.smoofyuniverse.dungeon.ore'
+    relocate 'net.smoofyuniverse.bingo', 'net.smoofyuniverse.dungeon.bingo'
 }
 
 task updatePlugin <<{
